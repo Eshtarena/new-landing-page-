@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './form.css';
+
+/* CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+html {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  scroll-behavior: smooth;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+  background: #fff;
+  color: #222;
+  overflow-x: hidden;
+}
+
+/* Main container */
+#__next {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* RTL/LTR Support */
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="ltr"] {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Custom styles */
+.section-padding {
+  padding-top: 6rem;
+  padding-bottom: 5rem;
+}
+
+.container-width {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Fix image display */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Custom navbar height */
+.navbar-container {
+  height: 90px !important;
+  min-height: 90px !important;
+}
+
+.navbar-logo {
+  width: 70px !important;
+  height: 70px !important;
+}
+
+/*
+:root {
+  --main-color: #f2055c69;
+}
+*/ 

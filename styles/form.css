@@ -1,0 +1,70 @@
+/* React Select Styles */
+.react-select .react-select__control {
+  @apply border border-gray-300 rounded-lg shadow-sm transition-colors;
+}
+
+.react-select .react-select__control:hover {
+  @apply border-gray-400;
+}
+
+.react-select .react-select__control--is-focused {
+  @apply border-[#340040] ring-2 ring-purple-200 ring-opacity-50;
+  box-shadow: none;
+}
+
+.react-select-error .react-select__control {
+  @apply border-red-500;
+}
+
+.react-select-error .react-select__control--is-focused {
+  @apply ring-red-200;
+}
+
+.react-select .react-select__menu {
+  @apply border border-gray-200 rounded-lg shadow-lg bg-white z-50;
+}
+
+.react-select .react-select__option {
+  @apply cursor-pointer transition-colors;
+}
+
+.react-select .react-select__option--is-focused {
+  @apply bg-purple-50;
+}
+
+.react-select .react-select__option--is-selected {
+  @apply bg-[#340040] text-white;
+}
+
+/* Phone Input Styles */
+.phone-input-container {
+  @apply relative;
+}
+
+.phone-input-container .PhoneInputCountry {
+  @apply absolute left-3 top-1/2 -translate-y-1/2 z-10;
+}
+
+[dir="rtl"] .phone-input-container .PhoneInputCountry {
+  @apply left-auto right-3;
+}
+
+.phone-input-container input {
+  @apply pl-16;
+}
+
+[dir="rtl"] .phone-input-container input {
+  @apply pl-4 pr-16;
+}
+
+.phone-input-container .PhoneInputCountrySelect {
+  @apply opacity-0 absolute top-0 left-0 h-full;
+}
+
+.phone-input-error .PhoneInputInput {
+  @apply border-red-500;
+}
+
+.phone-input-error .PhoneInputInput:focus {
+  @apply ring-red-200;
+} 

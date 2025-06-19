@@ -1,0 +1,120 @@
+{
+  "navbar": {
+    "about": "About Us",
+    "deals": "Deals",
+    "contact": "Contact Us",
+    "login": "Login"
+  },
+  "about": {
+    "mainTitle": "Enjoy the power of group purchasing",
+    "mainDescription": "Eshtarena is a group purchasing management application for individuals and businesses by offering group purchasing on various products from different suppliers to provide the best price ever and the biggest discounts on purchase vouchers.",
+    "priceDescription": "Eshtarena ultimately offers you the best price for the product with the discount of bulk quantities throughout the group offer period 😊",
+    "discountDescription": "Eshtarena also offers you additional upfront discounts through group purchasing offers for vouchers from different suppliers without any irrational terms 😊",
+    "downloadTitle": "Download the application now and start your saving journey"
+  },
+  "deals": {
+    "title": "Our Deals",
+    "description": "Discover our variety of deals designed to save you money and provide the best value for your purchases",
+    "originalDeal": {
+      "title": "What is original deal?",
+      "description": "They are pre-prepared group purchase offers from Eshtarena that specify the price, quantity and supplier for a specific product after receiving price offers from all verified suppliers for this product and choosing the best offer to be presented it to you",
+      "point1": "The offer ends when the specified quantity or deal time ends",
+      "point2": "You can buy any quantity you want and get the group offer price automatically at the time of purchase",
+      "point3": "Eshtarena guarantees you the best price for the product in the market throughout the offer",
+      "point4": "You can view the page of the supplier, view the return policies and after-sales services",
+      "badge": "Original deal"
+    },
+    "coldDeal": {
+      "title": "What is Cold deal?",
+      "description": "These deals are for specific products that require more time to allow suppliers to compete in an open tender throughout the offer period to offer us the best price.",
+      "refundPolicy": "Buy the quantity you want at the current offer price before the end of the deal period from the mentioned supplier and in case there is a better offer from another supplier, eshtarena will automatically refund the price difference to your bank card used in the purchase.",
+      "badge": "Cold deal"
+    },
+    "vouchers": {
+      "howToUse": {
+        "title": "How can you use the purchase vouchers?",
+        "point1": "After purchasing a voucher for a specific brand from the group purchase offer, the voucher is automatically added to your vouchers' wallet on eshtarena.",
+        "point2": "You can open the voucher from your wallet, view your balance and bill the branch or the supplier's website with the voucher barcode number.",
+        "point3": "You can cash out the full or partial value of the voucher and spend the remaining balance in future purchases.",
+        "point4": "You will receive a notification from eshtarena after each purchase on what was spent with the remaining balance in this voucher."
+      }
+    },
+    "voucherDeal": {
+      "title": "What is Voucher deal?",
+      "description": "They are pre-prepared group purchase offers from Eshtarena with a specific price, quantity and supplier on a discounted purchase voucher without terms or conditions from various suppliers.",
+      "point1": "Buy a purchase voucher from the supplier you choose in the group offer at a discounted price and enjoy spending the full voucher value at the supplier without terms or conditions",
+      "point2": "Save before you buy from the brands you love and pay from your voucher wallet on eshtarena at the supplier's branches or website.",
+      "badge": "Voucher deal"
+    },
+    "sold": "Sold",
+    "available": "Available",
+    "marketPrice": "Market Price",
+    "dealPrice": "Deal Price",
+    "voucherValue": "Voucher value",
+    "save": "Save"
+  },
+  "contact": {
+    "title": "Get in Touch",
+    "description": "Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
+    "email": "Send us an email",
+    "phone": "Call us now",
+    "info": {
+      "location": {
+        "title": "Our Location",
+        "address": "Trivium Square, North 90th Street, Fifth Settlement, New Cairo"
+      },
+      "phone": {
+        "title": "Phone Number"
+      },
+      "email": {
+        "title": "Email Address",
+        "address": "customerservice@eshtarena.com"
+      },
+      "social": {
+        "title": "Follow Us",
+        "error": "Failed to load social media links. Please try again later."
+      }
+    },
+    "form": {
+      "name": "Full Name",
+      "email": "Email Address",
+      "country": "Select Country",
+      "phone": "Phone Number",
+      "message": "Your Message",
+      "submit": "Send Message",
+      "sending": "Sending...",
+      "success": "Message sent successfully!",
+      "error": "Failed to send message. Please try again.",
+      "validation": {
+        "name": {
+          "required": "Please enter your name",
+          "min": "Name must be at least 2 characters",
+          "max": "Name is too long"
+        },
+        "email": {
+          "required": "Please enter your email",
+          "invalid": "Please enter a valid email address"
+        },
+        "country": {
+          "required": "Please select your country"
+        },
+        "phone": {
+          "required": "Please enter your phone number",
+          "invalid": "Please enter a valid phone number"
+        },
+        "message": {
+          "required": "Please enter your message",
+          "min": "Message must be at least 10 characters",
+          "max": "Message is too long"
+        }
+      }
+    }
+  },
+  "footer": {
+    "copyright": "© {{year}} Eshtarena. All rights reserved.",
+    "links": "Links",
+    "terms": "Terms & Conditions",
+    "privacy": "Privacy Policy",
+    "downloadApp": "Download the app now and get started"
+  }
+} 

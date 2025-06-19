@@ -1,0 +1,76 @@
+import { useTranslation } from 'next-i18next';
+import Image from 'next/image';
+import { LANDING_IMAGES, STORES_IMAGES_LINKS } from '../utils/consts';
+
+export default function AboutSection() {
+  const { t, i18n } = useTranslation('common');
+  const yourNeedsImage = i18n.language === 'ar' ? LANDING_IMAGES.ar.yourNeedsEasily : LANDING_IMAGES.en.yourNeedsEasily;
+
+  return (
+    <div className="max-w-7xl mx-auto px-4">
+      <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+        {/* Content Section - Order changes based on language */}
+        <div className={`w-full lg:w-1/2 ${i18n.language === 'ar' ? 'lg:order-2' : 'lg:order-1'}`}>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#340040] leading-tight mb-8">
+            {t('about.mainTitle')}
+          </h1>
+          
+          <div className="space-y-6 text-lg text-gray-600">
+            <p>{t('about.mainDescription')}</p>
+            <p>{t('about.priceDescription')}</p>
+            <p>{t('about.discountDescription')}</p>
+          </div>
+
+          <div className="mt-12">
+            <h3 className="text-xl text-[#340040] font-semibold mb-6">
+              {t('about.downloadTitle')}
+            </h3>
+            <div className="flex flex-wrap gap-6">
+              <a 
+                href="https://apps.apple.com/app/eshtarena"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-[180px] h-[53px] relative hover:opacity-90 transition-opacity"
+              >
+                <Image
+                  src={STORES_IMAGES_LINKS.apple}
+                  alt="Download on the App Store"
+                  fill
+                  className="object-contain"
+                />
+              </a>
+              <a 
+                href="https://play.google.com/store/apps/details?id=com.eshtarena"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-[180px] h-[53px] relative hover:opacity-90 transition-opacity"
+              >
+                <Image
+                  src={STORES_IMAGES_LINKS.google}
+                  alt="Get it on Google Play"
+                  fill
+                  className="object-contain"
+                />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Image Section */}
+        <div className={`w-full lg:w-1/2 ${i18n.language === 'ar' ? 'lg:order-1' : 'lg:order-2'}`}>
+          <div className="relative w-full max-w-[500px] mx-auto">
+            <div className="aspect-[3/4]">
+              <Image
+                src={yourNeedsImage}
+                alt="Eshtarena App Screenshots"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+} 

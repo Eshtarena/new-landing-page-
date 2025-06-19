@@ -1,0 +1,32 @@
+{
+  "name": "eshtarena-landing-page",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "generate-favicon": "node scripts/generate-favicon.js"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.1.1",
+    "i18next": "^23.8.2",
+    "next": "^14.2.30",
+    "next-i18next": "14.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.58.1",
+    "react-phone-number-input": "^3.4.12",
+    "react-select": "^5.10.1",
+    "yup": "^1.6.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.17",
+    "eslint": "8.56.0",
+    "eslint-config-next": "14.1.0",
+    "postcss": "^8.4.35",
+    "sharp": "^0.34.2",
+    "tailwindcss": "^3.4.1"
+  }
+}
