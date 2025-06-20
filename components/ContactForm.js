@@ -1,9 +1,8 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'next-i18next';
 import Select from 'react-select';
-import PhoneInput from 'react-phone-number-input';
-import { isValidPhoneNumber } from 'react-phone-number-input';
+import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
 import { object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { submitContactForm } from '../utils/api';
@@ -21,11 +20,48 @@ const countries = [
   { value: 'EG', labelEn: 'Egypt', labelAr: 'مصر' }
 ];
 
+// Country code mapping
+const countryToCode = {
+  'JO': '+962',
+  'SA': '+966',
+  'AE': '+971',
+  'KW': '+965',
+  'BH': '+973',
+  'QA': '+974',
+  'OM': '+968',
+  'EG': '+20'
+};
+
+// Add this CSS at the top of the file after the imports
+const phoneInputCustomStyles = `
+  .PhoneInput {
+    display: flex;
+    align-items: center;
+  }
+  .PhoneInputCountry {
+    position: relative;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+  }
+  .PhoneInputCountrySelect {
+    display: none;
+  }
+  .PhoneInputCountryIcon {
+    display: none;
+  }
+  .PhoneInputCountrySelectArrow {
+    display: none;
+  }
+`;
+
 export default function ContactForm() {
   const { t, i18n } = useTranslation('common');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
 
   // Transform countries based on current language
   const countryOptions = countries.map(country => ({
@@ -47,9 +83,7 @@ export default function ContactForm() {
       .nullable(),
     phone: string()
       .required(t('contact.form.validation.phone.required'))
-      .test('phone', t('contact.form.validation.phone.invalid'), value => 
-        value ? isValidPhoneNumber(value) : false
-      ),
+      .matches(/^\+\d{1,4}\s\d{6,14}$/, t('contact.form.validation.phone.invalid')),
     message: string()
       .required(t('contact.form.validation.message.required'))
       .min(10, t('contact.form.validation.message.min'))
@@ -62,6 +96,8 @@ export default function ContactForm() {
     control,
     formState: { errors },
     reset,
+    watch,
+    setValue
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -73,6 +109,32 @@ export default function ContactForm() {
     },
   });
 
+  // Watch for country changes
+  const selectedCountryValue = watch('country');
+  
+  // Update phone number when country changes
+  useEffect(() => {
+    if (selectedCountryValue?.value) {
+      const countryCode = countryToCode[selectedCountryValue.value];
+      const numberWithoutCode = phoneNumber.replace(/^\+\d{1,4}\s*/, '');
+      const newPhoneNumber = countryCode + ' ' + numberWithoutCode;
+      setPhoneNumber(newPhoneNumber);
+      setValue('phone', newPhoneNumber);
+    }
+  }, [selectedCountryValue, setValue]);
+
+  const handlePhoneChange = (e) => {
+    const value = e.target.value;
+    const countryCode = selectedCountryValue?.value ? countryToCode[selectedCountryValue.value] : '+20';
+    
+    // Only allow digits after country code
+    const numberWithoutCode = value.replace(countryCode + ' ', '').replace(/\D/g, '');
+    const newPhoneNumber = countryCode + ' ' + numberWithoutCode;
+    
+    setPhoneNumber(newPhoneNumber);
+    setValue('phone', newPhoneNumber);
+  };
+
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     setSubmitStatus(null);
@@ -82,8 +144,7 @@ export default function ContactForm() {
       const result = await submitContactForm(data);
       setSubmitStatus('success');
       reset();
-      // You might want to do something with the result, like showing the submissionId
-      console.log('Submission successful:', result);
+      setPhoneNumber('');
     } catch (error) {
       setSubmitStatus('error');
       setErrorMessage(error.message || t('contact.form.error'));
@@ -163,24 +224,12 @@ export default function ContactForm() {
         <label className="block text-sm font-medium text-gray-700 mb-1">
           {t('contact.form.phone')}
         </label>
-        <Controller
-          name="phone"
-          control={control}
-          render={({ field }) => (
-            <PhoneInput
-              {...field}
-              international
-              defaultCountry="EG"
-              className={`phone-input-container ${errors.phone ? 'phone-input-error' : ''}`}
-              inputComponent={({ ...props }) => (
-                <input
-                  {...props}
-                  className={getInputClassName(errors.phone)}
-                  placeholder={t('contact.form.phone')}
-                />
-              )}
-            />
-          )}
+        <input
+          type="tel"
+          value={phoneNumber}
+          onChange={handlePhoneChange}
+          className={getInputClassName(errors.phone)}
+          placeholder={t('contact.form.phone')}
         />
         {errors.phone && (
           <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>

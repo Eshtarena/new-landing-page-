@@ -10,7 +10,7 @@ export default function AboutSection() {
     <div className="max-w-7xl mx-auto px-4">
       <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
         {/* Content Section - Order changes based on language */}
-        <div className={`w-full lg:w-1/2 ${i18n.language === 'ar' ? 'lg:order-2' : 'lg:order-1'}`}>
+        <div className={`w-full lg:w-1/2 ${i18n.language === 'ar' ? 'lg:order-2' : 'lg:order-1'} text-center lg:text-start`}>
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#340040] leading-tight mb-8">
             {t('about.mainTitle')}
           </h1>
@@ -25,7 +25,7 @@ export default function AboutSection() {
             <h3 className="text-xl text-[#340040] font-semibold mb-6">
               {t('about.downloadTitle')}
             </h3>
-            <div className="flex flex-wrap gap-6">
+            <div className="flex flex-wrap gap-6 justify-center lg:justify-start">
               <a 
                 href="https://apps.apple.com/app/eshtarena"
                 target="_blank"
@@ -57,7 +57,7 @@ export default function AboutSection() {
         </div>
 
         {/* Image Section */}
-        <div className={`w-full lg:w-1/2 ${i18n.language === 'ar' ? 'lg:order-1' : 'lg:order-2'}`}>
+        <div className={`w-full lg:w-1/2 ${i18n.language === 'ar' ? 'lg:order-1' : 'lg:order-2'} flex justify-center`}>
           <div className="relative w-full max-w-[500px] mx-auto">
             <div className="aspect-[3/4]">
               <Image

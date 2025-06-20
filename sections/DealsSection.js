@@ -17,8 +17,15 @@ export default function DealsSection() {
       description: t(`${baseKey}.description`, { returnNull: true }),
       points: (() => {
         // For deals with numbered points
-        if (['original', 'voucher'].includes(deal.id)) {
+        if (deal.id === 'original') {
           return [1, 2, 3, 4].map(num => {
+            const point = t(`${baseKey}.point${num}`, { returnNull: true });
+            return point || null;
+          }).filter(Boolean);
+        }
+        // For voucher deal
+        if (deal.id === 'voucher') {
+          return [1, 2].map(num => {
             const point = t(`${baseKey}.point${num}`, { returnNull: true });
             return point || null;
           }).filter(Boolean);
@@ -38,7 +45,7 @@ export default function DealsSection() {
 
   return (
     <section id="deals" className="w-full">
-      <div className="container-width text-center mb-16">
+      <div className="container-width text-center mb-16 px-4">
         <h2 className="text-4xl md:text-5xl font-bold text-[#340040] mb-6">
           {t('deals.title')}
         </h2>
@@ -47,22 +54,24 @@ export default function DealsSection() {
         </p>
       </div>
 
-      {DEALS_DATA.map((deal) => {
-        const { title, description, points } = getCardContent(deal);
-        return (
-          <DealCard
-            key={deal.id}
-            title={title}
-            description={description}
-            points={points}
-            imageSrc={getImageSrc(deal.imageSrc)}
-            imageAlt={deal.imageAlt}
-            imageIsPhone={deal.imageIsPhone}
-            isReversed={deal.isReversed}
-            hasBgColor={deal.hasBgColor}
-          />
-        );
-      })}
+      <div className="flex flex-col items-center mt-6">
+        {DEALS_DATA.map((deal) => {
+          const { title, description, points } = getCardContent(deal);
+          return (
+            <DealCard
+              key={deal.id}
+              title={title}
+              description={description}
+              points={points}
+              imageSrc={getImageSrc(deal.imageSrc)}
+              imageAlt={deal.imageAlt}
+              imageIsPhone={deal.imageIsPhone}
+              isReversed={deal.isReversed}
+              hasBgColor={deal.hasBgColor}
+            />
+          );
+        })}
+      </div>
     </section>
   );
 }

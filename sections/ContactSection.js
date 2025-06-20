@@ -1,7 +1,6 @@
 import { useState } from "react";
 import ContactForm from "../components/ContactForm";
 import { useTranslation } from "next-i18next";
-import { submitContactForm } from "../utils/api";
 import Image from "next/image";
 import { STORES_IMAGES_LINKS } from "../utils/consts";
 
@@ -9,7 +8,7 @@ import { STORES_IMAGES_LINKS } from "../utils/consts";
 const API_BASE_URL = "https://api.eshtarena.com";
 
 export default function ContactSection({ socialData }) {
-  const { t } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,12 +17,7 @@ export default function ContactSection({ socialData }) {
     message: "",
   });
 
-  // Function to get full image URL
-  const getImageUrl = (logoPath) => {
-    console.log(`${API_BASE_URL}/public/advice/${logoPath}`);
-
-    return `${API_BASE_URL}/public/advice/${logoPath}`;
-  };
+  const isRTL = i18n.language === "ar";
 
   return (
     <section id="contact" className="bg-white py-16 md:py-24 scroll-mt-16">
@@ -35,13 +29,27 @@ export default function ContactSection({ socialData }) {
           <p className="text-lg text-gray-600">{t("contact.description")}</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <div
+          className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-start ${
+            isRTL ? "lg:rtl" : "lg:ltr"
+          }`}
+        >
           {/* Contact Information */}
           <div className="bg-gray-50 rounded-2xl p-8 lg:sticky lg:top-24">
             <div className="space-y-8">
               {/* Location */}
-              <div className="flex items-start space-x-4 rtl:space-x-reverse">
-                <div className="flex-shrink-0 w-12 h-12 bg-[#340040] bg-opacity-10 rounded-lg flex items-center justify-center">
+              <div
+                className={`flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 ${
+                  isRTL
+                    ? "md:flex-row-reverse md:space-x-6"
+                    : "md:flex-row md:space-x-6"
+                }`}
+              >
+                <div
+                  className={`flex-shrink-0 w-12 h-12 bg-[#340040] bg-opacity-10 rounded-lg flex items-center justify-center ${
+                    isRTL ? "md:ml-2" : "md:mr-2"
+                  }`}
+                >
                   <svg
                     className="w-6 h-6 text-[#340040]"
                     fill="none"
@@ -62,7 +70,11 @@ export default function ContactSection({ socialData }) {
                     />
                   </svg>
                 </div>
-                <div>
+                <div
+                  className={`text-center ${
+                    isRTL ? "md:text-end" : "md:text-start"
+                  } flex-grow`}
+                >
                   <h3 className="text-lg font-semibold text-[#340040] mb-1">
                     {t("contact.info.location.title")}
                   </h3>
@@ -72,29 +84,19 @@ export default function ContactSection({ socialData }) {
                 </div>
               </div>
 
-              {/* Phone */}
-              {/* <div className="flex items-start space-x-4 rtl:space-x-reverse">
-                <div className="flex-shrink-0 w-12 h-12 bg-[#340040] bg-opacity-10 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-[#340040]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-[#340040] mb-1">
-                    {t('contact.info.phone.title')}
-                  </h3>
-                  <a 
-                    href="tel:+962790000000" 
-                    className="text-gray-600 hover:text-[#340040] transition-colors"
-                  >
-                    +962 79 000 0000
-                  </a>
-                </div>
-              </div> */}
-
               {/* Email */}
-              <div className="flex items-start space-x-4 rtl:space-x-reverse">
-                <div className="flex-shrink-0 w-12 h-12 bg-[#340040] bg-opacity-10 rounded-lg flex items-center justify-center">
+              <div
+                className={`flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 ${
+                  isRTL
+                    ? "md:flex-row-reverse md:space-x-6"
+                    : "md:flex-row md:space-x-6"
+                }`}
+              >
+                <div
+                  className={`flex-shrink-0 w-12 h-12 bg-[#340040] bg-opacity-10 rounded-lg flex items-center justify-center ${
+                    isRTL ? "md:ml-2" : "md:mr-2"
+                  }`}
+                >
                   <svg
                     className="w-6 h-6 text-[#340040]"
                     fill="none"
@@ -109,7 +111,11 @@ export default function ContactSection({ socialData }) {
                     />
                   </svg>
                 </div>
-                <div>
+                <div
+                  className={`text-center ${
+                    isRTL ? "md:text-end" : "md:text-start"
+                  } flex-grow`}
+                >
                   <h3 className="text-lg font-semibold text-[#340040] mb-1">
                     {t("contact.info.email.title")}
                   </h3>
@@ -123,74 +129,86 @@ export default function ContactSection({ socialData }) {
               </div>
 
               {/* Social Media Links */}
-              {socialData && (
-                <div className="pt-6 mt-6 border-t border-gray-200">
-                  <h3 className="text-lg font-semibold text-[#340040] mb-4">
-                    {t("contact.info.social.title")}
-                  </h3>
-                  <div className="flex flex-wrap gap-4">
-                    {socialData.social.map((social) => (
-                      <a
-                        key={social._id}
-                        href={social.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 bg-[#340040] bg-opacity-10 rounded-lg flex items-center justify-center text-[#340040] hover:bg-[#340040] hover:text-white transition-colors"
-                        title={social.title}
-                      >
-                        <Image
-                          src={social.logo}
-                          alt={social.title}
-                          width={20}
-                          height={20}
-                          className="object-contain"
-                        />
-                      </a>
-                    ))}
-                  </div>
-
-                  {/* App Store Links */}
-                  <div className="mt-6 flex flex-wrap gap-4">
-                    {socialData.google && (
-                      <a
-                        href={socialData.google}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 min-w-[160px]"
-                      >
-                        <Image
-                          src={STORES_IMAGES_LINKS.google}
-                          alt="Get it on Google Play"
-                          width={160}
-                          height={48}
-                          className="w-full h-auto"
-                        />
-                      </a>
-                    )}
-                    {socialData.apple && (
-                      <a
-                        href={socialData.apple}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 min-w-[160px]"
-                      >
-                        <Image
-                          src={STORES_IMAGES_LINKS.apple}
-                          alt="Download on the App Store"
-                          width={160}
-                          height={48}
-                          className="w-full h-auto"
-                        />
-                      </a>
-                    )}
-                  </div>
+              <div className="pt-6 mt-6 border-t border-gray-200">
+                <h3
+                  className={`text-lg font-semibold text-[#340040] mb-4 text-center md:text-${
+                    isRTL ? "right" : "left"
+                  }`}
+                >
+                  {t("contact.info.social.title")}
+                </h3>
+                <div
+                  className={`flex flex-wrap gap-4 justify-center md:justify-${
+                    isRTL ? "end" : "start"
+                  }`}
+                >
+                  {socialData.social.map((social) => (
+                    <a
+                      key={social._id}
+                      href={social.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 bg-[#340040] bg-opacity-10 rounded-lg flex items-center justify-center text-[#340040] hover:bg-[#340040] hover:text-white transition-colors"
+                      title={social.title}
+                    >
+                      <Image
+                        src={social.logo}
+                        alt={social.title}
+                        width={20}
+                        height={20}
+                        className="object-contain"
+                      />
+                    </a>
+                  ))}
                 </div>
-              )}
+
+                {/* App Store Links */}
+                <div
+                  className={`flex flex-wrap gap-6 mt-8 justify-center md:justify-${
+                    isRTL ? "end" : "start"
+                  }`}
+                >
+                  {socialData.apple && (
+                    <a
+                      href={socialData.apple}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-[160px] h-[48px] relative"
+                    >
+                      <Image
+                        src={STORES_IMAGES_LINKS.apple}
+                        alt="Download on the App Store"
+                        fill
+                        className="object-contain"
+                      />
+                    </a>
+                  )}
+                  {socialData.google && (
+                    <a
+                      href={socialData.google}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-[160px] h-[48px] relative"
+                    >
+                      <Image
+                        src={STORES_IMAGES_LINKS.google}
+                        alt="Get it on Google Play"
+                        fill
+                        className="object-contain"
+                      />
+                    </a>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Contact Form */}
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-100">
+          <div
+            className={`bg-white rounded-2xl shadow-lg border border-gray-100 mx-auto w-full ${
+              isRTL ? "lg:order-first" : ""
+            }`}
+          >
             <div className="p-8">
               <ContactForm />
             </div>

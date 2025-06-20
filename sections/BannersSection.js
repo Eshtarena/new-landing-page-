@@ -34,7 +34,7 @@ export default function BannersSection() {
     return (
       <section id="home" className="w-full bg-gray-200 text-center relative mt-[70px] md:mt-[90px]">
         <div className="w-full h-96 flex items-center justify-center">
-          <div className="text-gray-600 text-xl">
+          <div className="text-gray-600 text-xl px-4">
             Banner images will appear here once uploaded
           </div>
         </div>
@@ -47,7 +47,7 @@ export default function BannersSection() {
       <div className="w-full max-w-full mx-auto relative overflow-hidden md:h-screen h-auto aspect-[4/3]">
         <div className="flex transition-transform duration-700 ease-in-out h-full" style={{ transform: `translateX(-${slide * 100}%)` }}>
           {validImages.map((img, idx) => (
-            <div key={img} className="w-full flex-shrink-0 h-full relative">
+            <div key={img} className="w-full flex-shrink-0 h-full relative flex items-center justify-center">
               <Image 
                 src={img} 
                 alt="slider" 

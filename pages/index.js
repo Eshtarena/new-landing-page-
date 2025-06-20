@@ -86,12 +86,12 @@ export default function Home() {
           </div>
 
           {/* About Section */}
-          <section id="about" className="bg-white py-16 md:py-24 scroll-mt-16">
+          <section id="about" className="bg-white py-8 md:py-12 scroll-mt-16">
             <AboutSection socialData={socialData} />
           </section>
 
           {/* Deals Section */}
-          <section id="deals" className="py-16 md:py-24 scroll-mt-16">
+          <section id="deals" className="py-8 md:py-12 scroll-mt-16">
             <DealsSection />
           </section>
 

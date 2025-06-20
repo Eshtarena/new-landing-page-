@@ -8,37 +8,34 @@
  * @param {string} data.message - Message content
  * @returns {Promise} - Resolves with the response data or rejects with error
  */
-export async function submitContactForm(data) {
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.eshtarena.com';
+
+export const submitContactForm = async (formData) => {
   try {
-    // You can replace this URL with your actual API endpoint
-    const response = await fetch('/api/contact', {
+    const response = await fetch(`${API_BASE_URL}/v1/contact-us`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name: data.name,
-        email: data.email,
-        country: data.country.value,
-        phone: data.phone,
-        message: data.message,
-        submittedAt: new Date().toISOString(),
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        message: formData.message,
       }),
     });
 
     if (!response.ok) {
-      // If the server response wasn't ok, try to get error details
-      const errorData = await response.json().catch(() => null);
-      throw new Error(errorData?.message || 'Failed to submit contact form');
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to submit form');
     }
 
-    const result = await response.json();
-    return result;
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error('Contact form submission error:', error);
-    throw error;
+    throw new Error(error.message || 'Failed to submit form');
   }
-}
+};
 
 /**
  * Fetch social media links and app store links from the API

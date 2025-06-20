@@ -4,24 +4,25 @@ import Link from 'next/link';
 import { STORES_IMAGES_LINKS } from '../utils/consts';
 
 export default function Footer({ socialData }) {
-  const { t } = useTranslation('common');
+  const { t, i18n } = useTranslation('common');
+  const isRTL = i18n.language === 'ar';
 
   return (
     <footer className="bg-[#340040] text-white py-12">
-      <div className="container-width">
+      <div className={`container-width ${isRTL ? 'rtl' : 'ltr'}`}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* First Column - Logo and Social Links */}
-          <div className="flex flex-col space-y-6">
-            <div className="w-40">
+          <div className={`flex flex-col items-center md:items-${isRTL ? 'end' : 'start'} space-y-6`}>
+            <Link href="/" className="w-[180px] h-[45px] relative">
               <Image
-                src="/Eshtarena_icon.svg"
+                src="/app_icon.svg"
                 alt="Eshtarena"
-                width={160}
-                height={40}
-                className="w-full"
+                fill
+                priority
+                className="object-contain brightness-0 invert"
               />
-            </div>
-            <div className="flex flex-wrap gap-4">
+            </Link>
+            <div className={`flex flex-wrap gap-4 justify-center md:justify-${isRTL ? 'end' : 'start'}`}>
               {Array.isArray(socialData?.social) && socialData.social.map((social) => (
                 <a
                   key={social._id}
@@ -42,13 +43,13 @@ export default function Footer({ socialData }) {
           </div>
 
           {/* Second Column - Links */}
-          <div className="flex flex-col space-y-4">
+          <div className={`flex flex-col items-center md:items-${isRTL ? 'end' : 'start'} space-y-4`}>
             <h3 className="text-lg font-semibold mb-2">{t('footer.links')}</h3>
             <Link 
               href="https://eshtarena.com/terms-conditions" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-sm opacity-80 hover:opacity-100 hover:text-white hover:underline transition-colors"
+              className="text-sm opacity-80 hover:opacity-100 hover:text-white hover:underline transition-colors text-center md:text-inherit"
             >
               {t('footer.terms')}
             </Link>
@@ -56,31 +57,30 @@ export default function Footer({ socialData }) {
               href="https://eshtarena.com/privacy-policy" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-sm opacity-80 hover:opacity-100 hover:text-white hover:underline transition-colors"
+              className="text-sm opacity-80 hover:opacity-100 hover:text-white hover:underline transition-colors text-center md:text-inherit"
             >
               {t('footer.privacy')}
             </Link>
           </div>
 
           {/* Third Column - Download App */}
-          <div className="flex flex-col space-y-6">
+          <div className={`flex flex-col items-center md:items-${isRTL ? 'end' : 'start'} space-y-6`}>
             <p className="text-lg font-semibold">
               {t('footer.downloadApp')}
             </p>
-            <div className="flex gap-4">
+            <div className={`flex gap-4 justify-center md:justify-${isRTL ? 'end' : 'start'}`}>
               {socialData.apple && (
                 <Link 
                   href={socialData.apple}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 min-w-[120px] max-w-[120px]"
+                  className="w-[120px] h-[36px] relative"
                 >
                   <Image
                     src={STORES_IMAGES_LINKS.apple}
                     alt="Download on App Store"
-                    width={120}
-                    height={36}
-                    className="w-full h-auto"
+                    fill
+                    className="object-contain"
                   />
                 </Link>
               )}
@@ -89,19 +89,18 @@ export default function Footer({ socialData }) {
                   href={socialData.google}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 min-w-[120px] max-w-[120px]"
+                  className="w-[120px] h-[36px] relative"
                 >
                   <Image
                     src={STORES_IMAGES_LINKS.google}
                     alt="Get it on Google Play"
-                    width={120}
-                    height={36}
-                    className="w-full h-auto"
+                    fill
+                    className="object-contain"
                   />
                 </Link>
               )}
             </div>
-            <p className="text-sm opacity-80">
+            <p className={`text-sm opacity-80 text-center md:text-${isRTL ? 'right' : 'left'}`}>
               © 2024 : All rights reserved by ESHTARENA LTD IBC
             </p>
           </div>
