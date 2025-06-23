@@ -64,8 +64,8 @@ export default function Footer({ socialData }) {
           </div>
 
           {/* Third Column - Download App */}
-          <div className={`flex flex-col items-center md:items-${isRTL ? 'end' : 'start'} space-y-6`}>
-            <p className="text-lg font-semibold">
+          <div className={`flex flex-col text-center items-center md:items-${isRTL ? 'end' : 'start'} space-y-6`}>
+            <p className="text-lg font-semibold text-center">
               {t('footer.downloadApp')}
             </p>
             <div className={`flex gap-4 justify-center md:justify-${isRTL ? 'end' : 'start'}`}>
