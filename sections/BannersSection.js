@@ -43,7 +43,7 @@ export default function BannersSection() {
   }
 
   return (
-    <section id="home" className="w-full bg-gray-50 text-center relative mt-[45px] md:mt-[90px]">
+    <section id="home" className="w-full text-center relative mt-[44px] md:mt-[90px]">
       <div className="w-full max-w-full mx-auto relative overflow-hidden md:h-screen h-auto aspect-[4/3]">
         <div className="flex transition-transform duration-700 ease-in-out h-full" style={{ transform: `translateX(-${slide * 100}%)` }}>
           {validImages.map((img, idx) => (

@@ -81,9 +81,8 @@ export default function Home() {
         <Navbar />
         <main>
           {/* Banner Section */}
-          <div>
             <BannersSection />
-          </div>
+          
 
           {/* About Section */}
           <section id="about" className="bg-white py-8 md:py-12 scroll-mt-16">
