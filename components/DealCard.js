@@ -53,7 +53,7 @@ export default function DealCard({
   );
 
   // Determine the order based on RTL and isReversed
-  const shouldReverse = isRTL ? !isReversed : isReversed;
+  const shouldReverse = false;
 
   return (
     <div className={`w-full ${hasBgColor ? 'bg-[#F0F0F5]' : ''}`}>

@@ -13,9 +13,9 @@ export default function Footer({ socialData }) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* First Column - Logo and Social Links */}
           <div className={`flex flex-col items-center md:items-${isRTL ? 'end' : 'start'} space-y-6`}>
-            <Link href="/" className="w-[180px] h-[45px] relative">
+            <Link href="/" className="w-[300px] h-[120px] relative">
               <Image
-                src="/app_icon.svg"
+                src="/eshtarena_logo.svg"
                 alt="Eshtarena"
                 fill
                 priority
