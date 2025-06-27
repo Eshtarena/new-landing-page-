@@ -39,7 +39,7 @@ export default function DealCard({
 
   const ImageSection = () => (
     <div className="flex items-center justify-center">
-      <div className={imageIsPhone ? "w-[300px] h-[600px] relative" : "w-full max-w-2xl"}>
+      <div className={imageIsPhone ? "w-[350px] h-[550px] relative" : "w-full max-w-2xl"}>
         <Image
           src={imageSrc}
           alt={imageAlt}
@@ -62,13 +62,13 @@ export default function DealCard({
           <div className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 ${isRTL ? 'rtl' : 'ltr'}`}>
             {shouldReverse ? (
               <>
-                <ImageSection />
                 <ContentSection />
+                <ImageSection />
               </>
             ) : (
               <>
-                <ContentSection />
                 <ImageSection />
+                <ContentSection />
               </>
             )}
           </div>

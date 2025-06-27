@@ -4,8 +4,9 @@ export default function LanguageSwitcher() {
   const router = useRouter();
   const { pathname, asPath, query } = router;
 
-  const switchLanguage = (locale) => {
-    router.push({ pathname, query }, asPath, { locale });
+  const switchLanguage = async (locale) => {
+    await router.push({ pathname, query }, asPath, { locale });
+    window.location.reload();
   };
 
   return (

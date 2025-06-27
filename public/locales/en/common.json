@@ -14,15 +14,15 @@
     "downloadTitle": "Download the application now and start your saving journey"
   },
   "deals": {
-    "title": "Our Deals",
-    "description": "Discover our variety of deals designed to save you money and provide the best value for your purchases",
+    "title": "Deals Types",
+    "description": "Discover our variety of deals types that designed to save your money and provide the best value for your purchases",
     "originalDeal": {
       "title": "What is original deal?",
-      "description": "They are pre-prepared group purchase offers from Eshtarena that specify the price, quantity and supplier for a specific product after receiving price offers from all verified suppliers for this product and choosing the best offer to be presented it to you",
+      "description": "They are pre-prepared group purchase offers from Eshtarena that specify the price, quantity and supplier for a specific product after receiving price offers from all verified suppliers for this product and choosing the best offer to be presented to you",
       "point1": "The offer ends when the specified quantity or deal time ends",
       "point2": "You can buy any quantity you want and get the group offer price automatically at the time of purchase",
       "point3": "Eshtarena guarantees you the best price for the product in the market throughout the offer",
-      "point4": "You can view the page of the supplier, view the return policies and after-sales services",
+      "point4": "You can view the supplier profile page, view the return policies and after-sales services",
       "badge": "Original deal"
     },
     "coldDeal": {
@@ -35,7 +35,7 @@
       "howToUse": {
         "title": "How can you use the purchase vouchers?",
         "point1": "After purchasing a voucher for a specific brand from the group purchase offer, the voucher is automatically added to your vouchers' wallet on eshtarena.",
-        "point2": "You can open the voucher from your wallet, view your balance and bill the branch or the supplier's website with the voucher barcode number.",
+        "point2": "You can open the voucher from your wallet, view your balance and bill the branch or the supplier's website and mobile app with the voucher barcode number.",
         "point3": "You can cash out the full or partial value of the voucher and spend the remaining balance in future purchases.",
         "point4": "You will receive a notification from eshtarena after each purchase on what was spent with the remaining balance in this voucher."
       }
@@ -183,4 +183,4 @@
       }
     }
   }
-} 
+}

@@ -64,7 +64,7 @@ export const DEALS_DATA = [
     },
     imageAlt: 'Voucher Deal',
     hasBgColor: false,
-    isReversed: true
+    isReversed: false
   },
   {
     id: 'howToUse',
@@ -87,7 +87,7 @@ export const DEALS_DATA = [
     },
     imageAlt: 'Cold Deal',
     hasBgColor: true,
-    isReversed: true
+    isReversed: false
   }
 ];
 
