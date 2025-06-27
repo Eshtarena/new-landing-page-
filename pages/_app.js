@@ -6,8 +6,8 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>Eshtarena - Group Purchasing Power</title>
-        <meta name="description" content="Eshtarena is a group purchasing management application for individuals and businesses, offering the best prices and biggest discounts through group offers." />
+        <title>Eshtarena</title>
+        <meta name="description" content="The group shopping app" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Component {...pageProps} />

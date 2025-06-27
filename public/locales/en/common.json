@@ -115,6 +115,71 @@
     "links": "Links",
     "terms": "Terms & Conditions",
     "privacy": "Privacy Policy",
-    "downloadApp": "Download the app now and start your saving journey"
+    "downloadApp": "Download the app now and start your saving journey"
+  },
+  "suppliers": {
+    "join_button": "Join Eshtarena Partners and Suppliers",
+    "form": {
+      "title": "Join Eshtarena Partners and Suppliers",
+      "company_info": "Company Information",
+      "company_name": "Company Name",
+      "category": "Category",
+      "business_email": "Business Email",
+      "phone_number": "Phone Number",
+      "headquarters": "Head Quarter Address",
+      "contact_person": "Contact Person Information",
+      "contact_name": "Name",
+      "contact_title": "Title",
+      "contact_email": "Email",
+      "contact_phone": "Phone Number",
+      "message": "Message",
+      "submit": "Submit Application",
+      "submitting": "Submitting...",
+      "success": "Your application has been submitted successfully!",
+      "error": "An error occurred while submitting your application. Please try again.",
+      "validation": {
+        "company_name": {
+          "required": "Company name is required",
+          "min": "Company name must be at least 2 characters",
+          "max": "Company name must be less than 100 characters"
+        },
+        "category": {
+          "required": "Category is required",
+          "min": "Category must be at least 2 characters"
+        },
+        "business_email": {
+          "required": "Business email is required",
+          "invalid": "Please enter a valid email address"
+        },
+        "phone_number": {
+          "required": "Phone number is required",
+          "invalid": "Please enter a valid phone number"
+        },
+        "headquarters": {
+          "required": "Head quarter address is required",
+          "min": "Address must be at least 5 characters"
+        },
+        "contact_name": {
+          "required": "Contact name is required",
+          "min": "Name must be at least 2 characters"
+        },
+        "contact_title": {
+          "required": "Title is required"
+        },
+        "contact_email": {
+          "required": "Email is required",
+          "invalid": "Please enter a valid email address"
+        },
+        "contact_phone": {
+          "required": "Phone number is required",
+          "invalid": "Please enter a valid phone number"
+        },
+        "message": {
+          "required": "Message is required",
+          "min": "Message must be at least 10 characters",
+          "max": "Message must be less than 1000 characters"
+        }
+      }
+    }
   }
 } 

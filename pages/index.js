@@ -4,20 +4,21 @@ import BannersSection from "../sections/BannersSection";
 import AboutSection from "../sections/AboutSection";
 import DealsSection from "../sections/DealsSection";
 import ContactSection from "../sections/ContactSection";
+import SuppliersRequests from "../sections/SuppliersRequests";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { fetchSocialLinks } from "../utils/api";
-import Head from 'next/head';
+import Head from "next/head";
 
 export default function Home() {
   const { t } = useTranslation("common");
   const router = useRouter();
   const [socialData, setSocialData] = useState({
     social: [],
-    apple: '',
-    google: ''
+    apple: "",
+    google: "",
   });
 
   // Force scroll to top on mount
@@ -32,7 +33,7 @@ export default function Home() {
         const data = await fetchSocialLinks();
         setSocialData(data);
       } catch (error) {
-        console.error('Error loading social links:', error);
+        console.error("Error loading social links:", error);
       }
     };
 
@@ -48,11 +49,12 @@ export default function Home() {
         if (element) {
           const navbarHeight = 90;
           const elementPosition = element.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+          const offsetPosition =
+            elementPosition + window.pageYOffset - navbarHeight;
 
           window.scrollTo({
             top: offsetPosition,
-            behavior: "smooth"
+            behavior: "smooth",
           });
         }
       }
@@ -71,28 +73,30 @@ export default function Home() {
   return (
     <>
       <Head>
-        <script dangerouslySetInnerHTML={{ __html: `
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
           if (typeof window !== 'undefined') {
             window.scrollTo(0, 0);
           }
-        `}} />
+        `,
+          }}
+        />
       </Head>
       <div className="min-h-screen">
         <Navbar />
         <main>
           {/* Banner Section */}
-            <BannersSection />
-          
+          <BannersSection />
 
           {/* About Section */}
-          <section id="about" className="bg-white py-8 md:py-12 scroll-mt-16">
-            <AboutSection socialData={socialData} />
-          </section>
+          <AboutSection socialData={socialData} />
 
           {/* Deals Section */}
-          <section id="deals" className="py-8 md:py-12 scroll-mt-16">
-            <DealsSection />
-          </section>
+          <DealsSection />
+
+          {/* Suppliers Requests Section */}
+          <SuppliersRequests />
 
           {/* Contact Section */}
           <ContactSection socialData={socialData} />
@@ -104,10 +108,10 @@ export default function Home() {
 }
 
 export async function getStaticProps({ locale }) {
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     window.scrollTo(0, 0);
   }
-  
+
   return {
     props: {
       ...(await serverSideTranslations(locale, ["common"])),

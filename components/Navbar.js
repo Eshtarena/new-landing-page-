@@ -3,9 +3,11 @@ import Image from 'next/image';
 import { useTranslation } from 'next-i18next';
 import { useState, useEffect, useCallback } from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
+import { useRouter } from 'next/router';
 
 export default function Navbar() {
   const { t } = useTranslation('common');
+  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const [isClosing, setIsClosing] = useState(false);
@@ -58,28 +60,52 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [closeMenu, lastScrollY]);
 
-  const handleNavClick = (e, sectionId) => {
+  const handleNavClick = async (e, sectionId) => {
     e.preventDefault();
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const navbarHeight = 90;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+    
+    // If not on the landing page, navigate to it first
+    if (router.pathname !== '/') {
+      await router.push('/');
+      // Wait for navigation to complete
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          const navbarHeight = 90;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth"
-      });
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+          });
 
-      setActiveSection(sectionId);
-      closeMenu();
+          setActiveSection(sectionId);
+          closeMenu();
+        }
+      }, 100);
+    } else {
+      // If already on landing page, just scroll
+      const element = document.getElementById(sectionId);
+      if (element) {
+        const navbarHeight = 90;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth"
+        });
+
+        setActiveSection(sectionId);
+        closeMenu();
+      }
     }
   };
 
   const getLinkClassName = (sectionId, isMobile = false) => {
     const baseClasses = isMobile
       ? "block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-      : "transition-colors duration-200";
+      : "transition-colors duration-200 px-3";
 
     const activeClasses = isMobile
       ? "bg-white text-[#340040]"
@@ -104,13 +130,15 @@ export default function Navbar() {
         <div className="flex items-center justify-between navbar-container">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <Image
-              src="/app_icon.svg"
-              alt="Eshtarena Logo"
-              width={70}
-              height={70}
-              className="navbar-logo"
-            />
+            <Link href="/" className="cursor-pointer">
+              <Image
+                src="/app_icon.svg"
+                alt="Eshtarena Logo"
+                width={120}
+                height={120}
+                className="navbar-logo h-[60px] w-auto"
+              />
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
@@ -203,7 +231,7 @@ export default function Navbar() {
               href="https://eshtarena.com/login"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-white hover:text-[#340040] transition-colors duration-200"
+              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white hover:text-[#340040] transition-colors duration-200"
             >
               {t('navbar.login')}
             </a>
