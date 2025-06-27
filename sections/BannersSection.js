@@ -79,7 +79,7 @@ export default function BannersSection() {
 
   if (validImages.length === 0) {
     return (
-      <section id="home" className="w-full bg-gray-200 text-center relative mt-[67px] md:mt-[90px]">
+      <section id="home" className="w-full bg-gray-200 text-center relative mt-[65px] md:mt-[90px]">
         <div className="w-full h-96 flex items-center justify-center">
           <div className="text-gray-600 text-xl px-4">
             Banner images will appear here once uploaded
