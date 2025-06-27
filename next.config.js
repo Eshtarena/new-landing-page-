@@ -6,6 +6,7 @@ const nextConfig = {
   i18n,
   images: {
     domains: ['api.eshtarena.com'],
+    unoptimized: true
   },
   experimental: {
     scrollRestoration: true
