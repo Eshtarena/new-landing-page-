@@ -51,8 +51,8 @@ export default function DealsSection() {
   };
 
   return (
-    <section id="deals" className="w-full">
-      <div className="container-width text-center mb-16 px-4">
+    <section id="deals" className="w-full  ">
+      <div className=" text-center mb-16 md:px-[100px] px-[20px] ">
         <h2 className="text-4xl md:text-5xl font-bold text-[#340040] mb-6">
           {t("deals.title")}
         </h2>
@@ -61,7 +61,7 @@ export default function DealsSection() {
         </p>
       </div>
 
-      <div className="flex flex-col items-center mt-6">
+      <div className="flex flex-col       items-center mt-6">
         {DEALS_DATA.map((deal) => {
           const { title, description, points } = getCardContent(deal);
           return (

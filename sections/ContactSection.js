@@ -20,8 +20,8 @@ export default function ContactSection({ socialData }) {
   const isRTL = i18n.language === "ar";
 
   return (
-    <section id="contact" className="bg-white py-16 md:py-24 scroll-mt-16">
-      <div className="max-w-7xl mx-auto px-4">
+    <section id="contact" className="bg-white py-16 md:py-24 scroll-mt-16 ">
+      <div className="md:px-[100px] px-[20px] mx-auto ">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-[#340040] mb-4">
             {t("contact.title")}
@@ -30,12 +30,12 @@ export default function ContactSection({ socialData }) {
         </div>
 
         <div
-          className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-start ${
+          className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center  ${
             isRTL ? "lg:rtl" : "lg:ltr"
           }`}
         >
           {/* Contact Information */}
-          <div className="bg-gray-50 rounded-2xl p-8 lg:sticky lg:top-24">
+          <div className="bg-gray-50 lg:order-1 order-2 rounded-2xl p-8 lg:sticky lg:top-24">
             <div className="space-y-8">
               {/* Location */}
               <div

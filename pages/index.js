@@ -13,7 +13,7 @@ import { fetchSocialLinks } from "../utils/api";
 import Head from "next/head";
 
 export default function Home() {
-  const { t } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
   const router = useRouter();
   const [socialData, setSocialData] = useState({
     social: [],
@@ -83,7 +83,7 @@ export default function Home() {
           }}
         />
       </Head>
-      <div className="min-h-screen">
+      <div className={`min-h-screen   `}>
         <Navbar />
         <main>
           {/* Banner Section */}
