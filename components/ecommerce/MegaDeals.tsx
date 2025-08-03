@@ -1,136 +1,70 @@
 import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-
-interface DealItem {
-  id: number;
-  title: string;
-  image: string;
-  discount?: string;
-  price?: string;
-  originalPrice?: string;
-  link: string;
-}
+import { CompactDealCard } from '../deals/DealCard';
+import { Deal } from '../../types/deals';
+import { MOCK_MEGA_DEALS_BY_CATEGORY } from '../../data/mockDeals';
 
 interface CategoryDeals {
   title: string;
-  items: DealItem[];
-}
-
-interface DealsData {
-  [key: string]: CategoryDeals;
+  deals: Deal[];
 }
 
 export default function MegaDeals() {
-  const deals: DealsData = {
-    fashion: {
-      title: 'Fashion deals',
-      items: [
-        {
-          id: 1,
-          title: 'Ballerinas, sandals & more',
-          image: '/landing_page/english/cold_deal.png',
-          discount: 'Up to 60% off',
-          link: '/fashion/footwear'
-        }
-      ]
-    },
-    appliances: {
-      title: 'Appliances deals',
-      items: [
-        {
-          id: 1,
-          title: 'Hand Blender Vitesse',
-          image: '/landing_page/english/original_deal.png',
-          price: '1049 EGP',
-          originalPrice: '1199 EGP',
-          link: '/appliances/blenders'
-        }
-      ]
-    },
-    supermarket: {
-      title: 'Supermarket deals',
-      items: [
-        {
-          id: 1,
-          title: 'Fine Kitchen Tissue Paper',
-          image: '/landing_page/english/voucher_deal.png',
-          price: '124.95 EGP',
-          originalPrice: '200 EGP',
-          link: '/supermarket/paper-products'
-        }
-      ]
-    },
-    sports: {
-      title: 'Sports deals',
-      items: [
-        {
-          id: 1,
-          title: 'Sports essentials',
-          image: '/landing_page/english/voucher_deal2.png',
-          discount: 'Up to 30% off',
-          link: '/sports/essentials'
-        }
-      ]
-    }
+  const handleDealClick = (deal: Deal) => {
+    console.log('Deal clicked:', deal);
+    // You can add navigation logic here
+    // For example: router.push(`/deals/${deal.id}`);
   };
 
   return (
-    <div className="py-8">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Mega deals</h2>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {Object.entries(deals).map(([category, categoryDeals]) => (
-          <div key={category} className="bg-white rounded-lg overflow-hidden shadow-md">
-            <div className="p-4 border-b">
-              <h3 className="text-lg font-semibold text-primary-600">
-                {categoryDeals.title}
-              </h3>
-            </div>
-            
-            <div className="p-4">
-              {categoryDeals.items.map((item) => (
-                <Link
-                  key={item.id}
-                  href={item.link}
-                  className="group block"
-                >
-                  <div className="relative h-48 mb-4">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      style={{ objectFit: 'cover' }}
-                    />
+    <div className="py-8 bg-gray-50">
+      <div className="container mx-auto px-4">
+        <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+          Mega Deals
+        </h2>
+        
+        <div className="space-y-12">
+          {Object.entries(MOCK_MEGA_DEALS_BY_CATEGORY).map(([categoryKey, category]) => (
+            category.deals.length > 0 && (
+              <div key={categoryKey} className="bg-white rounded-xl shadow-lg overflow-hidden">
+                {/* Category Header */}
+                <div className="bg-gradient-to-r from-purple-600 to-purple-800 px-6 py-4">
+                  <h3 className="text-xl font-bold text-white">
+                    {category.title}
+                  </h3>
+                  <p className="text-purple-100 text-sm">
+                    {category.deals.length} amazing deals available
+                  </p>
+                </div>
+                
+                {/* Deals Grid */}
+                <div className="p-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {category.deals.map((deal) => (
+                      <CompactDealCard
+                        key={deal.id}
+                        deal={deal}
+                        onCardClick={handleDealClick}
+                        className="transform hover:scale-105 transition-transform duration-200"
+                      />
+                    ))}
                   </div>
                   
-                  <h4 className="text-sm font-medium text-gray-800 group-hover:text-primary-600">
-                    {item.title}
-                  </h4>
-                  
-                  {item.discount && (
-                    <p className="text-sm font-bold text-green-600 mt-1">
-                      {item.discount}
-                    </p>
-                  )}
-                  
-                  {item.price && (
-                    <div className="mt-1">
-                      <span className="text-sm font-bold text-gray-800">
-                        {item.price}
-                      </span>
-                      {item.originalPrice && (
-                        <span className="text-sm text-gray-500 line-through ml-2">
-                          {item.originalPrice}
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </Link>
-              ))}
-            </div>
-          </div>
-        ))}
+                  {/* View All Link */}
+                  <div className="mt-6 text-center">
+                    <button className="inline-flex items-center px-6 py-3 bg-purple-600 text-white font-medium rounded-lg hover:bg-purple-700 transition-colors">
+                      View All {category.title}
+                      <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )
+          ))}
+        </div>
+        
+       
       </div>
     </div>
   );
