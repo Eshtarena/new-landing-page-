@@ -1,18 +1,31 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import BannersSection from "../sections/BannersSection";
+import AboutSection from "../sections/AboutSection";
+import DealsSection from "../sections/DealsSection";
+import ContactSection from "../sections/ContactSection";
+import SuppliersRequests from "../sections/SuppliersRequests";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { fetchSocialLinks } from "../utils/api";
+import Head from "next/head";
 
-export default function Home() {
-<<<<<<< HEAD
-  const { t, i18n } = useTranslation("common");
-=======
->>>>>>> 5f17ad0 (splited landingpage and built part of home page)
+export default function LandingPage() {
+  const { t } = useTranslation("common");
   const router = useRouter();
+  const [socialData, setSocialData] = useState({
+    social: [],
+    apple: "",
+    google: "",
+  });
 
+  // Force scroll to top on mount
   useEffect(() => {
-    router.replace('/landingpage');
-  }, [router]);
+    window.scrollTo(0, 0);
+  }, []);
 
-<<<<<<< HEAD
   // Fetch social links once at the top level
   useEffect(() => {
     const loadSocialLinks = async () => {
@@ -70,7 +83,7 @@ export default function Home() {
           }}
         />
       </Head>
-      <div className={`min-h-screen   `}>
+      <div className="min-h-screen">
         <Navbar />
         <main>
           {/* Banner Section */}
@@ -92,14 +105,16 @@ export default function Home() {
       </div>
     </>
   );
-=======
-  return null;
->>>>>>> 5f17ad0 (splited landingpage and built part of home page)
 }
 
-// Maintain i18n support
 export async function getStaticProps({ locale }) {
+  if (typeof window !== "undefined") {
+    window.scrollTo(0, 0);
+  }
+
   return {
-    props: {},
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
   };
-}
+} 
