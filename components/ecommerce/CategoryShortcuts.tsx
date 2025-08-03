@@ -1,11 +1,18 @@
+import React, { useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRef } from 'react';
+
+interface Shortcut {
+  id: number;
+  title: string;
+  image: string;
+  link: string;
+}
 
 export default function CategoryShortcuts() {
-  const scrollContainerRef = useRef(null);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const scroll = (direction) => {
+  const scroll = (direction: 'left' | 'right'): void => {
     if (scrollContainerRef.current) {
       const scrollAmount = direction === 'left' ? -200 : 200;
       scrollContainerRef.current.scrollBy({
@@ -15,7 +22,7 @@ export default function CategoryShortcuts() {
     }
   };
 
-  const shortcuts = [
+  const shortcuts: Shortcut[] = [
     {
       id: 1,
       title: 'Donate For Gaza',
