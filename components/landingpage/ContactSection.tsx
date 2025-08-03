@@ -20,7 +20,9 @@ export default function ContactSection({ socialData }) {
   const isRTL = i18n.language === "ar";
 
   return (
-    <section id="contact" className="bg-white py-16 md:py-24 scroll-mt-16 ">
+    <section id="contact" className={`bg-white py-16 md:py-24 scroll-mt-16 ${
+      isRTL ? "rtl" : "ltr"
+    }`}>
       <div className="md:px-[100px] px-[20px] mx-auto ">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-[#340040] mb-4">
@@ -71,8 +73,8 @@ export default function ContactSection({ socialData }) {
                   </svg>
                 </div>
                 <div
-                  className={`text-center ${
-                    isRTL ? "md:text-end" : "md:text-start"
+                  className={`text-center md:text-${
+                    isRTL ? "end" : "start"
                   } flex-grow`}
                 >
                   <h3 className="text-lg font-semibold text-[#340040] mb-1">
@@ -112,8 +114,8 @@ export default function ContactSection({ socialData }) {
                   </svg>
                 </div>
                 <div
-                  className={`text-center ${
-                    isRTL ? "md:text-end" : "md:text-start"
+                  className={`text-center md:text-${
+                    isRTL ? "end" : "start"
                   } flex-grow`}
                 >
                   <h3 className="text-lg font-semibold text-[#340040] mb-1">
@@ -132,7 +134,7 @@ export default function ContactSection({ socialData }) {
               <div className="pt-6 mt-6 border-t border-gray-200">
                 <h3
                   className={`text-lg font-semibold text-[#340040] mb-4 text-center md:text-${
-                    isRTL ? "right" : "left"
+                    isRTL ? "end" : "start"
                   }`}
                 >
                   {t("contact.info.social.title")}

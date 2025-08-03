@@ -39,7 +39,7 @@ export default function Navbar() {
       closeMenu();
 
       // Update active section
-      const sections = ["about", "deals", "contact"];
+      const sections = ["home", "about", "deals", "contact"];
       const scrollPosition = currentScrollY + 100;
 
       for (const section of sections) {
@@ -55,6 +55,11 @@ export default function Navbar() {
           }
         }
       }
+      
+      // Set home as active if we're at the very top
+      if (currentScrollY < 100) {
+        setActiveSection("home");
+      }
 
       setLastScrollY(currentScrollY);
     };
@@ -67,8 +72,8 @@ export default function Navbar() {
     e.preventDefault();
 
     // If not on the landing page, navigate to it first
-    if (router.pathname !== "/") {
-      await router.push("/");
+    if (router.pathname !== "/landingpage") {
+      await router.push("/landingpage");
       // Wait for navigation to complete
       setTimeout(() => {
         const element = document.getElementById(sectionId);
@@ -135,7 +140,11 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-24">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="cursor-pointer">
+            <a 
+              href="#home"
+              onClick={(e) => handleNavClick(e, "home")}
+              className="cursor-pointer"
+            >
               <Image
                 src="/eshtarena_logo.svg"
                 alt="Eshtarena Logo"
@@ -145,7 +154,7 @@ export default function Navbar() {
                 className="navbar-logo"
                 priority
               />
-            </Link>
+            </a>
           </div>
 
           {/* Desktop Navigation */}

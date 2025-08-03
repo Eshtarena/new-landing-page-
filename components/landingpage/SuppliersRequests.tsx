@@ -11,7 +11,7 @@ export default function SuppliersRequests() {
   };
 
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section className={`bg-white py-16 md:py-24 ${isRTL ? "rtl" : "ltr"}`}>
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-center">
           <button

@@ -51,7 +51,7 @@ export default function DealsSection() {
   };
 
   return (
-    <section id="deals" className="w-full  ">
+    <section id="deals" className={`w-full ${i18n.language === "ar" ? "rtl" : "ltr"}`}>
       <div className=" text-center mb-16 md:px-[100px] px-[20px] ">
         <h2 className="text-4xl md:text-5xl font-bold text-[#340040] mb-6">
           {t("deals.title")}
