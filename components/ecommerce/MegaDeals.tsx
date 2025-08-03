@@ -15,7 +15,7 @@ export default function MegaDeals() {
       <div className="container mx-auto px-4">
         {/* Deals Grid */}
         <div className="p-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {ALL_MOCK_DEALS.map((deal) => (
               <CompactDealCard
                 key={deal.id}
@@ -28,7 +28,7 @@ export default function MegaDeals() {
 
           {/* View All Link */}
           <div className="mt-6 text-center">
-            <button className="inline-flex items-center px-6 py-3 bg-purple-600 text-white font-medium rounded-lg hover:bg-purple-700 transition-colors">
+            <button className="inline-flex items-center px-6 py-3 bg-[#340040] text-white font-medium rounded-lg hover:bg-[#340040] transition-colors">
               View All Deals
               <svg
                 className="ml-2 w-4 h-4"
