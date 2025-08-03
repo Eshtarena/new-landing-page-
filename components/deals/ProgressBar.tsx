@@ -44,14 +44,6 @@ export default function ProgressBar({
           }}
         />
       </div>
-      
-      {showLabels && (
-        <div className="flex justify-center mt-1">
-          <span className="text-xs text-gray-500">
-            {progressPercentage.toFixed(1)}% sold
-          </span>
-        </div>
-      )}
     </div>
   );
 }

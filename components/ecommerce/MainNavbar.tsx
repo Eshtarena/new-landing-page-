@@ -1,18 +1,29 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import Logo from '../Logo';
 import LanguageSwitcher from '../landingpage/LanguageSwitcher';
+import { buildLoginRoute } from '../../utils/routes';
 
 interface SearchState {
   query: string;
 }
 
-export default function MainNavbar() {
+interface MainNavbarProps {
+  countryCode?: string;
+  lang?: string;
+}
+
+export default function MainNavbar({ countryCode = 'egy', lang = 'en' }: MainNavbarProps) {
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const router = useRouter();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchQuery(e.target.value);
   };
+
+  // Get the login route based on current country and language
+  const loginRoute = buildLoginRoute(countryCode, lang);
 
   return (
     <nav className="bg-[#340040] shadow-md py-4">
@@ -27,7 +38,7 @@ export default function MainNavbar() {
           <div className="hidden md:flex items-center space-x-2 ml-4">
             <span className="text-white">Deliver to</span>
             <button className="flex items-center space-x-1 text-primary-600 hover:text-primary-700">
-              <span>Cairo</span>
+              <span>{countryCode === 'egy' ? 'Cairo' : 'Riyadh'}</span>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
@@ -54,28 +65,39 @@ export default function MainNavbar() {
 
           {/* Right Side Icons */}
           <div className="flex items-center space-x-4">
-            {/* Account */}
-            <Link href="/account" className="text-white hover:text-primary-200">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
+            {/* Account - Connected to Login Page */}
+            <Link href={loginRoute} className="text-white hover:text-primary-200">
+              <div className="flex flex-col items-center">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span className="text-xs mt-1">Account</span>
+              </div>
             </Link>
 
             {/* Wishlist */}
             <Link href="/wishlist" className="text-white hover:text-primary-200">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
+              <div className="flex flex-col items-center">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                <span className="text-xs mt-1">Wishlist</span>
+              </div>
             </Link>
 
             {/* Cart */}
             <Link href="/cart" className="text-white hover:text-primary-200 relative">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.293 2.293A1 1 0 004 16v1a1 1 0 001 1h1m0 0v-3a1 1 0 011-1h2m8-1V9a1 1 0 00-1-1H9.5" />
-              </svg>
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                3
-              </span>
+              <div className="flex flex-col items-center">
+                <div className="relative">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.293 2.293A1 1 0 004 16v1a1 1 0 001 1h1m0 0v-3a1 1 0 011-1h2m8-1V9a1 1 0 00-1-1H9.5" />
+                  </svg>
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    3
+                  </span>
+                </div>
+                <span className="text-xs mt-1">Cart</span>
+              </div>
             </Link>
 
             {/* Language Switcher */}

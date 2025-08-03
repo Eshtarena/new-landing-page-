@@ -49,7 +49,7 @@ export default function HeroSlider() {
   };
 
   return (
-    <div className="relative h-[400px] rounded-lg overflow-hidden my-4">
+    <div className="relative h-[500px] rounded-lg overflow-hidden my-4">
       {/* Slides */}
       <div className="relative h-full">
         {slides.map((slide, index) => (
@@ -63,7 +63,7 @@ export default function HeroSlider() {
               src={slide.image}
               alt={slide.title}
               fill
-              style={{ objectFit: 'cover' }}
+              style={{ objectFit: 'fill' }}
               priority={index === 0}
             />
           </div>
