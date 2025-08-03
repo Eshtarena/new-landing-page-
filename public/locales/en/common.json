@@ -191,5 +191,190 @@
   "privacy": {
     "pageTitle": "Privacy Policy",
     "pageDescription": "Learn how we collect, use, and protect your personal information"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in to your account",
+      "subtitle": "Welcome back! Please enter your credentials.",
+      "email": "Email address",
+      "emailPlaceholder": "Enter your email",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot your password?",
+      "signInButton": "Sign in",
+      "newToEshtarena": "New to Eshtarena?",
+      "createAccount": "Create an account",
+      "errorGeneral": "Login failed. Please check your credentials and try again."
+    },
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Choose your account type to get started",
+      "accountTypeQuestion": "Are you registering as an organization?",
+      "getStarted": "Get Started",
+      "alreadyHaveAccount": "Already have an account?",
+      "signInInstead": "Sign in instead",
+      "personal": {
+        "title": "Personal Account",
+        "description": "For individual users shopping for personal needs",
+        "feature1": "Quick 2-step registration",
+        "feature2": "Personal profile and preferences",
+        "feature3": "Individual shopping experience"
+      },
+      "organization": {
+        "title": "Organization Account",
+        "description": "For businesses, companies, and organizations",
+        "feature1": "Comprehensive 3-step registration",
+        "feature2": "Business verification and documents",
+        "feature3": "Bulk purchasing and corporate features"
+      }
+    },
+    "personalRegistration": {
+      "title": "Create Personal Account",
+      "step1": {
+        "title": "Personal Information",
+        "subtitle": "Tell us about yourself",
+        "fullName": "Full Name",
+        "fullNamePlaceholder": "Enter your full name",
+        "email": "Email Address",
+        "emailPlaceholder": "Enter your email",
+        "phone": "Phone Number",
+        "phonePlaceholder": "Enter your phone number",
+        "birthdate": "Date of Birth"
+      },
+      "step2": {
+        "title": "Security Setup",
+        "subtitle": "Choose a secure password",
+        "password": "Password",
+        "passwordPlaceholder": "Enter your password",
+        "confirmPassword": "Confirm Password",
+        "confirmPasswordPlaceholder": "Confirm your password",
+        "requirements": {
+          "title": "Password requirements:",
+          "length": "At least 8 characters long",
+          "uppercase": "Contains uppercase and lowercase letters",
+          "number": "Contains at least one number"
+        }
+      },
+      "navigation": {
+        "back": "Back",
+        "next": "Next",
+        "previous": "Previous",
+        "createAccount": "Create Account"
+      },
+      "stepIndicator": "Step {{current}} of {{total}}"
+    },
+    "organizationRegistration": {
+      "title": "Create Organization Account",
+      "step1": {
+        "title": "Company Information",
+        "subtitle": "Tell us about your organization",
+        "commercialName": "Commercial Name",
+        "commercialNamePlaceholder": "Enter your commercial name",
+        "registeredName": "Registered Name",
+        "registeredNamePlaceholder": "Enter your registered company name",
+        "email": "Email Address",
+        "emailPlaceholder": "Enter your business email",
+        "scopeOfBusiness": "Scope of Business",
+        "scopeOfBusinessPlaceholder": "Describe your business activities"
+      },
+      "step2": {
+        "title": "Legal Documentation",
+        "subtitle": "Provide your business registration details",
+        "crNumber": "CR Number (Commercial Registration)",
+        "crNumberPlaceholder": "Enter 10-digit CR number",
+        "vatNumber": "VAT Registration Number",
+        "vatNumberPlaceholder": "Enter 15-digit VAT number",
+        "documentsInfo": {
+          "title": "💡 Required Documents:",
+          "cr": "Valid Commercial Registration (CR)",
+          "vat": "VAT Registration Certificate",
+          "verification": "These will be verified during account approval"
+        }
+      },
+      "step3": {
+        "title": "Security Setup",
+        "subtitle": "Choose a secure password for your account",
+        "password": "Password",
+        "passwordPlaceholder": "Enter your password",
+        "confirmPassword": "Confirm Password",
+        "confirmPasswordPlaceholder": "Confirm your password",
+        "requirements": {
+          "title": "Password requirements:",
+          "length": "At least 8 characters long",
+          "uppercase": "Contains uppercase and lowercase letters",
+          "number": "Contains at least one number"
+        }
+      },
+      "navigation": {
+        "back": "Back",
+        "next": "Next",
+        "previous": "Previous",
+        "createAccount": "Create Account"
+      },
+      "stepIndicator": "Step {{current}} of {{total}}",
+      "stepper": {
+        "companyInfo": "Company Info",
+        "legalDetails": "Legal Details",
+        "security": "Security"
+      }
+    },
+    "common": {
+      "loading": "Loading...",
+      "error": "An error occurred. Please try again.",
+      "required": "This field is required",
+      "languageSwitcher": {
+        "english": "English",
+        "arabic": "العربية"
+      }
+    },
+    "validation": {
+      "email": {
+        "required": "Email is required",
+        "invalid": "Please enter a valid email address"
+      },
+      "password": {
+        "required": "Password is required",
+        "minLength": "Password must be at least 8 characters long",
+        "uppercase": "Password must contain at least one uppercase letter",
+        "lowercase": "Password must contain at least one lowercase letter",
+        "number": "Password must contain at least one number"
+      },
+      "confirmPassword": {
+        "required": "Please confirm your password",
+        "mismatch": "Passwords do not match"
+      },
+      "fullName": {
+        "required": "Full name is required",
+        "minLength": "Full name must be at least 2 characters long",
+        "invalid": "Full name can only contain letters and spaces"
+      },
+      "phone": {
+        "required": "Phone number is required",
+        "invalid": "Please enter a valid phone number"
+      },
+      "birthdate": {
+        "required": "Birthdate is required",
+        "invalid": "Please enter a valid date",
+        "minAge": "You must be at least {{age}} years old",
+        "future": "Birthdate cannot be in the future",
+        "maxAge": "Please enter a valid birthdate"
+      },
+      "companyName": {
+        "required": "Company name is required",
+        "minLength": "Company name must be at least 2 characters long"
+      },
+      "scopeOfBusiness": {
+        "required": "Scope of Business is required"
+      },
+      "crNumber": {
+        "required": "CR Number is required",
+        "invalid": "CR Number must be exactly 10 digits"
+      },
+      "vatNumber": {
+        "required": "VAT Registration Number is required",
+        "invalid": "VAT Registration Number must be exactly 15 digits"
+      }
+    }
   }
 }
