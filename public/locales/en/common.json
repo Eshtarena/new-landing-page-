@@ -182,5 +182,14 @@
         }
       }
     }
+  },
+  "terms": {
+    "pageTitle": "Terms & Policies",
+    "pageDescription": "Review our terms of service, policies, and guidelines for using Eshtarena",
+    "readMore": "Read More"
+  },
+  "privacy": {
+    "pageTitle": "Privacy Policy",
+    "pageDescription": "Learn how we collect, use, and protect your personal information"
   }
 }
