@@ -88,10 +88,10 @@ export default function LandingPage() {
         <script
           dangerouslySetInnerHTML={{
             __html: `
-          if (typeof window !== 'undefined') {
-            window.scrollTo(0, 0);
-          }
-        `,
+        if (typeof window !== 'undefined') {
+          window.scrollTo(0, 0);
+        }
+      `,
           }}
         />
       </Head>
@@ -119,10 +119,12 @@ export default function LandingPage() {
   );
 }
 
-export const getStaticProps: GetStaticProps = async ({ locale }: GetStaticPropsContext) => {
+export const getStaticProps: GetStaticProps = async ({
+  locale,
+}: GetStaticPropsContext) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? 'en', ["common"])),
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
     },
   };
-} 
+};

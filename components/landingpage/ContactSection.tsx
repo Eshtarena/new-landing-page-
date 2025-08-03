@@ -1,282 +1,217 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import ContactForm from "../ContactForm";
 import { useTranslation } from "next-i18next";
+import Image from "next/image";
+import { STORES_IMAGES_LINKS } from "../../utils/consts";
 
-interface SocialLink {
-  platform: string;
-  url: string;
-}
+// API base URL constant
+const API_BASE_URL = "https://api.eshtarena.com";
 
-interface SocialData {
-  social: SocialLink[];
-  apple: string;
-  google: string;
-}
-
-interface ContactSectionProps {
-  socialData: SocialData;
-}
-
-interface FormData {
-  name: string;
-  email: string;
-  phone: string;
-  message: string;
-}
-
-export default function ContactSection({ socialData }: ContactSectionProps) {
-  const { t } = useTranslation("common");
-  const [formData, setFormData] = useState<FormData>({
+export default function ContactSection({ socialData }) {
+  const { t, i18n } = useTranslation("common");
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
+    country: null,
     phone: "",
     message: "",
   });
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
-  const [success, setSuccess] = useState<boolean>(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to submit form");
-      }
-
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        message: "",
-      });
-      setSuccess(true);
-    } catch (err) {
-      setError(t("contact.form.error"));
-    } finally {
-      setLoading(false);
-    }
-  };
+  const isRTL = i18n.language === "ar";
 
   return (
-    <section id="contact" className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-[#340040] mb-4">
+    <section id="contact" className="bg-white py-16 md:py-24 scroll-mt-16 ">
+      <div className="md:px-[100px] px-[20px] mx-auto ">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#340040] mb-4">
             {t("contact.title")}
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            {t("contact.description")}
-          </p>
+          <p className="text-lg text-gray-600">{t("contact.description")}</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div
+          className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center  ${
+            isRTL ? "lg:rtl" : "lg:ltr"
+          }`}
+        >
           {/* Contact Information */}
-          <div>
-            <h3 className="text-2xl font-semibold text-[#340040] mb-6">
-              {t("contact.getInTouch")}
-            </h3>
-            <div className="space-y-6">
-              <div className="flex items-start">
-                <div className="flex-shrink-0">
+          <div className="bg-gray-50 lg:order-1 order-2 rounded-2xl p-8 lg:sticky lg:top-24">
+            <div className="space-y-8">
+              {/* Location */}
+              <div
+                className={`flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 ${
+                  isRTL
+                    ? "md:flex-row-reverse md:space-x-6"
+                    : "md:flex-row md:space-x-6"
+                }`}
+              >
+                <div
+                  className={`flex-shrink-0 w-12 h-12 bg-[#340040] bg-opacity-10 rounded-lg flex items-center justify-center ${
+                    isRTL ? "md:ml-2" : "md:mr-2"
+                  }`}
+                >
                   <svg
-                    className="h-6 w-6 text-[#340040]"
+                    className="w-6 h-6 text-[#340040]"
                     fill="none"
-                    stroke="currentColor"
                     viewBox="0 0 24 24"
+                    stroke="currentColor"
                   >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                     />
                   </svg>
                 </div>
-                <div className="ml-3">
-                  <p className="text-lg font-medium text-[#340040]">
-                    {t("contact.email")}
+                <div
+                  className={`text-center ${
+                    isRTL ? "md:text-end" : "md:text-start"
+                  } flex-grow`}
+                >
+                  <h3 className="text-lg font-semibold text-[#340040] mb-1">
+                    {t("contact.info.location.title")}
+                  </h3>
+                  <p className="text-gray-600">
+                    {t("contact.info.location.address")}
                   </p>
-                  <p className="mt-1 text-gray-600">support@eshtarena.com</p>
                 </div>
               </div>
 
-              <div className="flex items-start">
-                <div className="flex-shrink-0">
+              {/* Email */}
+              <div
+                className={`flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 ${
+                  isRTL
+                    ? "md:flex-row-reverse md:space-x-6"
+                    : "md:flex-row md:space-x-6"
+                }`}
+              >
+                <div
+                  className={`flex-shrink-0 w-12 h-12 bg-[#340040] bg-opacity-10 rounded-lg flex items-center justify-center ${
+                    isRTL ? "md:ml-2" : "md:mr-2"
+                  }`}
+                >
                   <svg
-                    className="h-6 w-6 text-[#340040]"
+                    className="w-6 h-6 text-[#340040]"
                     fill="none"
-                    stroke="currentColor"
                     viewBox="0 0 24 24"
+                    stroke="currentColor"
                   >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2v10a2 2 0 002 2z"
                     />
                   </svg>
                 </div>
-                <div className="ml-3">
-                  <p className="text-lg font-medium text-[#340040]">
-                    {t("contact.phone")}
-                  </p>
-                  <p className="mt-1 text-gray-600">+1 (555) 123-4567</p>
+                <div
+                  className={`text-center ${
+                    isRTL ? "md:text-end" : "md:text-start"
+                  } flex-grow`}
+                >
+                  <h3 className="text-lg font-semibold text-[#340040] mb-1">
+                    {t("contact.info.email.title")}
+                  </h3>
+                  <a
+                    href="mailto:customerservice@eshtarena.com"
+                    className="text-gray-600 hover:text-[#340040] transition-colors"
+                  >
+                    {t("contact.info.email.address")}
+                  </a>
                 </div>
               </div>
 
-              {/* Social Links */}
-              <div className="mt-8">
-                <h4 className="text-lg font-medium text-[#340040] mb-4">
-                  {t("contact.followUs")}
-                </h4>
-                <div className="flex space-x-4">
-                  {socialData.social.map((link) => (
+              {/* Social Media Links */}
+              <div className="pt-6 mt-6 border-t border-gray-200">
+                <h3
+                  className={`text-lg font-semibold text-[#340040] mb-4 text-center md:text-${
+                    isRTL ? "right" : "left"
+                  }`}
+                >
+                  {t("contact.info.social.title")}
+                </h3>
+                <div
+                  className={`flex flex-wrap gap-4 justify-center md:justify-${
+                    isRTL ? "end" : "start"
+                  }`}
+                >
+                  {socialData.social.map((social) => (
                     <a
-                      key={link.platform}
-                      href={link.url}
+                      key={social._id}
+                      href={social.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-gray-400 hover:text-[#340040]"
+                      className="w-10 h-10 bg-[#340040] bg-opacity-10 rounded-lg flex items-center justify-center text-[#340040] hover:bg-[#340040] hover:text-white transition-colors"
+                      title={social.title}
                     >
-                      <span className="sr-only">{link.platform}</span>
-                      <i className={`fab fa-${link.platform.toLowerCase()} text-2xl`}></i>
+                      <Image
+                        src={social.logo}
+                        alt={social.title}
+                        width={20}
+                        height={20}
+                        className="object-contain"
+                      />
                     </a>
                   ))}
+                </div>
+
+                {/* App Store Links */}
+                <div
+                  className={`flex flex-wrap gap-6 mt-8 justify-center md:justify-${
+                    isRTL ? "end" : "start"
+                  }`}
+                >
+                  {socialData.apple && (
+                    <a
+                      href={socialData.apple}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-[160px] h-[48px] relative"
+                    >
+                      <Image
+                        src={STORES_IMAGES_LINKS.apple}
+                        alt="Download on the App Store"
+                        fill
+                        className="object-contain"
+                      />
+                    </a>
+                  )}
+                  {socialData.google && (
+                    <a
+                      href={socialData.google}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-[160px] h-[48px] relative"
+                    >
+                      <Image
+                        src={STORES_IMAGES_LINKS.google}
+                        alt="Get it on Google Play"
+                        fill
+                        className="object-contain"
+                      />
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
           </div>
 
           {/* Contact Form */}
-          <div>
-            {success ? (
-              <div className="text-center p-8 bg-green-50 rounded-lg">
-                <svg
-                  className="w-16 h-16 text-green-500 mx-auto mb-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <h3 className="text-xl font-semibold text-green-900 mb-2">
-                  {t("contact.form.success.title")}
-                </h3>
-                <p className="text-green-700">
-                  {t("contact.form.success.message")}
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    {t("contact.form.name")}
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#340040] focus:ring-[#340040]"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    {t("contact.form.email")}
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#340040] focus:ring-[#340040]"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="phone"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    {t("contact.form.phone")}
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#340040] focus:ring-[#340040]"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    {t("contact.form.message")}
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows={4}
-                    required
-                    value={formData.message}
-                    onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#340040] focus:ring-[#340040]"
-                  />
-                </div>
-
-                {error && (
-                  <div className="text-red-600 text-sm">
-                    {error}
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#340040] hover:bg-[#340040]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#340040] disabled:opacity-50"
-                >
-                  {loading ? t("contact.form.sending") : t("contact.form.send")}
-                </button>
-              </form>
-            )}
+          <div
+            className={`bg-white rounded-2xl shadow-lg border border-gray-100 mx-auto w-full ${
+              isRTL ? "lg:order-first" : ""
+            }`}
+          >
+            <div className="p-8">
+              <ContactForm />
+            </div>
           </div>
         </div>
       </div>
