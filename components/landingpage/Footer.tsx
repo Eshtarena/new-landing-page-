@@ -8,7 +8,9 @@ export default function Footer({ socialData }) {
   const isRTL = i18n.language === "ar";
 
   return (
-    <footer className="bg-[#340040] text-white py-12 md:px-[50px] px-[10px]">
+    <footer className={`bg-[#340040] text-white py-12 md:px-[50px] px-[10px] ${
+      isRTL ? "rtl" : "ltr"
+    }`}>
       <div className={`container-width ${isRTL ? "rtl" : "ltr"}`}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* First Column - Logo and Social Links */}
@@ -123,7 +125,7 @@ export default function Footer({ socialData }) {
             </div>
             <p
               className={`text-sm opacity-80 text-center md:text-${
-                isRTL ? "right" : "left"
+                isRTL ? "end" : "start"
               }`}
             >
               © 2024 : All rights reserved by ESHTARENA LTD IBC

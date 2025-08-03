@@ -12,7 +12,9 @@ export default function AboutSection() {
   return (
     <div
       id="about"
-      className="md:px-[100px] px-[20px] mx-auto   md:py-20 py-8 "
+      className={`md:px-[100px] px-[20px] mx-auto md:py-20 py-8 ${
+        isRTL ? "rtl" : "ltr"
+      }`}
     >
       <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
         {/* Content Section - Order changes based on language */}

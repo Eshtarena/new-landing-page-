@@ -6,7 +6,13 @@ export default function LanguageSwitcher() {
   const { pathname, asPath, query } = router;
 
   const switchLanguage = (locale: string): void => {
-    router.push({ pathname, query }, asPath, { locale });
+    // Only switch if it's a different locale
+    if (router.locale !== locale) {
+      router.push({ pathname, query }, asPath, { locale }).then(() => {
+        // Force reload the page to ensure all media and styles are properly updated
+        window.location.reload();
+      });
+    }
   };
 
   return (

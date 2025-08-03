@@ -22,6 +22,7 @@ export default function BannersSection() {
     // Reset errors and loading state when language changes
     setImageErrors({});
     setIsLoading(true);
+    setSlide(1); // Reset slide position when language changes
   }, [i18n.language]);
 
   // Filter out images that failed to load
@@ -35,13 +36,14 @@ export default function BannersSection() {
   ];
 
   const handleImageError = (index, error) => {
-    console.error(`Error loading image at index ${index}:`, error);
+    console.error(`Error loading image at index ${index} for language ${i18n.language}:`, error);
     console.log("Image path:", images[index]);
+    console.log("All images for current language:", images);
     setImageErrors((prev) => ({ ...prev, [index]: true }));
   };
 
   const handleImageLoad = (index) => {
-    console.log("Image loaded successfully:", images[index]);
+    console.log(`Image loaded successfully for language ${i18n.language}:`, images[index]);
     setIsLoading(false);
   };
 
@@ -99,7 +101,7 @@ export default function BannersSection() {
     return (
       <section
         id="home"
-        className="w-full bg-gray-200 text-center relative mt-[70px] md:mt-[90px]"
+        className="w-full bg-gray-200 text-center relative mt-[44px] md:mt-[90px]"
       >
         <div className="w-full h-96 flex items-center justify-center">
           <div className="text-gray-600 text-xl px-4">
@@ -113,10 +115,9 @@ export default function BannersSection() {
   }
 
   const getSliderStyle = () => {
+    const isRTL = i18n.language === "ar";
     return {
-      transform: `translateX(${i18n.language === "ar" ? "" : "-"}${
-        slide * 100
-      }%)`,
+      transform: `translateX(${isRTL ? "" : "-"}${slide * 100}%)`,
       transition: isTransitioning ? "transform 700ms ease-in-out" : "none",
     };
   };
@@ -124,7 +125,9 @@ export default function BannersSection() {
   return (
     <section
       id="home"
-      className="w-full text-center relative mt-[44px] md:mt-[90px]"
+      className={`w-full text-center relative mt-[44px] md:mt-[90px] ${
+        i18n.language === "ar" ? "rtl" : "ltr"
+      }`}
     >
       <div
         className="w-full max-w-full mx-auto relative overflow-hidden md:h-screen h-auto aspect-[4/3]"
