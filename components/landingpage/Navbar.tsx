@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/router";
+import Logo from "../Logo";
 import LanguageSwitcher from "../landingpage/LanguageSwitcher";
 
 export default function Navbar() {
@@ -28,15 +28,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link href="/">
-              <Image
-                src="/eshtarena_logo.svg"
-                alt="Eshtarena Logo"
-                width={150}
-                height={40}
-                className="cursor-pointer"
-              />
-            </Link>
+            <Logo width={150} height={40} className="cursor-pointer" href="/" priority />
           </div>
 
           {/* Navigation Links */}
@@ -64,6 +56,14 @@ export default function Navbar() {
               }`}
             >
               Contact
+            </Link>
+            <Link
+              href="/join-suppliers"
+              className={`text-white hover:text-white/80 ${
+                router.pathname === "/join-suppliers" ? "text-white/80" : ""
+              }`}
+            >
+              Join as Supplier
             </Link>
           </div>
 
