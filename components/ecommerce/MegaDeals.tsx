@@ -1,8 +1,28 @@
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+interface DealItem {
+  id: number;
+  title: string;
+  image: string;
+  discount?: string;
+  price?: string;
+  originalPrice?: string;
+  link: string;
+}
+
+interface CategoryDeals {
+  title: string;
+  items: DealItem[];
+}
+
+interface DealsData {
+  [key: string]: CategoryDeals;
+}
+
 export default function MegaDeals() {
-  const deals = {
+  const deals: DealsData = {
     fashion: {
       title: 'Fashion deals',
       items: [

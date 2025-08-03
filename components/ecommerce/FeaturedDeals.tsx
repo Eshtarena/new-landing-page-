@@ -1,8 +1,17 @@
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+interface Deal {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  link: string;
+}
+
 export default function FeaturedDeals() {
-  const deals = [
+  const deals: Deal[] = [
     {
       id: 1,
       title: 'Special Offer',

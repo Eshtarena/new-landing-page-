@@ -1,10 +1,18 @@
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
 import LanguageSwitcher from '../LanguageSwitcher';
 
+interface SearchState {
+  query: string;
+}
+
 export default function MainNavbar() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setSearchQuery(e.target.value);
+  };
 
   return (
     <nav className="bg-[#340040] shadow-md py-4">
@@ -26,7 +34,7 @@ export default function MainNavbar() {
           {/* Country Selector */}
           <div className="hidden md:flex items-center space-x-2 ml-4">
             <span className="text-white">Deliver to</span>
-            <button className="flex items-center space-x-1 text-white hover:text-primary-700">
+            <button className="flex items-center space-x-1 text-primary-600 hover:text-primary-700">
               <span>Cairo</span>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -42,7 +50,7 @@ export default function MainNavbar() {
                 className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-500"
                 placeholder="What are you looking for?"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleSearchChange}
               />
               <button className="absolute right-3 top-1/2 transform -translate-y-1/2">
                 <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,6 +64,7 @@ export default function MainNavbar() {
           <div className="flex items-center space-x-6">
             {/* Language Switch */}
             <LanguageSwitcher />
+
             {/* Login */}
             <button className="flex items-center space-x-1 text-white hover:text-primary-600">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

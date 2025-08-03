@@ -1,10 +1,17 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 
-export default function HeroSlider() {
-  const [currentSlide, setCurrentSlide] = useState(0);
+interface Slide {
+  id: number;
+  image: string;
+  title: string;
+  link: string;
+}
 
-  const slides = [
+export default function HeroSlider() {
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
+
+  const slides: Slide[] = [
     {
       id: 1,
       image: '/banners/english/best_price_en.png',
@@ -31,13 +38,13 @@ export default function HeroSlider() {
     }, 5000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
 
-  const nextSlide = () => {
+  const nextSlide = (): void => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
   };
 
-  const prevSlide = () => {
+  const prevSlide = (): void => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 

@@ -1,3 +1,5 @@
+import React from 'react';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import MainNavbar from '../../components/ecommerce/MainNavbar';
@@ -8,14 +10,21 @@ import CategoryShortcuts from '../../components/ecommerce/CategoryShortcuts';
 import FeaturedDeals from '../../components/ecommerce/FeaturedDeals';
 import MegaDeals from '../../components/ecommerce/MegaDeals';
 
-const countryNames = {
+interface CountryNames {
+  [key: string]: string;
+}
+
+interface Props {
+  countryCode: string;
+}
+
+const countryNames: CountryNames = {
   egy: 'Egypt',
   saudi: 'Saudi Arabia'
 };
 
-export default function CountryHomePage() {
+export default function CountryHomePage({ countryCode }: Props) {
   const router = useRouter();
-  const { countryCode } = router.query;
 
   return (
     <>
@@ -39,9 +48,8 @@ export default function CountryHomePage() {
   );
 }
 
-// This gets called on every request
-export async function getServerSideProps({ params }) {
-  const { countryCode } = params;
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const { countryCode } = params as { countryCode: string };
   
   // Validate country code
   const validCountryCodes = ['egy', 'saudi'];
@@ -57,4 +65,4 @@ export async function getServerSideProps({ params }) {
       countryCode: countryCode.toLowerCase(),
     },
   };
-} 
+}; 
