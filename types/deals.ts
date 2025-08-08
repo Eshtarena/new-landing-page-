@@ -37,6 +37,8 @@ export interface BaseDeal {
   saveAmount: number;
   currency: string;
   isActive: boolean;
+  category?: string;
+  supplier?: string;
 }
 
 export interface VoucherDeal extends BaseDeal {

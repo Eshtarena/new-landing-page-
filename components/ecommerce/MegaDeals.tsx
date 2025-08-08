@@ -1,13 +1,15 @@
 import React from "react";
+import { useRouter } from "next/router";
 import { CompactDealCard } from "../deals/DealCard";
 import { Deal } from "../../types/deals";
 import { ALL_MOCK_DEALS } from "../../data/mockDeals";
+import { handleDealClick } from "../../utils/navigation";
 
 export default function MegaDeals() {
-  const handleDealClick = (deal: Deal) => {
-    console.log("Deal clicked:", deal);
-    // You can add navigation logic here
-    // For example: router.push(`/deals/${deal.id}`);
+  const router = useRouter();
+  
+  const onDealClick = (deal: Deal) => {
+    handleDealClick(router, deal, "MegaDeals");
   };
 
   return (
@@ -20,7 +22,7 @@ export default function MegaDeals() {
               <CompactDealCard
                 key={deal.id}
                 deal={deal}
-                onCardClick={handleDealClick}
+                onCardClick={onDealClick}
                 className="transform hover:scale-105 transition-transform duration-200"
               />
             ))}
