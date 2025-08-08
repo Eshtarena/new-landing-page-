@@ -63,7 +63,7 @@ export default function Footer({ socialData }) {
             <Link
               href="/terms-and-conditions"
               // href="https://eshtarena.com/terms-conditions"
-              target="_blank"
+              // target="_blank"
               rel="noopener noreferrer"
               className="text-sm opacity-80 hover:opacity-100 hover:text-white hover:underline transition-colors text-center md:text-inherit"
             >
@@ -72,7 +72,7 @@ export default function Footer({ socialData }) {
             <Link
               href="/privacy-policy"
               // href="https://eshtarena.com/privacy-policy"
-              target="_blank"
+              // target="_blank"
               rel="noopener noreferrer"
               className="text-sm opacity-80 hover:opacity-100 hover:text-white hover:underline transition-colors text-center md:text-inherit"
             >
