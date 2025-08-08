@@ -73,26 +73,28 @@ export interface DealTheme {
   text: string;
 }
 
+import { COLORS } from '../utils/colors';
+
 export const DEAL_THEMES: Record<DealType, DealTheme> = {
   voucher: {
-    primary: '#10B981', // green-500
-    secondary: '#ECFDF5', // green-50
-    badge: '#059669', // green-600
-    progressBar: '#10B981',
-    text: '#ffffff'
+    primary: COLORS.voucherDeal, 
+    secondary: `${COLORS.voucherDeal}30`, 
+    badge: `${COLORS.voucherDeal}E6`, 
+    progressBar: COLORS.voucherDeal,
+    text: COLORS.darkViolet
   },
   cold: {
-    primary: '#581C87', // purple-900
-    secondary: '#F3E8FF', // purple-50
-    badge: '#6B21A8', // purple-800
-    progressBar: '#581C87',
+    primary: COLORS.darkViolet, 
+    secondary: `${COLORS.darkViolet}30`, 
+    badge: `${COLORS.darkViolet}E6`, 
+    progressBar: COLORS.darkViolet,
     text: '#ffffff'
   },
   original: {
-    primary: '#DC2626', // red-600
-    secondary: '#FEF2F2', // red-50
-    badge: '#B91C1C', // red-700
-    progressBar: '#DC2626',
+    primary: COLORS.originalDeal, 
+    secondary: `${COLORS.originalDeal}30`, 
+    badge: `${COLORS.originalDeal}E6`, 
+    progressBar: COLORS.originalDeal,
     text: '#ffffff'
   }
 }; 

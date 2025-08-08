@@ -61,7 +61,8 @@ export default function Footer({ socialData }) {
           >
             <h3 className="text-lg font-semibold mb-2">{t("footer.links")}</h3>
             <Link
-              href="https://eshtarena.com/terms-conditions"
+              href="/terms-and-conditions"
+              // href="https://eshtarena.com/terms-conditions"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm opacity-80 hover:opacity-100 hover:text-white hover:underline transition-colors text-center md:text-inherit"
@@ -69,7 +70,8 @@ export default function Footer({ socialData }) {
               {t("footer.terms")}
             </Link>
             <Link
-              href="https://eshtarena.com/privacy-policy"
+              href="/privacy-policy"
+              // href="https://eshtarena.com/privacy-policy"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm opacity-80 hover:opacity-100 hover:text-white hover:underline transition-colors text-center md:text-inherit"
