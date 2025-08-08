@@ -95,7 +95,7 @@ export default function LandingPage() {
           }}
         />
       </Head>
-      <div className={`min-h-screen ${i18n.language === 'ar' ? 'rtl' : 'ltr'}`}>
+      <div className={`min-h-screen ${i18n.language === "ar" ? "rtl" : "ltr"}`}>
         <Navbar />
         <main>
           {/* Banner Section */}
@@ -109,7 +109,11 @@ export default function LandingPage() {
 
           {/* Suppliers Requests Section */}
           <SuppliersRequests />
-
+          <div
+            className={`flex flex-row justify-center items-center bg-red-500`}
+          >
+            <h1> helow</h1>
+          </div>
           {/* Contact Section */}
           <ContactSection socialData={socialData} />
         </main>
