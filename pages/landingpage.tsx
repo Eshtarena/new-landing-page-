@@ -109,7 +109,7 @@ export default function LandingPage() {
 
           {/* Suppliers Requests Section */}
           <SuppliersRequests />
-
+{/*  */}
           {/* Contact Section */}
           <ContactSection socialData={socialData} />
         </main>
