@@ -1,5 +1,5 @@
 import React from 'react';
-import DealCard, { CompactDealCard, MinimalDealCard } from './DealCard';
+import DealCard from './DealCard';
 import { Deal } from '../../types/deals';
 import { getMockVoucherDeals, getMockColdDeals, getMockOriginalDeals } from '../../data/mockDeals';
 
@@ -28,24 +28,21 @@ export default function DealCardShowcase({ onDealClick }: DealCardShowcaseProps)
     <div className="p-6 bg-gray-50 min-h-screen">
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Deal Card Components Showcase</h1>
       
-      {/* Full Deal Cards */}
+      {/* Compact Deal Cards - Main Display */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6">Full Deal Cards</h2>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-6">Deal Cards Showcase</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <DealCard 
             deal={sampleVoucherDeal} 
             onCardClick={handleDealClick}
-            showFullDetails={true}
           />
           <DealCard 
             deal={sampleColdDeal} 
             onCardClick={handleDealClick}
-            showFullDetails={true}
           />
           <DealCard 
             deal={sampleOriginalDeal} 
             onCardClick={handleDealClick}
-            showFullDetails={true}
           />
         </div>
       </section>
@@ -54,38 +51,38 @@ export default function DealCardShowcase({ onDealClick }: DealCardShowcaseProps)
       <section className="mb-12">
         <h2 className="text-2xl font-semibold text-gray-800 mb-6">Compact Deal Cards</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          <CompactDealCard 
+          <DealCard 
             deal={sampleVoucherDeal} 
             onCardClick={handleDealClick}
           />
-          <CompactDealCard 
+          <DealCard 
             deal={sampleColdDeal} 
             onCardClick={handleDealClick}
           />
-          <CompactDealCard 
+          <DealCard 
             deal={sampleOriginalDeal} 
             onCardClick={handleDealClick}
           />
-          <CompactDealCard 
+          <DealCard 
             deal={{ ...sampleVoucherDeal, isActive: false }} 
             onCardClick={handleDealClick}
           />
         </div>
       </section>
 
-      {/* Minimal Deal Cards */}
+      {/* Compact Deal Cards - Grid Layout */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6">Minimal Deal Cards (List View)</h2>
-        <div className="max-w-md space-y-3">
-          <MinimalDealCard 
+        <h2 className="text-2xl font-semibold text-gray-800 mb-6">Grid Layout</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <DealCard 
             deal={sampleVoucherDeal} 
             onCardClick={handleDealClick}
           />
-          <MinimalDealCard 
+          <DealCard 
             deal={sampleColdDeal} 
             onCardClick={handleDealClick}
           />
-          <MinimalDealCard 
+          <DealCard 
             deal={sampleOriginalDeal} 
             onCardClick={handleDealClick}
           />

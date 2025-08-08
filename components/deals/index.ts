@@ -1,8 +1,8 @@
 // Main Deal Card Components
-export { default as DealCard, CompactDealCard, MinimalDealCard } from './DealCard';
+export { default as DealCard } from './DealCard';
 
 // Sub-components
-export { default as ImageCarousel, CompactImageCarousel } from './ImageCarousel';
+export { default as ImageCarousel } from './ImageCarousel';
 export { default as CountdownTimer, CompactCountdownTimer } from './CountdownTimer';
 export { default as ProgressBar, SimpleProgressBar } from './ProgressBar';
 export { default as DealBadge, SimpleDealBadge } from './DealBadge';

@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { CompactDealCard } from "../deals/DealCard";
+import DealCard from "../deals/DealCard";
 import { Deal } from "../../types/deals";
 import { ALL_MOCK_DEALS } from "../../data/mockDeals";
 import { handleDealClick } from "../../utils/navigation";
@@ -19,7 +19,7 @@ export default function MegaDeals() {
         <div className="p-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {ALL_MOCK_DEALS.map((deal) => (
-              <CompactDealCard
+              <DealCard
                 key={deal.id}
                 deal={deal}
                 onCardClick={onDealClick}

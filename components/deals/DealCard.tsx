@@ -7,7 +7,7 @@ import PricingDisplay from "./PricingDisplay";
 import { DealCardProps } from "../../types/deals";
 import { COLORS } from "../../utils/colors";
 
-export function CompactDealCard({
+export default function DealCard({
   deal,
   className = "",
   onCardClick,

@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next';
 
 interface Feature {
   id: number;
-  icon: JSX.Element;
+  icon: React.ReactElement;
   title: string;
   description: string;
 }
