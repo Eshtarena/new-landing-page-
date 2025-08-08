@@ -41,16 +41,14 @@ export default function ContactSection({ socialData }) {
             <div className="space-y-8">
               {/* Location */}
               <div
-                className={`flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 ${
+                className={`flex flex-col md:flex-row items-center space-y-4 md:space-y-0 ${
                   isRTL
-                    ? "md:flex-row-reverse md:space-x-6"
-                    : "md:flex-row md:space-x-6"
+                    ? "md:flex-row md:space-x-6"
+                    : "md:flex-row-reverse md:space-x-6"
                 }`}
               >
                 <div
-                  className={`flex-shrink-0 w-12 h-12 bg-[#340040] bg-opacity-10 rounded-lg flex items-center justify-center ${
-                    isRTL ? "md:ml-2" : "md:mr-2"
-                  }`}
+                  className={`flex-shrink-0 w-12 h-12 bg-[#340040] bg-opacity-10 rounded-lg flex items-center justify-center mx-2`}
                 >
                   <svg
                     className="w-6 h-6 text-[#340040]"
@@ -74,13 +72,13 @@ export default function ContactSection({ socialData }) {
                 </div>
                 <div
                   className={`text-center md:text-${
-                    isRTL ? "end" : "start"
+                    isRTL ? "start" : "end"
                   } flex-grow`}
                 >
                   <h3 className="text-lg font-semibold text-[#340040] mb-1">
                     {t("contact.info.location.title")}
                   </h3>
-                  <p className="text-gray-600">
+                  <p className="text-gray-600 ">
                     {t("contact.info.location.address")}
                   </p>
                 </div>
@@ -90,14 +88,12 @@ export default function ContactSection({ socialData }) {
               <div
                 className={`flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 ${
                   isRTL
-                    ? "md:flex-row-reverse md:space-x-6"
-                    : "md:flex-row md:space-x-6"
+                  ? "md:flex-row md:space-x-6"
+                  : "md:flex-row-reverse md:space-x-6"
                 }`}
               >
                 <div
-                  className={`flex-shrink-0 w-12 h-12 bg-[#340040] bg-opacity-10 rounded-lg flex items-center justify-center ${
-                    isRTL ? "md:ml-2" : "md:mr-2"
-                  }`}
+                  className={`flex-shrink-0 w-12 h-12 bg-[#340040] bg-opacity-10 rounded-lg flex items-center justify-center mx-2`}
                 >
                   <svg
                     className="w-6 h-6 text-[#340040]"
@@ -109,13 +105,13 @@ export default function ContactSection({ socialData }) {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2v10a2 2 0 002 2z"
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                     />
                   </svg>
                 </div>
                 <div
                   className={`text-center md:text-${
-                    isRTL ? "end" : "start"
+                    isRTL ? "start" : "end"
                   } flex-grow`}
                 >
                   <h3 className="text-lg font-semibold text-[#340040] mb-1">
@@ -133,11 +129,10 @@ export default function ContactSection({ socialData }) {
               {/* Social Media Links */}
               <div className="pt-6 mt-6 border-t border-gray-200">
                 <h3
-                  className={`text-lg font-semibold text-[#340040] mb-4 text-center md:text-${
-                    isRTL ? "end" : "start"
-                  }`}
+                  className={`text-lg font-semibold text-[#340040] mb-4 text-center`}
                 >
                   {t("contact.info.social.title")}
+            
                 </h3>
                 <div
                   className={`flex flex-wrap gap-4 justify-center md:justify-${
