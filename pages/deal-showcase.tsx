@@ -1,13 +1,15 @@
 import React from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import DealCardShowcase from '../components/deals/DealCardShowcase';
 import { Deal } from '../types/deals';
+import { handleDealClick } from '../utils/navigation';
 
 export default function DealShowcasePage() {
-  const handleDealClick = (deal: Deal) => {
-    console.log('Deal clicked from page:', deal);
-    // You can add navigation logic here
-    // For example: router.push(`/deals/${deal.id}`);
+  const router = useRouter();
+  
+  const onDealClick = (deal: Deal) => {
+    handleDealClick(router, deal, "DealShowcasePage");
   };
 
   return (
@@ -17,7 +19,7 @@ export default function DealShowcasePage() {
         <meta name="description" content="Showcase of reusable deal card components" />
       </Head>
       
-      <DealCardShowcase onDealClick={handleDealClick} />
+      <DealCardShowcase onDealClick={onDealClick} />
     </>
   );
 } 

@@ -21,7 +21,8 @@ export function CompactDealCard({
       <ImageCarousel
         images={deal.images}
         aspectRatio="video"
-        autoScroll
+        autoScroll={true} // enable auto scroll
+        autoScrollInterval={3000} // scroll every 3 seconds
         showDots={false}
         showArrows={false}
         className="h-48"
