@@ -17,7 +17,7 @@ export default function ContactSection({ socialData }) {
     message: "",
   });
 
-  const isRTL = i18n.language === "ar";
+  const isRTL = i18n.language === "en";
 
   return (
     <section id="contact" className={`bg-white py-16 md:py-24 scroll-mt-16 ${
