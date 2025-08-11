@@ -14,9 +14,9 @@ export default function MegaDeals() {
 
   return (
     <div className="py-8 bg-gray-50">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto">
         {/* Deals Grid */}
-        <div className="p-6">
+        <div className="">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {ALL_MOCK_DEALS.map((deal) => (
               <DealCard

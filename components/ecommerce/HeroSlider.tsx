@@ -14,19 +14,19 @@ export default function HeroSlider() {
   const slides: Slide[] = [
     {
       id: 1,
-      image: '/banners/english/best_price_en.png',
+      image: '/banners/english/1.webp',
       title: 'Best Price Guarantee',
       link: '#'
     },
     {
       id: 2,
-      image: '/banners/english/phones_en.png',
+      image: '/banners/english/2.webp',
       title: 'Latest Smartphones',
       link: '#'
     },
     {
       id: 3,
-      image: '/banners/english/lady_en.png',
+      image: '/banners/english/3.webp',
       title: 'Fashion Deals',
       link: '#'
     }
@@ -49,7 +49,7 @@ export default function HeroSlider() {
   };
 
   return (
-    <div className="relative h-[500px] rounded-lg overflow-hidden my-4">
+    <div className="relative h-[250px] md:h-[500px] rounded-lg overflow-hidden my-4">
       {/* Slides */}
       <div className="relative h-full">
         {slides.map((slide, index) => (

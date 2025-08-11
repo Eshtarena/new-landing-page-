@@ -41,11 +41,7 @@ export default function ContactSection({ socialData }) {
             <div className="space-y-8">
               {/* Location */}
               <div
-                className={`flex flex-col md:flex-row items-center space-y-4 md:space-y-0 ${
-                  isRTL
-                    ? "md:flex-row md:space-x-6"
-                    : "md:flex-row-reverse md:space-x-6"
-                }`}
+                className={`flex flex-col items-center space-y-4 md:space-y-0 md:flex-row md:space-x-6`}
               >
                 <div
                   className={`flex-shrink-0 w-12 h-12 bg-[#340040] bg-opacity-10 rounded-lg flex items-center justify-center mx-2`}
@@ -71,9 +67,7 @@ export default function ContactSection({ socialData }) {
                   </svg>
                 </div>
                 <div
-                  className={`text-center md:text-${
-                    isRTL ? "start" : "end"
-                  } flex-grow`}
+                  className={`text-center md:text-start flex-grow`}
                 >
                   <h3 className="text-lg font-semibold text-[#340040] mb-1">
                     {t("contact.info.location.title")}
@@ -86,11 +80,7 @@ export default function ContactSection({ socialData }) {
 
               {/* Email */}
               <div
-                className={`flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 ${
-                  isRTL
-                  ? "md:flex-row md:space-x-6"
-                  : "md:flex-row-reverse md:space-x-6"
-                }`}
+                className={`flex flex-col items-center md:items-start space-y-4 md:space-y-0 md:flex-row md:space-x-6`}
               >
                 <div
                   className={`flex-shrink-0 w-12 h-12 bg-[#340040] bg-opacity-10 rounded-lg flex items-center justify-center mx-2`}
@@ -110,9 +100,7 @@ export default function ContactSection({ socialData }) {
                   </svg>
                 </div>
                 <div
-                  className={`text-center md:text-${
-                    isRTL ? "start" : "end"
-                  } flex-grow`}
+                  className={`text-center md:text-start flex-grow`}
                 >
                   <h3 className="text-lg font-semibold text-[#340040] mb-1">
                     {t("contact.info.email.title")}

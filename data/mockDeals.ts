@@ -11,7 +11,7 @@ const fashionDeals: Deal[] = [
     description: 'Premium quality sneakers from top brands with ultimate comfort',
     images: [
       {
-        src: '/landing_page/english/cold_deal.png',
+        src: '/dummy_images/snekers.png',
         alt: 'Designer Sneakers'
       }
     ],
@@ -43,7 +43,7 @@ const fashionDeals: Deal[] = [
     description: 'Trendy summer outfits for men and women',
     images: [
       {
-        src: '/landing_page/english/original_deal.png',
+        src: '/dummy_images/man_fashon.png',
         alt: 'Summer Fashion'
       }
     ],
@@ -77,9 +77,13 @@ const electronicsDeals: Deal[] = [
     description: 'Latest MacBook Pro with M3 chip, 16GB RAM, 512GB SSD',
     images: [
       {
-        src: '/landing_page/english/cold_deal.png',
+        src: '/dummy_images/laptop.png',
         alt: 'MacBook Pro M3'
-      }
+      },
+      {
+        src: '/dummy_images/laptop2.png',
+        alt: 'MacBook Pro M3'
+      },
     ],
     dealType: 'cold',
     timer: {
@@ -143,7 +147,7 @@ const homeKitchenDeals: Deal[] = [
     description: 'Voucher valid for all kitchen appliances and cookware',
     images: [
       {
-        src: '/landing_page/english/voucher_deal.png',
+        src: '/dummy_images/home_kitchen.png',
         alt: 'Kitchen Appliances Voucher'
       }
     ],

@@ -26,61 +26,85 @@ export default function CategoryShortcuts() {
     {
       id: 1,
       title: 'Donate For Gaza',
-      image: '/landing_page/english/cold_deal.png',
+      image: '/dummy_images/palastine.png',
       link: '/donate'
-    },
-    {
-      id: 2,
-      title: 'Summer Store',
-      image: '/landing_page/english/original_deal.png',
-      link: '/summer'
-    },
-    {
-      id: 3,
-      title: 'Installments & Discounts',
-      image: '/landing_page/english/voucher_deal.png',
-      link: '/installments'
-    },
-    {
-      id: 4,
-      title: 'Bestsellers',
-      image: '/landing_page/english/voucher_deal2.png',
-      link: '/bestsellers'
     },
     {
       id: 5,
       title: 'Men\'s Fashion',
-      image: '/landing_page/english/your_needs_easily.png',
+      image: '/dummy_images/man_fashon.png',
       link: '/mens-fashion'
+    },
+    {
+      id: 9,
+      title: 'Mobiles',
+      image: '/dummy_images/mobile1.png',
+      link: '/mobiles'
     },
     {
       id: 6,
       title: 'Women\'s Fashion',
-      image: '/landing_page/english/cold_deal.png',
+      image: '/dummy_images/woman_fashon.png',
       link: '/womens-fashion'
     },
     {
       id: 7,
       title: 'Kids\' Fashion',
-      image: '/landing_page/english/original_deal.png',
+      image: '/dummy_images/kids_fashon.png',
       link: '/kids-fashion'
     },
     {
-      id: 8,
-      title: 'Home & Kitchen',
-      image: '/landing_page/english/voucher_deal.png',
-      link: '/home-kitchen'
+      id: 5,
+      title: 'Men\'s Fashion',
+      image: '/dummy_images/man_fashon.png',
+      link: '/mens-fashion'
     },
     {
       id: 9,
       title: 'Mobiles',
-      image: '/landing_page/english/voucher_deal2.png',
+      image: '/dummy_images/mobile1.png',
       link: '/mobiles'
+    },
+    {
+      id: 6,
+      title: 'Women\'s Fashion',
+      image: '/dummy_images/woman_fashon.png',
+      link: '/womens-fashion'
+    },
+    {
+      id: 7,
+      title: 'Kids\' Fashion',
+      image: '/dummy_images/kids_fashon.png',
+      link: '/kids-fashion'
+    },
+    {
+      id: 2,
+      title: 'Summer Store',
+      image: '/dummy_images/summer.png',
+      link: '/summer'
+    },
+    {
+      id: 3,
+      title: 'Installments & Discounts',
+      image: '/dummy_images/installments.png',
+      link: '/installments'
+    },
+    {
+      id: 4,
+      title: 'Bestsellers',
+      image: '/dummy_images/bestsellers.png',
+      link: '/bestsellers'
+    },
+    {
+      id: 8,
+      title: 'Home & Kitchen',
+      image: '/dummy_images/home_kitchen.png',
+      link: '/home-kitchen'
     },
     {
       id: 10,
       title: 'Beauty',
-      image: '/landing_page/english/your_needs_easily.png',
+      image: '/dummy_images/beauty.png',
       link: '/beauty'
     }
   ];

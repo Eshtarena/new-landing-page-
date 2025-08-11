@@ -26,36 +26,36 @@ export default function MainNavbar({ countryCode = 'egy', lang = 'en' }: MainNav
   const loginRoute = buildLoginRoute(countryCode, lang);
 
   return (
-    <nav className="bg-[#340040] shadow-md py-4">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+    <nav className="bg-[#340040] shadow-md ">
+      <div className="md:px-40 py-4">
+        <div className="flex md:flex-row flex-col justify-between items-center md:h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
             <Logo width={120} height={40} className="cursor-pointer" href="/" />
           </div>
 
           {/* Search Bar */}
-          <div className="flex-1 max-w-lg mx-8">
-            <div className="relative">
+          <div className="md:flex-1 md:max-w-lg w-[90%] md:mx-8">
+            
               <input
                 type="text"
                 value={searchQuery}
                 onChange={handleSearchChange}
                 placeholder="Search for products..."
-                className="w-full px-4 py-2 pl-10 pr-4 text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-4 py-2 pl-4 pr-4 text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
               <div className="absolute inset-y-0 left-0 flex items-center pl-3">
                 <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
-            </div>
+          
           </div>
 
           {/* Right Side Icons */}
-          <div className="flex items-center space-x-4">
+          <div className=" items-center space-x-4 hidden md:flex ">
             {/* Account - Connected to Login Page */}
-            <Link href={loginRoute} className="text-white hover:text-primary-200">
+            <Link href={loginRoute} className="text-white ">
               <div className="flex flex-col items-center">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
