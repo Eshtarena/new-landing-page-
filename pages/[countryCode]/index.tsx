@@ -9,6 +9,7 @@ import HeroSlider from "../../components/ecommerce/HeroSlider";
 import CategoryShortcuts from "../../components/ecommerce/CategoryShortcuts";
 import FeaturedDeals from "../../components/ecommerce/FeaturedDeals";
 import MegaDeals from "../../components/ecommerce/MegaDeals";
+import NotFoundPage from "../../components/NotFoundPage";
 
 interface CountryNames {
   [key: string]: string;
@@ -43,11 +44,10 @@ export default function CountryHomePage({ countryCode }: Props) {
 
       <div className="min-h-screen bg-gray-50">
         <MainNavbar countryCode={countryCode} lang={lang} />
-        <CategoryMenu />
+        {/* <CategoryMenu /> */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <HeroSlider />
           <CategoryShortcuts />
-
           <MegaDeals />
         </main>
       </div>

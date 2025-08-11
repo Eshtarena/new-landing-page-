@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
 import { useState, useEffect, useCallback } from "react";
-import LanguageSwitcher from "./LanguageSwitcher";
+import LanguageSwitcher from "../../components/LanguageSwitcher";
 import { useRouter } from "next/router";
 
 export default function Navbar() {
@@ -55,7 +55,7 @@ export default function Navbar() {
           }
         }
       }
-      
+
       // Set home as active if we're at the very top
       if (currentScrollY < 100) {
         setActiveSection("home");
@@ -140,7 +140,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-24">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <a 
+            <a
               href="#home"
               onClick={(e) => handleNavClick(e, "home")}
               className="cursor-pointer"
@@ -181,7 +181,7 @@ export default function Navbar() {
               {t("navbar.contact")}
             </a>
             <a
-              href="https://eshtarena.com/login"
+              href="https://dashboard.eshtarena.com/login"
               target="_blank"
               rel="noopener noreferrer"
               className="text-white  px-3 py-1 rounded hover:bg-white hover:text-[#340040] transition-colors duration-200"
@@ -264,7 +264,7 @@ export default function Navbar() {
               {t("navbar.contact")}
             </a>
             <a
-              href="https://eshtarena.com/login"
+              href="https://dashboard.eshtarena.com/login"
               target="_blank"
               rel="noopener noreferrer"
               className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white hover:text-[#340040] transition-colors duration-200"
@@ -276,4 +276,4 @@ export default function Navbar() {
       </div>
     </nav>
   );
-} 
+}
