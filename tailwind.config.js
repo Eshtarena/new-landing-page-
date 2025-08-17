@@ -9,29 +9,29 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          50: '#f0fdfa',
-          100: '#ccfbf1',
-          200: '#99f6e4',
-          300: '#5eead4',
-          400: '#2dd4bf',
-          500: '#14b8a6',
-          600: '#0d9488',
-          700: '#0f766e',
-          800: '#115e59',
-          900: '#134e4a',
-          950: '#042f2e',
+          50: "#f9f2fa",
+          100: "#f2e0f5",
+          200: "#e0b3e6",
+          300: "#c980d1",
+          400: "#a64da6",
+          500: "#340040", // main brand color
+          600: "#2a0034",
+          700: "#200028",
+          800: "#17001d",
+          900: "#0f0012",
+          950: "#08000a",
         },
       },
       keyframes: {
         slideUp: {
-          '0%': { transform: 'translateY(0)', opacity: '1' },
-          '100%': { transform: 'translateY(-10px)', opacity: '0' },
-        }
+          "0%": { transform: "translateY(0)", opacity: "1" },
+          "100%": { transform: "translateY(-10px)", opacity: "0" },
+        },
       },
       animation: {
-        slideUp: 'slideUp 0.3s ease-in-out forwards',
+        slideUp: "slideUp 0.3s ease-in-out forwards",
       },
     },
   },
   plugins: [],
-} 
+};
