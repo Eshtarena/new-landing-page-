@@ -34,6 +34,7 @@ const fashionDeals: Deal[] = [
     marketPrice: 650,
     currency: 'SAR',
     isActive: true,
+    category: 'Fashion',
     priceChangeIndicator: 'down'
   } as ColdDeal,
 
@@ -65,7 +66,8 @@ const fashionDeals: Deal[] = [
     saveAmount: 80,
     marketPrice: 400,
     currency: 'SAR',
-    isActive: true
+    isActive: true,
+    category: 'Fashion'
   } as OriginalDeal
 ];
 
@@ -104,6 +106,7 @@ const electronicsDeals: Deal[] = [
     marketPrice: 10000,
     currency: 'SAR',
     isActive: true,
+    category: 'Electronics',
     priceChangeIndicator: 'down'
   } as ColdDeal,
 
