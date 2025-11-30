@@ -102,7 +102,7 @@ export default function LandingPage() {
           <BannersSection />
 
           {/* About Section */}
-          <AboutSection />
+          <AboutSection socialData={socialData}/>
 
           {/* Deals Section */}
           <DealsSection />

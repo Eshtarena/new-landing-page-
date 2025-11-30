@@ -2,7 +2,7 @@ import { useTranslation } from "next-i18next";
 import Image from "next/image";
 import { LANDING_IMAGES, STORES_IMAGES_LINKS } from "../../utils/consts";
 
-export default function AboutSection() {
+export default function AboutSection({socialData} ) {
   const { t, i18n } = useTranslation("common");
   const isRTL = i18n.language === "ar";
   const yourNeedsImage = isRTL
@@ -68,7 +68,7 @@ export default function AboutSection() {
               }`}
             >
               <a
-                href="https://apps.apple.com/app/eshtarena"
+                href={socialData.apple}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-[180px] h-[53px] relative hover:opacity-90 transition-opacity"
@@ -80,8 +80,8 @@ export default function AboutSection() {
                   className="object-contain"
                 />
               </a>
-              <a
-                href="https://play.google.com/store/apps/details?id=com.eshtarena"
+               <a
+                href={socialData.google}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-[180px] h-[53px] relative hover:opacity-90 transition-opacity"

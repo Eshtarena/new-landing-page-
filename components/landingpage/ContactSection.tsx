@@ -16,13 +16,16 @@ export default function ContactSection({ socialData }) {
     phone: "",
     message: "",
   });
-
+  // ContactUsSection
   const isRTL = i18n.language === "en";
 
   return (
-    <section id="contact" className={`bg-white py-16 md:py-24 scroll-mt-16 ${
-      isRTL ? "rtl" : "ltr"
-    }`}>
+    <section
+      id="contact"
+      className={`bg-white py-16 md:py-24 scroll-mt-16 ${
+        isRTL ? "rtl" : "ltr"
+      }`}
+    >
       <div className="md:px-[100px] px-[20px] mx-auto ">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-[#340040] mb-4">
@@ -66,9 +69,7 @@ export default function ContactSection({ socialData }) {
                     />
                   </svg>
                 </div>
-                <div
-                  className={`text-center md:text-start flex-grow`}
-                >
+                <div className={`text-center md:text-start flex-grow`}>
                   <h3 className="text-lg font-semibold text-[#340040] mb-1">
                     {t("contact.info.location.title")}
                   </h3>
@@ -99,9 +100,7 @@ export default function ContactSection({ socialData }) {
                     />
                   </svg>
                 </div>
-                <div
-                  className={`text-center md:text-start flex-grow`}
-                >
+                <div className={`text-center md:text-start flex-grow`}>
                   <h3 className="text-lg font-semibold text-[#340040] mb-1">
                     {t("contact.info.email.title")}
                   </h3>
@@ -120,7 +119,6 @@ export default function ContactSection({ socialData }) {
                   className={`text-lg font-semibold text-[#340040] mb-4 text-center`}
                 >
                   {t("contact.info.social.title")}
-            
                 </h3>
                 <div
                   className={`flex flex-wrap gap-4 justify-center md:justify-${
@@ -202,4 +200,4 @@ export default function ContactSection({ socialData }) {
       </div>
     </section>
   );
-} 
+}
