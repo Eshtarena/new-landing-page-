@@ -63,7 +63,37 @@ export default function DealDetailsPage() {
         className="min-h-screen"
         style={{ backgroundColor: COLORS.mainBackground }}
       >
-        <MainNavbar countryCode={countryCode} lang={lang} />
+        {/* Desktop Navbar */}
+        <div className="hidden md:block">
+          <MainNavbar countryCode={countryCode} lang={lang} />
+        </div>
+
+        {/* Mobile Navbar with Back Button */}
+        <div className="md:hidden bg-[#340040] shadow-md">
+          <div className="flex items-center px-4 py-4">
+            <button
+              onClick={() => router.back()}
+              className="flex items-center justify-center w-10 h-10 mr-3 text-white hover:bg-white/10 rounded-full transition-colors"
+              aria-label="Go back"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+            <h1 className="text-white text-lg font-semibold">Deal details</h1>
+          </div>
+        </div>
+
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
@@ -89,7 +119,37 @@ export default function DealDetailsPage() {
       className="min-h-screen"
       style={{ backgroundColor: COLORS.mainBackground }}
     >
-      <MainNavbar countryCode={countryCode} lang={lang} />
+      {/* Desktop Navbar */}
+      <div className="hidden md:block">
+        <MainNavbar countryCode={countryCode} lang={lang} />
+      </div>
+
+      {/* Mobile Navbar with Back Button */}
+      <div className="md:hidden bg-[#340040] shadow-md">
+        <div className="flex items-center px-4 py-4">
+          <button
+            onClick={() => router.back()}
+            className="flex items-center justify-center w-10 h-10 mr-3 text-white hover:bg-white/10 rounded-full transition-colors"
+            aria-label="Go back"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+          <h1 className="text-white text-lg font-semibold">Deal details</h1>
+        </div>
+      </div>
+
       <div className="container mx-auto px-4 py-8">
         {/* Main Content - Two Sections Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
