@@ -5,6 +5,7 @@ import ImageCarousel from "./ImageCarousel";
 import DealBadge from "./DealBadge";
 import PricingDisplay from "./PricingDisplay";
 import CountdownTimer from "./CountdownTimer";
+import ProgressBar from "./ProgressBar";
 
 interface DealInfoSectionProps {
   deal: Deal;
@@ -22,12 +23,11 @@ export default function DealInfoSection({ deal }: DealInfoSectionProps) {
       <div className="mb-6">
         <ImageCarousel
           images={deal.images}
-          aspectRatio="video"
           autoScroll={true} // enable auto scroll
           autoScrollInterval={3000} // scroll every 3 seconds
           showDots={false}
           showArrows={false}
-          className="h-80 rounded-lg overflow-hidden"
+          className="h-80 w-full"
         />
       </div>
 
@@ -85,7 +85,16 @@ export default function DealInfoSection({ deal }: DealInfoSectionProps) {
           />
         </div>
       </div>
-
+  {/* Progress Bar - Based on Deal Type */}
+  <div className="mb-8">
+        <ProgressBar
+          quantity={deal.quantity}
+          dealType={deal.dealType}
+          showLabels={true}
+          height="lg"
+          className="text-base"
+        />
+      </div>
       {/* Pricing */}
       <div className="mb-8">
         <PricingDisplay
@@ -95,6 +104,8 @@ export default function DealInfoSection({ deal }: DealInfoSectionProps) {
           className="bg-gray-50 rounded-lg p-4"
         />
       </div>
+
+    
 
       {/* Join Deal Button */}
       <div className="space-y-4">
@@ -108,14 +119,6 @@ export default function DealInfoSection({ deal }: DealInfoSectionProps) {
         >
           Join Deal
         </button>
-
-        {/* Progress Info */}
-        <div className="text-center text-sm text-gray-600">
-          <span className="font-medium">{deal.quantity.sold}</span> people
-          joined •
-          <span className="font-medium"> {deal.quantity.available}</span> spots
-          left
-        </div>
       </div>
     </div>
   );

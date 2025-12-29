@@ -58,9 +58,15 @@ export default function ImageCarousel({
     );
   }
 
+  // Check if className contains height classes (h-*), if so, skip aspect ratio
+  const hasFixedHeight = className.includes('h-');
+  const containerClasses = hasFixedHeight 
+    ? 'w-full h-full rounded-lg overflow-hidden bg-gray-100'
+    : `${aspectRatioClasses[aspectRatio]} rounded-lg overflow-hidden bg-gray-100`;
+
   return (
     <div className={`relative ${className}`}>
-      <div className={`${aspectRatioClasses[aspectRatio]} rounded-lg overflow-hidden bg-gray-100`}>
+      <div className={containerClasses}>
         <img
           src={images[currentIndex].src}
           alt={images[currentIndex].alt}
