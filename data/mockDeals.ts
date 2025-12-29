@@ -13,6 +13,10 @@ const fashionDeals: Deal[] = [
       {
         src: '/dummy_images/snekers.png',
         alt: 'Designer Sneakers'
+      },
+      {
+        src: '/dummy_images/man_fashon.png',
+        alt: 'Designer Sneakers'
       }
     ],
     dealType: 'cold',

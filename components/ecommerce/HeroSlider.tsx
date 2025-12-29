@@ -63,7 +63,7 @@ export default function HeroSlider() {
               src={slide.image}
               alt={slide.title}
               fill
-              style={{ objectFit: 'fill' }}
+              style={{ objectFit: 'cover', width: '100%' }}
               priority={index === 0}
             />
           </div>
