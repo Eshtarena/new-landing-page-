@@ -130,26 +130,28 @@ export default function BannersSection() {
       }`}
     >
       <div
-        className="w-full max-w-full mx-auto relative overflow-hidden md:h-screen h-auto aspect-[4/3]"
+        className="w-full min-w-full mx-auto relative overflow-hidden h-auto"
         {...handlers}
       >
         <div
-          className="flex h-full"
+          className="flex h-auto"
           style={getSliderStyle()}
           onTransitionEnd={handleTransitionEnd}
         >
           {extendedImages.map((img, idx) => (
             <div
               key={`${img}-${idx}`}
-              className="w-full flex-shrink-0 h-full relative flex items-center justify-center"
+              className="w-full flex-shrink-0 relative md:m-0 mt-12"
             >
               <Image
                 src={img}
                 alt={`Slider image ${idx + 1}`}
-                fill
-                className="object-contain md:object-cover w-full h-full"
+                width={1920}
+                height={1080}
+                className="w-full h-auto object-contain"
                 priority={idx <= 1}
                 sizes="100vw"
+                unoptimized
                 onError={(error) =>
                   handleImageError(images.indexOf(img), error)
                 }
