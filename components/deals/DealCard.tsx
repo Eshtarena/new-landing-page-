@@ -29,11 +29,8 @@ export default function DealCard({
       />
 
       {/* Content */}
-<<<<<<< HEAD
-      <div className="p-4 space-y-4 md:mt-8">
-=======
       <div className="p-4 space-y-4 ">
->>>>>>> main
+
         {/* Title & Timer */}
         <div className="flex justify-between gap-4">
           <div className="flex-1 min-w-0">
