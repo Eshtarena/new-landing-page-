@@ -70,4 +70,65 @@ export const fetchSocialLinks = async () => {
       google: ''
     };
   }
+};
+
+/**
+ * Submit supplier request form data to the backend API
+ * @param {Object} formData - The form data
+ * @param {string} formData.companyName - Company name
+ * @param {string} formData.category - Category
+ * @param {string} formData.businessEmail - Business email
+ * @param {string} formData.phoneNumber - Phone number
+ * @param {string} formData.headquarters - Headquarter address
+ * @param {Object} formData.contactPerson - Contact person information
+ * @param {string} formData.contactPerson.name - Contact person name
+ * @param {string} formData.contactPerson.title - Contact person title
+ * @param {string} formData.contactPerson.email - Contact person email
+ * @param {string} formData.contactPerson.phone - Contact person phone
+ * @param {string} formData.contactPerson.message - Message
+ * @returns {Promise} - Resolves with the response data or rejects with error
+ */
+export const submitSupplierRequest = async (formData) => {
+  try {
+    // Map form data to API request body format
+    const requestBody = {
+      companyName: formData.companyName,
+      category: formData.category,
+      businessEmail: formData.businessEmail,
+      phoneNumber: formData.phoneNumber,
+      headQuarterAddress: formData.headquarters, // Map headquarters to headQuarterAddress
+      contactPerson: {
+        name: formData.contactPerson.name,
+        title: formData.contactPerson.title,
+        email: formData.contactPerson.email,
+        phoneNumber: formData.contactPerson.phone, // Map phone to phoneNumber
+      },
+      message: formData.contactPerson.message,
+    };
+
+    const response = await fetch(`${API_BASE_URL}/supplierrequest`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    const responseData = await response.json();
+
+    if (!response.ok) {
+      // Handle error response (400)
+      const errorMessage = responseData.error || 'Failed to submit supplier request';
+      throw new Error(errorMessage);
+    }
+
+    // Handle success response (200)
+    if (responseData.message === 'success') {
+      return responseData;
+    }
+
+    throw new Error('Unexpected response from server');
+  } catch (error) {
+    throw new Error(error.message || 'Failed to submit supplier request');
+  }
 }; 

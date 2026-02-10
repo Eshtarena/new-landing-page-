@@ -3,7 +3,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useState, useEffect } from "react";
-import { fetchSocialLinks } from "../utils/api";
+import { fetchSocialLinks, submitSupplierRequest } from "../utils/api";
 import { useForm } from "react-hook-form";
 import { object, string } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -82,13 +82,18 @@ export default function JoinSuppliers() {
     setErrorMessage("");
 
     try {
-      // TODO: Implement API call to submit supplier form
-      console.log(data);
-      setSubmitStatus("success");
-      reset();
+      const response = await submitSupplierRequest(data);
+      
+      // Check for success response
+      if (response.message === "success") {
+        setSubmitStatus("success");
+        reset();
+      } else {
+        throw new Error(t("suppliers.form.error") || "An error occurred. Please try again.");
+      }
     } catch (error) {
       setSubmitStatus("error");
-      setErrorMessage(error.message || t("suppliers.form.error"));
+      setErrorMessage(error.message || t("suppliers.form.error") || "An error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -266,7 +271,7 @@ export default function JoinSuppliers() {
               {/* Form Status Messages */}
               {submitStatus === "success" && (
                 <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded relative" role="alert">
-                  {t("suppliers.form.success") || "Form submitted successfully!"}
+                  {t("suppliers.form.success") || "Your request was submitted successfully"}
                 </div>
               )}
               {submitStatus === "error" && (
