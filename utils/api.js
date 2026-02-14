@@ -106,7 +106,7 @@ export const submitSupplierRequest = async (formData) => {
       message: formData.contactPerson.message,
     };
 
-    const response = await fetch(`${API_BASE_URL}/supplierrequest`, {
+    const response = await fetch(`${API_BASE_URL}/v1/supplierrequest`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
