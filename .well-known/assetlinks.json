@@ -1,0 +1,14 @@
+[
+    {
+      "relation": [
+        "delegate_permission/common.handle_all_urls"
+      ],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "eshtarena.app",
+        "sha256_cert_fingerprints": [
+          "EC:C4:12:D3:AE:F2:DB:9E:2F:A0:F9:D9:B5:B4:5C:13:24:A4:2F:97:25:D4:E1:EA:1F:58:D3:DE:16:AF:EE:2A"
+        ]
+      }
+    }
+  ]
