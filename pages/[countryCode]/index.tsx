@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -10,6 +10,8 @@ import CategoryShortcuts from "../../components/ecommerce/CategoryShortcuts";
 import FeaturedDeals from "../../components/ecommerce/FeaturedDeals";
 import MegaDeals from "../../components/ecommerce/MegaDeals";
 import NotFoundPage from "../../components/NotFoundPage";
+import { setLatestCountryCode } from "../../utils/countryPreference";
+import { isValidCountry } from "../../utils/routes";
 
 interface CountryNames {
   [key: string]: string;
@@ -26,6 +28,13 @@ const countryNames: CountryNames = {
 
 export default function CountryHomePage({ countryCode }: Props) {
   const router = useRouter();
+
+  // Persist as latest selected country so deal pages without country in URL can use it
+  useEffect(() => {
+    if (countryCode && isValidCountry(countryCode)) {
+      setLatestCountryCode(countryCode);
+    }
+  }, [countryCode]);
 
   // Determine language from router or default to 'en'
   const lang = router.locale || "en";

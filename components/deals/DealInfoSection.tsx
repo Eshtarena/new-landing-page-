@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "next-i18next";
 import { Deal } from "../../types/deals";
 import { COLORS } from "../../utils/colors";
 import ImageCarousel from "./ImageCarousel";
@@ -12,6 +13,7 @@ interface DealInfoSectionProps {
 }
 
 export default function DealInfoSection({ deal }: DealInfoSectionProps) {
+  const { t } = useTranslation("common");
   const handleJoinDeal = () => {
     // Handle join deal logic
     console.log("Joining deal:", deal.id);
@@ -31,22 +33,15 @@ export default function DealInfoSection({ deal }: DealInfoSectionProps) {
         />
       </div>
 
-      {/* Deal Name and Description */}
+      {/* Deal Name (no description below) */}
       <div className="flex flex-row justify-between items-center">
-        <div>
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex-1">
-              <h2
-                className="text-2xl font-bold mb-2"
-                style={{ color: COLORS.darkViolet }}
-              >
-                {deal.title}
-              </h2>
-              <p className="text-gray-600 text-base leading-relaxed">
-                {deal.description}
-              </p>
-            </div>
-          </div>
+        <div className="flex-1">
+          <h2
+            className="text-2xl font-bold mb-4"
+            style={{ color: COLORS.darkViolet }}
+          >
+            {deal.title}
+          </h2>
         </div>
         {/* Timer */}
         <div className="mb-6">
@@ -117,7 +112,7 @@ export default function DealInfoSection({ deal }: DealInfoSectionProps) {
             boxShadow: `0 4px 14px 0 ${COLORS.originalDeal}40`,
           }}
         >
-          Join Deal
+          {t("deals.detailsPage.joinDeal", "Join Deal")}
         </button>
       </div>
     </div>

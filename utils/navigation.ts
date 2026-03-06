@@ -1,21 +1,34 @@
 import { Deal } from '../types/deals';
 
 /**
- * Navigate to deal details page
+ * Get deal details URL for shared links (type-specific paths under /v1)
+ * - Voucher: /v1/deal/voucher/:voucherid
+ * - Cold: /v1/deal/cold/:dealid
+ * - Original: /v1/deal/original/:dealid
+ */
+export const getDealDetailsUrl = (deal: Deal): string => {
+  console.log('deal', deal);
+  switch (deal.dealType) {
+    case 'voucher':
+      return `/v1/deal/voucher/${deal.id}`;
+    case 'cold':
+      return `/v1/deal/cold/${deal.id}`;
+    case 'original':
+      return `/v1/deal/original/${deal.id}`;
+    default: {
+      const d = deal as Deal;
+      return `/v1/deal/original/${d.id}`;
+    }
+  }
+};
+
+/**
+ * Navigate to deal details page (type-specific route for sharing)
  * @param router - Next.js router instance
  * @param deal - Deal object
  */
 export const navigateToDealDetails = (router: any, deal: Deal) => {
-  router.push(`/deal-details/${deal.id}`);
-};
-
-/**
- * Get deal details URL
- * @param dealId - Deal ID
- * @returns URL string for deal details page
- */
-export const getDealDetailsUrl = (dealId: string) => {
-  return `/deal-details/${dealId}`;
+  router.push(getDealDetailsUrl(deal));
 };
 
 /**
