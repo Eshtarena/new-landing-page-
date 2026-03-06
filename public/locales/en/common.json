@@ -74,7 +74,8 @@
       "dealNotFound": "Deal Not Found",
       "dealNotFoundMessage": "The deal you're looking for doesn't exist or may have been removed.",
       "goBack": "Go Back",
-      "loading": "Loading deal details..."
+      "loading": "Loading deal details...",
+      "downloadApp": "Download the app"
     }
   },
   "contact": {
