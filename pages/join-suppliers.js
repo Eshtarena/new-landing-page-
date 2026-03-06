@@ -295,7 +295,7 @@ export default function JoinSuppliers() {
           </div>
         </div>
         <div className="text-center text-sm text-gray-500">
-          v: 1.0.1
+          v: 1.0.0
         </div>
       </main>
       <Footer socialData={socialData} />
