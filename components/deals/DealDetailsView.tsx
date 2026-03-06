@@ -21,6 +21,8 @@ import {
   mapColdApiToDeal,
   mapOriginalApiToDeal,
 } from "../../services/dealDetailsApi";
+import { fetchSocialLinks } from "../../utils/api";
+import { STORES_IMAGES_LINKS } from "../../utils/consts";
 
 interface DealDetailsViewProps {
   /** The deal id from the URL (voucherid or dealid) */
@@ -63,6 +65,24 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
   const [isLoading, setIsLoading] = useState(true);
   const [countryCode, setCountryCode] = useState<string>("egy");
   const [lang, setLang] = useState<Lang>("en");
+  const [storeLinks, setStoreLinks] = useState<{ apple: string; google: string }>({
+    apple: "https://apps.apple.com/app/eshtarena",
+    google: "https://play.google.com/store/apps/details?id=com.eshtarena",
+  });
+
+  useEffect(() => {
+    fetchSocialLinks()
+      .then((data) => {
+        if (data.apple || data.google) {
+          setStoreLinks({
+            apple: data.apple || storeLinks.apple,
+            google: data.google || storeLinks.google,
+          });
+        }
+      })
+      .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once on mount
+  }, []);
 
   // Prefer ?lang=ar from URL so deal content and UI switch to Arabic
   useEffect(() => {
@@ -262,10 +282,45 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
           <h1 className="text-white text-lg font-semibold">{t("deals.detailsPage.pageTitle")}</h1>
         </div>
       </div>
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 pb-24 md:pb-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <DealInfoSection deal={deal} />
           <DealTabsSection deal={deal} lang={lang} />
+        </div>
+      </div>
+
+      {/* Mobile only: download app buttons – open store for downloading */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-[#340040] border-t border-white/10 px-4 py-3 safe-area-pb z-10">
+        <p className="text-white/90 text-sm text-center mb-3">
+          {t("deals.detailsPage.downloadApp", "Download the app")}
+        </p>
+        <div className="flex items-center justify-center gap-4">
+          <a
+            href={storeLinks.apple}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 max-w-[140px] h-10 flex items-center justify-center rounded-lg bg-black/20 hover:bg-black/30 transition-colors"
+            aria-label="Download on the App Store"
+          >
+            <img
+              src={STORES_IMAGES_LINKS.apple}
+              alt="App Store"
+              className="h-8 w-auto object-contain"
+            />
+          </a>
+          <a
+            href={storeLinks.google}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 max-w-[140px] h-10 flex items-center justify-center rounded-lg bg-black/20 hover:bg-black/30 transition-colors"
+            aria-label="Get it on Google Play"
+          >
+            <img
+              src={STORES_IMAGES_LINKS.google}
+              alt="Google Play"
+              className="h-8 w-auto object-contain"
+            />
+          </a>
         </div>
       </div>
     </div>
