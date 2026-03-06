@@ -71,17 +71,16 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
   });
 
   useEffect(() => {
+    const defaultApple = "https://apps.apple.com/app/eshtarena";
+    const defaultGoogle = "https://play.google.com/store/apps/details?id=com.eshtarena";
     fetchSocialLinks()
       .then((data) => {
-        if (data.apple || data.google) {
-          setStoreLinks({
-            apple: data.apple || storeLinks.apple,
-            google: data.google || storeLinks.google,
-          });
-        }
+        setStoreLinks({
+          apple: data.apple || defaultApple,
+          google: data.google || defaultGoogle,
+        });
       })
       .catch(() => {});
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once on mount
   }, []);
 
   // Prefer ?lang=ar from URL so deal content and UI switch to Arabic
