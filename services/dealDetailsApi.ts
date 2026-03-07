@@ -1,10 +1,12 @@
 import type { ColdDetailsApiResponse, OriginalDetailsApiResponse, DealDetailsApiDeal } from "../types/api/dealDetails";
 import type { ColdDeal, OriginalDeal, DealTimer } from "../types/deals";
-import { API_BASE_URL, getGuestAuthHeaders } from "./config";
+import { API_BASE_URL, BACKEND_PUBLIC_BASE, getGuestAuthHeaders } from "./config";
 import type { Lang } from "./voucherApi";
 
-const DEAL_IMAGE_BASE =
-  process.env.NEXT_PUBLIC_DEAL_IMAGE_BASE || "https://api.eshtarena.com/public";
+/** Cold/original deal image: backend_base_url/public/deal/image */
+const DEAL_IMAGE_BASE = `${BACKEND_PUBLIC_BASE}/public/deal`;
+/** Supplier image: backend_base_url/public/supplier/image */
+const SUPPLIER_IMAGE_BASE = `${BACKEND_PUBLIC_BASE}/public/supplier`;
 
 /**
  * Normalize API status to "On going" | "Ended" for display.
@@ -93,7 +95,7 @@ function mapCommonDealFields(
     isActive,
     statusLabel,
     supplier: v.supplier ? (isEn ? v.supplier.name_en : v.supplier.name_ar) : undefined,
-    supplierPic: v.supplier?.pic ? `${DEAL_IMAGE_BASE}/${v.supplier.pic}` : undefined,
+    supplierPic: v.supplier?.pic ? `${SUPPLIER_IMAGE_BASE}/${v.supplier.pic}` : undefined,
   };
 }
 

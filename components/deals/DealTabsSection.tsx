@@ -121,7 +121,6 @@ export default function DealTabsSection({ deal, lang = 'en', variant = 'payment-
                 backgroundColor: activeTab === tab.id ? COLORS.darkViolet : 'transparent'
               }}
             >
-              <span className="mr-2">{tab.icon}</span>
               {isPaymentAndTermsOnly && tab.id === 'about'
                 ? dealLabels.tabAboutDeal
                 : isPaymentAndTermsOnly && tab.id === 'payment'

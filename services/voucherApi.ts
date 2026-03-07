@@ -1,10 +1,11 @@
 import type { VoucherApiResponse } from "../types/api/voucher";
 import type { VoucherDeal, DealTimer } from "../types/deals";
-import { API_BASE_URL, getGuestAuthHeaders } from "./config";
+import { API_BASE_URL, BACKEND_PUBLIC_BASE, getGuestAuthHeaders } from "./config";
 
-/** Base URL for voucher images (pic from API is appended). Adjust if your API uses a different path. */
-const VOUCHER_IMAGE_BASE =
-  process.env.NEXT_PUBLIC_VOUCHER_IMAGE_BASE || "https://api.eshtarena.com/public";
+/** Voucher deal image: backend_base_url/public/voucher/image */
+const VOUCHER_IMAGE_BASE = `${BACKEND_PUBLIC_BASE}/public/voucher`;
+/** Supplier image: backend_base_url/public/supplier/image */
+const SUPPLIER_IMAGE_BASE = `${BACKEND_PUBLIC_BASE}/public/supplier`;
 
 /**
  * Fetch voucher details from API.
@@ -85,7 +86,7 @@ export function mapVoucherApiToDeal(
     isActive,
     statusLabel,
     supplier: v.supplier ? (isEn ? v.supplier.name_en : v.supplier.name_ar) : undefined,
-    supplierPic: v.supplier?.pic ? `${VOUCHER_IMAGE_BASE}/${v.supplier.pic}` : undefined,
+    supplierPic: v.supplier?.pic ? `${SUPPLIER_IMAGE_BASE}/${v.supplier.pic}` : undefined,
     paymentTerms: paymentTerms.length ? paymentTerms : undefined,
   };
 }

@@ -59,28 +59,27 @@ export default function DealInfoSection({ deal, lang = "en", storeLinks }: DealI
         )}
       </div>
 
-      {/* Column 1: Deal name + Location | Column 2: Deal status + Deal type */}
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4 ">
-        <div className="flex flex-col gap-2 min-w-0">
+      {/* Mobile: two columns – (title + location) | (counter/Ended + deal type). Desktop: flex row. */}
+      <div className="grid grid-cols-2 lg:flex lg:flex-row lg:items-start lg:justify-between gap-3 sm:gap-4 mb-4">
+        <div className="flex flex-col gap-1 sm:gap-2 min-w-0">
           <h2
-            className="text-xl md:text-2xl font-bold"
+            className="text-base sm:text-xl md:text-2xl font-bold"
             style={{ color: COLORS.darkViolet }}
           >
             {deal.title}
           </h2>
           <div className="flex items-center" style={{ color: COLORS.darkViolet }}>
-            <svg className="w-5 h-5 mr-1.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-1.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
             </svg>
-            <span className="text-sm md:text-base font-medium">{deal.location.text}</span>
+            <span className="text-xs sm:text-sm md:text-base font-medium">{deal.location.text}</span>
           </div>
         </div>
-        <div className="flex flex-col gap-2 items-start sm:items-end shrink-0">
+        <div className="flex flex-col gap-1 sm:gap-2 items-start sm:items-end shrink-0">
           {deal.isActive ? (
             <CountdownTimer
               timer={deal.timer}
               textColor="text-blue-600"
-              className="text-base md:text-lg"
               labels={{
                 days: labels.timerDays,
                 hrs: labels.timerHrs,
@@ -89,11 +88,16 @@ export default function DealInfoSection({ deal, lang = "en", storeLinks }: DealI
               }}
             />
           ) : (
-            <span className="text-sm md:text-base font-semibold text-gray-600">
+            <span className="text-xs sm:text-sm md:text-base font-semibold text-gray-600">
               {deal.statusLabel === "Ended" ? labels.statusEnded : labels.statusOnGoing}
             </span>
           )}
-          <DealBadge dealType={deal.dealType} size="lg" isActive={deal.isActive} />
+          <span className="md:hidden">
+            <DealBadge dealType={deal.dealType} size="sm" isActive={deal.isActive} />
+          </span>
+          <span className="hidden md:inline-block">
+            <DealBadge dealType={deal.dealType} size="lg" isActive={deal.isActive} />
+          </span>
         </div>
       </div>
 
@@ -128,8 +132,8 @@ export default function DealInfoSection({ deal, lang = "en", storeLinks }: DealI
           rel="noopener noreferrer"
           className="flex-1 py-4 px-6 text-white font-semibold text-lg rounded-lg transition-all duration-200 hover:opacity-95 text-center"
           style={{
-            backgroundColor: COLORS.originalDeal,
-            boxShadow: `0 4px 14px 0 ${COLORS.originalDeal}40`,
+            backgroundColor: COLORS.darkViolet,
+            boxShadow: `0 4px 14px 0 ${COLORS.darkViolet}40`,
           }}
         >
           {labels.downloadTheApp}

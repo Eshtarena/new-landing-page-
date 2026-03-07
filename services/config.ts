@@ -1,5 +1,9 @@
 export const API_BASE_URL = "https://api.eshtarena.com/v1";
 
+/** Base URL for public assets (images). Use with /public/{type}/{filename}. */
+export const BACKEND_PUBLIC_BASE =
+  process.env.NEXT_PUBLIC_BACKEND_BASE_URL || "https://api.eshtarena.com";
+
 /** Fixed Bearer token for guest users (deal details, etc.). Override with NEXT_PUBLIC_GUEST_AUTH_TOKEN if needed. */
 export const GUEST_AUTH_TOKEN =
   process.env.NEXT_PUBLIC_GUEST_AUTH_TOKEN ||

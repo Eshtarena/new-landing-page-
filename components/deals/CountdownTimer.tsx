@@ -15,6 +15,8 @@ interface CountdownTimerProps {
   onTimerEnd?: () => void;
   /** Optional labels for Days, Hrs, Mins, Secs (e.g. for i18n) */
   labels?: CountdownTimerLabels;
+  /** Smaller text on mobile when "sm" */
+  size?: "sm" | "md";
 }
 
 const DEFAULT_LABELS: CountdownTimerLabels = {
@@ -30,9 +32,12 @@ export default function CountdownTimer({
   textColor = "text-gray-600",
   onTimerEnd,
   labels: customLabels,
+  size = "md",
 }: CountdownTimerProps) {
   const [timeLeft, setTimeLeft] = useState(timer);
   const labels = customLabels ?? DEFAULT_LABELS;
+  const valueClass = size === "sm" ? "text-sm font-bold" : "text-sm md:text-xl font-bold";
+  const labelClass = size === "sm" ? "text-[10px] text-gray-500" : "text-[10px] md:text-xs text-gray-500";
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -82,10 +87,10 @@ export default function CountdownTimer({
         { value: timeLeft.seconds, label: labels.secs },
       ].map(({ value, label }, index) => (
         <div key={index} className="flex flex-col items-center">
-          <span className={`text-xl font-bold ${textColor}`}>
+          <span className={`${valueClass} ${textColor}`}>
             {formatNumber(value)}
           </span>
-          <span className={`text-xs text-gray-500`}>{label}</span>
+          <span className={labelClass}>{label}</span>
         </div>
       ))}
     </div>

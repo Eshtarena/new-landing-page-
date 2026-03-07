@@ -208,7 +208,7 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
         <div className="md:hidden bg-[#340040] shadow-md">
           <div className={`flex items-center px-4 py-4 ${isRtl ? "flex-row-reverse" : ""}`}>
             <button
-              onClick={() => router.back()}
+              onClick={() => router.push(`/`)}
               className={`flex items-center justify-center w-10 h-10 text-white hover:bg-white/10 rounded-full transition-colors ${isRtl ? "ml-3" : "mr-3"}`}
               aria-label={labels.goBack}
             >
@@ -238,7 +238,7 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
               {labels.dealNotFoundMessage}
             </p>
             <button
-              onClick={() => router.back()}
+              onClick={() => router.push(`/${countryCode}${lang === "ar" ? "?lang=ar" : ""}`)}
               className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
             >
               {labels.goBack}
@@ -262,7 +262,7 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
       <div className="md:hidden bg-[#340040] shadow-md">
         <div className={`flex items-center px-4 py-4 ${isRtl ? "flex-row-reverse" : ""}`}>
           <button
-            onClick={() => router.back()}
+            onClick={() => router.push(`/${countryCode}${lang === "ar" ? "?lang=ar" : ""}`)}
             className={`flex items-center justify-center w-10 h-10 text-white hover:bg-white/10 rounded-full transition-colors ${isRtl ? "ml-3" : "mr-3"}`}
             aria-label={labels.goBack}
             >
