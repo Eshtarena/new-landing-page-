@@ -52,7 +52,31 @@
     "marketPrice": "سعر السوق",
     "dealPrice": "سعر العرض",
     "voucherValue": "قيمة الكوبون",
-    "save": "وفر"
+    "save": "وفر",
+    "detailsPage": {
+      "pageTitle": "تفاصيل العرض",
+      "description": "الوصف",
+      "details": "التفاصيل",
+      "termsAndConditions": "الشروط والأحكام",
+      "reviews": "المراجعات",
+      "aboutThisDeal": "حول هذا العرض",
+      "joinDeal": "انضم للعرض",
+      "dealDetails": "تفاصيل العرض",
+      "category": "الفئة",
+      "supplier": "المورد",
+      "dealType": "نوع العرض",
+      "location": "الموقع",
+      "totalQuantity": "الكمية الإجمالية",
+      "sold": "تم البيع",
+      "available": "متوفر",
+      "status": "الحالة",
+      "customerReviews": "تقييمات العملاء",
+      "dealNotFound": "العرض غير موجود",
+      "dealNotFoundMessage": "العرض الذي تبحث عنه غير موجود أو ربما تمت إزالته.",
+      "goBack": "رجوع",
+      "loading": "جاري تحميل تفاصيل العرض...",
+      "downloadApp": "حمّل التطبيق"
+    }
   },
   "contact": {
     "title": "تواصل معنا",

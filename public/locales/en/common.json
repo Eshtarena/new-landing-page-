@@ -52,7 +52,31 @@
     "marketPrice": "Market Price",
     "dealPrice": "Deal Price",
     "voucherValue": "Voucher value",
-    "save": "Save"
+    "save": "Save",
+    "detailsPage": {
+      "pageTitle": "Deal details",
+      "description": "Description",
+      "details": "Details",
+      "termsAndConditions": "Terms & Conditions",
+      "reviews": "Reviews",
+      "aboutThisDeal": "About This Deal",
+      "joinDeal": "Join Deal",
+      "dealDetails": "Deal Details",
+      "category": "Category",
+      "supplier": "Supplier",
+      "dealType": "Deal Type",
+      "location": "Location",
+      "totalQuantity": "Total Quantity",
+      "sold": "Sold",
+      "available": "Available",
+      "status": "Status",
+      "customerReviews": "Customer Reviews",
+      "dealNotFound": "Deal Not Found",
+      "dealNotFoundMessage": "The deal you're looking for doesn't exist or may have been removed.",
+      "goBack": "Go Back",
+      "loading": "Loading deal details...",
+      "downloadApp": "Download the app"
+    }
   },
   "contact": {
     "title": "Get in Touch",

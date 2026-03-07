@@ -37,13 +37,23 @@ export interface BaseDeal {
   saveAmount: number;
   currency: string;
   isActive: boolean;
+  /** From API: "On going" | "Ended". When set, UI shows this instead of Active/Inactive. */
+  statusLabel?: "On going" | "Ended";
   category?: string;
   supplier?: string;
+}
+
+/** Payment term item for voucher (from API customerPaymentTerms) */
+export interface VoucherPaymentTerm {
+  title: string;
+  description: string;
 }
 
 export interface VoucherDeal extends BaseDeal {
   dealType: 'voucher';
   voucherValue: number;
+  /** From API: customerPaymentTerms, shown in Terms tab */
+  paymentTerms?: VoucherPaymentTerm[];
 }
 
 export interface ColdDeal extends BaseDeal {
