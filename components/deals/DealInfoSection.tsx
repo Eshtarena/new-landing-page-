@@ -59,9 +59,9 @@ export default function DealInfoSection({ deal, lang = "en", storeLinks }: DealI
         )}
       </div>
 
-      {/* Mobile: two columns – (title + location) | (counter/Ended + deal type). Desktop: flex row. */}
-      <div className="grid grid-cols-2 lg:flex lg:flex-row lg:items-start lg:justify-between gap-3 sm:gap-4 mb-4">
-        <div className="flex flex-col gap-1 sm:gap-2 min-w-0">
+      {/* Title column left, counter column right; space between them. */}
+      <div className="flex flex-row flex-nowrap items-start justify-between w-full gap-2 sm:gap-4 mb-4">
+        <div className="flex flex-col gap-1 sm:gap-2 min-w-0 flex-shrink">
           <h2
             className="text-base sm:text-xl md:text-2xl font-bold"
             style={{ color: COLORS.darkViolet }}
@@ -75,7 +75,7 @@ export default function DealInfoSection({ deal, lang = "en", storeLinks }: DealI
             <span className="text-xs sm:text-sm md:text-base font-medium">{deal.location.text}</span>
           </div>
         </div>
-        <div className="flex flex-col gap-1 sm:gap-2 items-start sm:items-end shrink-0">
+        <div className="flex flex-col gap-1 sm:gap-2 items-end flex-shrink-0">
           {deal.isActive ? (
             <CountdownTimer
               timer={deal.timer}
