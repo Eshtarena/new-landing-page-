@@ -65,6 +65,7 @@ export function mapVoucherApiToDeal(
   const statusLabel = statusLower === "ended" || statusLower === "end" ? "Ended" as const : "On going" as const;
   const isActive = statusLabel === "On going";
 
+  // Voucher has a single deal image (pic); cold/original may have multiple (pics/images)
   return {
     id: v._id,
     title: isEn ? v.title_en : v.title_ar,
@@ -80,9 +81,11 @@ export function mapVoucherApiToDeal(
     saveAmount: v.save,
     currency: "SAR",
     voucherValue: v.voucherValue,
+    expireDate: v.expireDate,
     isActive,
     statusLabel,
     supplier: v.supplier ? (isEn ? v.supplier.name_en : v.supplier.name_ar) : undefined,
+    supplierPic: v.supplier?.pic ? `${VOUCHER_IMAGE_BASE}/${v.supplier.pic}` : undefined,
     paymentTerms: paymentTerms.length ? paymentTerms : undefined,
   };
 }

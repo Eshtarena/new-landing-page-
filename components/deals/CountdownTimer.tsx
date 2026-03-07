@@ -1,20 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { DealTimer } from "../../types/deals";
 
+export interface CountdownTimerLabels {
+  days: string;
+  hrs: string;
+  mins: string;
+  secs: string;
+}
+
 interface CountdownTimerProps {
   timer: DealTimer;
   className?: string;
   textColor?: string;
   onTimerEnd?: () => void;
+  /** Optional labels for Days, Hrs, Mins, Secs (e.g. for i18n) */
+  labels?: CountdownTimerLabels;
 }
+
+const DEFAULT_LABELS: CountdownTimerLabels = {
+  days: "Days",
+  hrs: "Hrs",
+  mins: "Mins",
+  secs: "Secs",
+};
 
 export default function CountdownTimer({
   timer,
   className = "",
   textColor = "text-gray-600",
   onTimerEnd,
+  labels: customLabels,
 }: CountdownTimerProps) {
   const [timeLeft, setTimeLeft] = useState(timer);
+  const labels = customLabels ?? DEFAULT_LABELS;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -58,10 +76,10 @@ export default function CountdownTimer({
   return (
     <div className={`flex flex-row items-center space-x-3 ${className}`}>
       {[
-        { value: timeLeft.days, label: "Days" },
-        { value: timeLeft.hours, label: "Hrs" },
-        { value: timeLeft.minutes, label: "Mins" },
-        { value: timeLeft.seconds, label: "Secs" },
+        { value: timeLeft.days, label: labels.days },
+        { value: timeLeft.hours, label: labels.hrs },
+        { value: timeLeft.minutes, label: labels.mins },
+        { value: timeLeft.seconds, label: labels.secs },
       ].map(({ value, label }, index) => (
         <div key={index} className="flex flex-col items-center">
           <span className={`text-xl font-bold ${textColor}`}>

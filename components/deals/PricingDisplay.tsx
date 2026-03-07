@@ -7,6 +7,8 @@ interface PricingDisplayProps {
   className?: string;
   showSavings?: boolean;
   layout?: "horizontal" | "vertical" | "compact";
+  /** Override labels by language (e.g. voucherValue, dealPrice, save, marketPrice) */
+  labels?: { voucherValue?: string; dealPrice?: string; save?: string; marketPrice?: string };
 }
 
 // Reusable price item component
@@ -47,19 +49,21 @@ export default function PricingDisplay({
   className = "",
   showSavings = true,
   layout = "horizontal",
+  labels: labelOverrides,
 }: PricingDisplayProps) {
   const formatCurrency = (amount: number, currency: string): string => {
     return `${amount.toLocaleString()} ${currency}`;
   };
 
-  // Calculate reference price (voucher value or market price)
   const referencePrice =
     "voucherValue" in deal
       ? deal.voucherValue
       : (deal as any).marketPrice || deal.dealPrice + deal.saveAmount;
 
   const referenceLabel =
-    "voucherValue" in deal ? "Voucher value" : "Market price";
+    "voucherValue" in deal
+      ? (labelOverrides?.voucherValue ?? "Voucher value")
+      : (labelOverrides?.marketPrice ?? "Market Price");
 
   const items = [
     {
@@ -68,12 +72,12 @@ export default function PricingDisplay({
       size: "small" as const,
     },
     {
-      label: "Deal Price",
+      label: labelOverrides?.dealPrice ?? "Deal Price",
       value: formatCurrency(deal.dealPrice, deal.currency),
       size: "large" as const,
     },
     {
-      label: "Save",
+      label: labelOverrides?.save ?? "Save",
       value: formatCurrency(deal.saveAmount, deal.currency),
       size: "small" as const,
     },

@@ -19,7 +19,11 @@ export interface DealDetailsApiDeal {
   status: string; // "On going" | "Ended" (or similar)
   quantity: number;
   sold: number;
+  /** Single image (voucher-style); used when only one image */
   pic?: string;
+  /** Multiple images (cold/original may have more than one) */
+  pics?: string[];
+  images?: string[];
   endDate?: string;
   supplier?: DealDetailsApiSupplier;
   dealPrice: number;

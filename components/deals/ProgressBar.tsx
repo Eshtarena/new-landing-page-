@@ -7,6 +7,8 @@ interface ProgressBarProps {
   className?: string;
   showLabels?: boolean;
   height?: "sm" | "md" | "lg";
+  soldLabel?: string;
+  availableLabel?: string;
 }
 
 export default function ProgressBar({
@@ -15,6 +17,8 @@ export default function ProgressBar({
   className = "",
   showLabels = true,
   height = "md",
+  soldLabel = "Sold",
+  availableLabel = "Available",
 }: ProgressBarProps) {
   const total = quantity.sold + quantity.available;
   const progressPercentage = total > 0 ? (quantity.sold / total) * 100 : 0;
@@ -42,8 +46,8 @@ export default function ProgressBar({
       </div>
       {showLabels && (
         <div className="flex justify-between text-gray-600 mt-2">
-          <span className="text-sm">{quantity.sold} Sold</span>
-          <span className="text-sm">{quantity.available} Available</span>
+          <span className="text-sm">{quantity.sold} {soldLabel}</span>
+          <span className="text-sm">{quantity.available} {availableLabel}</span>
         </div>
       )}
     </div>

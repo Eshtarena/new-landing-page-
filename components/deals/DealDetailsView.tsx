@@ -6,12 +6,6 @@ import DealInfoSection from "./DealInfoSection";
 import DealTabsSection from "./DealTabsSection";
 import { COLORS } from "../../utils/colors";
 import MainNavbar from "../ecommerce/MainNavbar";
-import {
-  ALL_MOCK_DEALS,
-  getMockVoucherDeals,
-  getMockColdDeals,
-  getMockOriginalDeals,
-} from "../../data/mockDeals";
 import { getLatestCountryCode } from "../../utils/countryPreference";
 import { isValidCountry } from "../../utils/routes";
 import { fetchVoucherDetails, mapVoucherApiToDeal, type Lang } from "../../services/voucherApi";
@@ -22,7 +16,7 @@ import {
   mapOriginalApiToDeal,
 } from "../../services/dealDetailsApi";
 import { fetchSocialLinks } from "../../utils/api";
-import { STORES_IMAGES_LINKS } from "../../utils/consts";
+import { DEAL_DETAILS_LABELS } from "../../utils/dealDetailsLabels";
 
 interface DealDetailsViewProps {
   /** The deal id from the URL (voucherid or dealid) */
@@ -50,12 +44,21 @@ function resolveCountryCode(
 }
 
 /**
- * Shared deal details view. Fetches deal by id (mock for now; replace with API call later).
- * Used by /deal/voucher/[voucherid], /deal/cold/[dealid], /deal/original/[dealid].
+ * Resolve lang from query string. Used for deal content and UI language.
  */
 function resolveLangFromQuery(queryLang: string | string[] | undefined): Lang {
   const q = Array.isArray(queryLang) ? queryLang[0] : queryLang;
   return q === "ar" ? "ar" : "en";
+}
+
+/** Get lang from current URL (client-safe). Use so ?lang=ar is respected even before router is ready. */
+function getLangFromUrl(routerQueryLang: string | string[] | undefined): Lang {
+  if (typeof window !== "undefined") {
+    const params = new URLSearchParams(window.location.search);
+    const urlLang = params.get("lang");
+    if (urlLang === "ar") return "ar";
+  }
+  return resolveLangFromQuery(routerQueryLang);
 }
 
 export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) {
@@ -64,15 +67,18 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
   const [deal, setDeal] = useState<Deal | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [countryCode, setCountryCode] = useState<string>("egy");
-  const [lang, setLang] = useState<Lang>("en");
+  // Initialize lang from URL on client so Arabic shows immediately when ?lang=ar
+  const [lang, setLang] = useState<Lang>(() =>
+    typeof window !== "undefined" ? getLangFromUrl(undefined) : "en"
+  );
   const [storeLinks, setStoreLinks] = useState<{ apple: string; google: string }>({
     apple: "https://apps.apple.com/app/eshtarena",
-    google: "https://play.google.com/store/apps/details?id=com.eshtarena",
+    google: "https://play.google.com/store/apps/details?id=eshtarena.app",
   });
 
   useEffect(() => {
     const defaultApple = "https://apps.apple.com/app/eshtarena";
-    const defaultGoogle = "https://play.google.com/store/apps/details?id=com.eshtarena";
+    const defaultGoogle = "https://play.google.com/store/apps/details?id=eshtarena.app";
     fetchSocialLinks()
       .then((data) => {
         setStoreLinks({
@@ -83,10 +89,10 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
       .catch(() => {});
   }, []);
 
-  // Prefer ?lang=ar from URL so deal content and UI switch to Arabic
+  // Sync lang from URL so UI and content show Arabic when ?lang=ar (client: read from window so it works before router is ready)
   useEffect(() => {
-    if (!router.isReady) return;
-    setLang(resolveLangFromQuery(router.query.lang));
+    const nextLang = getLangFromUrl(router.query.lang);
+    setLang(nextLang);
   }, [router.isReady, router.query.lang]);
 
   useEffect(() => {
@@ -104,15 +110,14 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
   }, [router.query.countryCode]);
 
   useEffect(() => {
-    if (!id || typeof id !== "string") {
+    if (!router.isReady || !id || typeof id !== "string") {
+      if (!router.isReady) return;
       setIsLoading(false);
       return;
     }
 
-    // Use URL lang so first load shows API values in the correct language (?lang=ar)
-    const effectiveLang = router.isReady
-      ? resolveLangFromQuery(router.query.lang)
-      : lang;
+    // Use URL lang so content (payment terms, description, etc.) is in correct language (?lang=ar)
+    const effectiveLang = getLangFromUrl(router.query.lang);
 
     let cancelled = false;
 
@@ -124,8 +129,7 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
         })
         .catch(() => {
           if (cancelled) return;
-          const fallback = getMockVoucherDeals()[0];
-          if (fallback) setDeal({ ...fallback, id });
+          // Do not use dummy data – show deal not found
         })
         .finally(() => {
           if (!cancelled) setIsLoading(false);
@@ -139,12 +143,11 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
           if (cancelled) return;
           const mapped = mapColdApiToDeal(data, effectiveLang);
           if (mapped) setDeal(mapped);
-          else setDeal({ ...getMockColdDeals()[0], id });
+          // If mapping fails, deal stays null – show deal not found
         })
         .catch(() => {
           if (cancelled) return;
-          const fallback = getMockColdDeals()[0];
-          if (fallback) setDeal({ ...fallback, id });
+          // Do not use dummy data
         })
         .finally(() => {
           if (!cancelled) setIsLoading(false);
@@ -158,12 +161,10 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
           if (cancelled) return;
           const mapped = mapOriginalApiToDeal(data, effectiveLang);
           if (mapped) setDeal(mapped);
-          else setDeal({ ...getMockOriginalDeals()[0], id });
         })
         .catch(() => {
           if (cancelled) return;
-          const fallback = getMockOriginalDeals()[0];
-          if (fallback) setDeal({ ...fallback, id });
+          // Do not use dummy data
         })
         .finally(() => {
           if (!cancelled) setIsLoading(false);
@@ -175,6 +176,7 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
   }, [id, dealType, lang, router.isReady, router.query.lang]);
 
   const isRtl = lang === "ar";
+  const labels = DEAL_DETAILS_LABELS[lang];
 
   if (isLoading) {
     return (
@@ -186,7 +188,7 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
       >
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">{t("deals.detailsPage.loading")}</p>
+          <p className="text-gray-600">{labels.loading}</p>
         </div>
       </div>
     );
@@ -208,7 +210,7 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
             <button
               onClick={() => router.back()}
               className={`flex items-center justify-center w-10 h-10 text-white hover:bg-white/10 rounded-full transition-colors ${isRtl ? "ml-3" : "mr-3"}`}
-              aria-label={t("deals.detailsPage.goBack")}
+              aria-label={labels.goBack}
             >
               <svg
                 className={`w-6 h-6 ${isRtl ? "rotate-180" : ""}`}
@@ -224,22 +226,22 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
                 />
               </svg>
             </button>
-            <h1 className="text-white text-lg font-semibold">{t("deals.detailsPage.pageTitle")}</h1>
+            <h1 className="text-white text-lg font-semibold">{labels.pageTitle}</h1>
           </div>
         </div>
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              {t("deals.detailsPage.dealNotFound")}
+              {labels.dealNotFound}
             </h2>
             <p className="text-gray-600 mb-6">
-              {t("deals.detailsPage.dealNotFoundMessage")}
+              {labels.dealNotFoundMessage}
             </p>
             <button
               onClick={() => router.back()}
               className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
             >
-              {t("deals.detailsPage.goBack")}
+              {labels.goBack}
             </button>
           </div>
         </div>
@@ -262,64 +264,29 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
           <button
             onClick={() => router.back()}
             className={`flex items-center justify-center w-10 h-10 text-white hover:bg-white/10 rounded-full transition-colors ${isRtl ? "ml-3" : "mr-3"}`}
-            aria-label={t("deals.detailsPage.goBack")}
-          >
-            <svg
-              className={`w-6 h-6 ${isRtl ? "rotate-180" : ""}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+            aria-label={labels.goBack}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
+              <svg
+                className={`w-6 h-6 ${isRtl ? "rotate-180" : ""}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
           </button>
-          <h1 className="text-white text-lg font-semibold">{t("deals.detailsPage.pageTitle")}</h1>
+          <h1 className="text-white text-lg font-semibold">{labels.pageTitle}</h1>
         </div>
       </div>
-      <div className="container mx-auto px-4 py-8 pb-24 md:pb-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <DealInfoSection deal={deal} />
-          <DealTabsSection deal={deal} lang={lang} />
-        </div>
-      </div>
-
-      {/* Mobile only: download app buttons – open store for downloading */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-[#340040] border-t border-white/10 px-4 py-3 safe-area-pb z-10">
-        <p className="text-white/90 text-sm text-center mb-3">
-          {t("deals.detailsPage.downloadApp", "Download the app")}
-        </p>
-        <div className="flex items-center justify-center gap-4">
-          <a
-            href={storeLinks.apple}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 max-w-[140px] h-10 flex items-center justify-center rounded-lg bg-black/20 hover:bg-black/30 transition-colors"
-            aria-label="Download on the App Store"
-          >
-            <img
-              src={STORES_IMAGES_LINKS.apple}
-              alt="App Store"
-              className="h-8 w-auto object-contain"
-            />
-          </a>
-          <a
-            href={storeLinks.google}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 max-w-[140px] h-10 flex items-center justify-center rounded-lg bg-black/20 hover:bg-black/30 transition-colors"
-            aria-label="Get it on Google Play"
-          >
-            <img
-              src={STORES_IMAGES_LINKS.google}
-              alt="Google Play"
-              className="h-8 w-auto object-contain"
-            />
-          </a>
+      <div className="container mx-auto px-4 py-6 md:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+          <DealInfoSection deal={deal} lang={lang} storeLinks={storeLinks} />
+          <DealTabsSection deal={deal} lang={lang} variant="payment-and-terms" />
         </div>
       </div>
     </div>

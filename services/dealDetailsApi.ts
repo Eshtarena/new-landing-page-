@@ -46,11 +46,31 @@ function extractDealFromOriginalResponse(data: OriginalDetailsApiResponse): Deal
   return null;
 }
 
+/** Build deal images array: support single pic or multiple pics/images from API */
+function mapDealImages(
+  v: DealDetailsApiDeal,
+  lang: Lang,
+  baseUrl: string
+): { src: string; alt: string }[] {
+  const alt = (lang === "en" ? v.title_en : v.title_ar) || v.title_en || v.title_ar || "Deal";
+  const multi = (v.pics ?? v.images) as string[] | undefined;
+  if (multi?.length) {
+    return multi.map((filename) => ({
+      src: `${baseUrl}/${filename}`,
+      alt,
+    }));
+  }
+  if (v.pic) {
+    return [{ src: `${baseUrl}/${v.pic}`, alt }];
+  }
+  return [];
+}
+
 function mapCommonDealFields(
   v: DealDetailsApiDeal,
   lang: Lang,
   dealType: "cold" | "original"
-): Pick<ColdDeal, "id" | "title" | "description" | "images" | "timer" | "location" | "quantity" | "dealPrice" | "saveAmount" | "currency" | "isActive" | "supplier" | "statusLabel"> {
+): Pick<ColdDeal, "id" | "title" | "description" | "images" | "timer" | "location" | "quantity" | "dealPrice" | "saveAmount" | "currency" | "isActive" | "supplier" | "supplierPic" | "statusLabel"> {
   const isEn = lang === "en";
   const statusLabel = normalizeStatus(v.status);
   const isActive = statusLabel === "On going";
@@ -63,9 +83,7 @@ function mapCommonDealFields(
     id: v._id,
     title: (isEn ? v.title_en : v.title_ar) || (v.title_en || v.title_ar) || "",
     description: v.about ? (isEn ? v.about.content_en : v.about.content_ar) : undefined,
-    images: v.pic
-      ? [{ src: `${DEAL_IMAGE_BASE}/${v.pic}`, alt: (isEn ? v.title_en : v.title_ar) || "Deal" }]
-      : [],
+    images: mapDealImages(v, lang, DEAL_IMAGE_BASE),
     timer: parseEndDateToTimer(v.endDate),
     location: { text: locationText },
     quantity: { sold, available },
@@ -75,6 +93,7 @@ function mapCommonDealFields(
     isActive,
     statusLabel,
     supplier: v.supplier ? (isEn ? v.supplier.name_en : v.supplier.name_ar) : undefined,
+    supplierPic: v.supplier?.pic ? `${DEAL_IMAGE_BASE}/${v.supplier.pic}` : undefined,
   };
 }
 

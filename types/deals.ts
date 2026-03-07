@@ -41,6 +41,8 @@ export interface BaseDeal {
   statusLabel?: "On going" | "Ended";
   category?: string;
   supplier?: string;
+  /** Supplier logo URL (from API supplier.pic) */
+  supplierPic?: string;
 }
 
 /** Payment term item for voucher (from API customerPaymentTerms) */
@@ -52,7 +54,9 @@ export interface VoucherPaymentTerm {
 export interface VoucherDeal extends BaseDeal {
   dealType: 'voucher';
   voucherValue: number;
-  /** From API: customerPaymentTerms, shown in Terms tab */
+  /** From API: expireDate e.g. "2026-04-10" */
+  expireDate?: string;
+  /** From API: customerPaymentTerms */
   paymentTerms?: VoucherPaymentTerm[];
 }
 
