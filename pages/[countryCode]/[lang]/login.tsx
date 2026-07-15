@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next/pages';
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 import InputField from '../../../components/auth/InputField';
 import Button from '../../../components/auth/Button';
 import { LoginFormData, FormErrors } from '../../../types/auth';
@@ -71,8 +72,8 @@ export default function LoginPage({ lang, countryCode }: LoginPageProps) {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Redirect to dashboard or home page after successful login
-      router.push(buildHomeRoute(countryCode, lang) + '/dashboard');
+      // Redirect to home page after successful login
+      router.push(buildHomeRoute(countryCode, lang));
     } catch (error) {
       console.error('Login failed:', error);
       setErrors({ general: t('auth.login.errorGeneral') });
@@ -87,7 +88,16 @@ export default function LoginPage({ lang, countryCode }: LoginPageProps) {
   };
 
   const switchLanguage = (newLang: string) => {
-    router.push(buildLoginRoute(countryCode, newLang));
+    if (newLang === lang) {
+      return;
+    }
+
+    if (typeof window !== 'undefined') {
+      (window as typeof window & { __preserveScrollOnNextRoute?: boolean }).__preserveScrollOnNextRoute =
+        true;
+    }
+
+    router.push(buildLoginRoute(countryCode, newLang), undefined, { scroll: false });
   };
 
   return (
@@ -101,10 +111,12 @@ export default function LoginPage({ lang, countryCode }: LoginPageProps) {
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           {/* Logo */}
           <div className="flex justify-center">
-            <img
-              className="w-32 h-auto"
-              src="/eshtarena_logo.svg"
+            <Image
+              src="/Group.svg"
               alt="Eshtarena"
+              width={200}
+              height={108}
+              className="object-contain"
             />
           </div>
           
@@ -231,7 +243,7 @@ export default function LoginPage({ lang, countryCode }: LoginPageProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params, locale }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const { lang, countryCode } = params as { lang: string; countryCode: string };
   
   // Validate language and country codes

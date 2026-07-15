@@ -17,11 +17,11 @@ export const SLIDER_IMAGES = {
     "/banners/arabic/3.webp",
     "/banners/arabic/4.webp",
     "/banners/arabic/5.webp",
-    "/banners/arabic/6.webp",
-    "/banners/arabic/7.webp",
-    "/banners/arabic/8.webp",
-    "/banners/arabic/9.webp",
-    "/banners/arabic/10.webp",
+    "/banners/arabic/sv5crnnyasumuwmxyezm.webp",
+    "/banners/arabic/trzs8wxthkwhhl5gffug.webp",
+    "/banners/arabic/ug6aemgdfflijhoho04w.webp",
+    "/banners/arabic/yfpdpbvhnlvupagiu5pc.webp",
+    "/banners/arabic/yp2d9u5xvgboo91otynf.webp",
   ],
 };
 export const LANDING_IMAGES = {
@@ -44,12 +44,12 @@ export const LANDING_IMAGES = {
 export const DEALS_DATA = [
   {
     id: "original",
-    translationKey: "deals.originalDeal",
+    translationKey: "deals.productDeal",
     imageSrc: {
       ar: LANDING_IMAGES.ar.originalDeal,
       en: LANDING_IMAGES.en.originalDeal,
     },
-    imageAlt: "Original Deal",
+    imageAlt: "Product Deal",
     hasBgColor: true,
     isReversed: false,
   },
@@ -90,8 +90,14 @@ export const DEALS_DATA = [
 ];
 
 export const STORES_IMAGES_LINKS = {
-  google: "/google_store.png",
-  apple: "/app_store.png",
+  en: {
+    google: "/google-play-en.svg",
+    apple: "/app-store-en.svg",
+  },
+  ar: {
+    google: "/google-play-ar.svg",
+    apple: "/app-store-ar.svg",
+  },
 };
 
 // {

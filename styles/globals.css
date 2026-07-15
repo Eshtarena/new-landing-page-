@@ -1,91 +1,218 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+@import "tailwindcss";
 @import "./form.css";
 
-/* CSS Reset */
+@theme {
+  --color-primary-50: #f9f2fa;
+  --color-primary-100: #f2e0f5;
+  --color-primary-200: #e0b3e6;
+  --color-primary-300: #c980d1;
+  --color-primary-400: #a64da6;
+  --color-primary-500: #340040;
+  --color-primary-600: #2a0034;
+  --color-primary-700: #200028;
+  --color-primary-800: #17001d;
+  --color-primary-900: #0f0012;
+  --color-primary-950: #08000a;
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  /*
+    Bilingual type system. --font-inter / --font-cairo are injected on <html>
+    by next/font in _app.js; the SF Pro stack stays as the fallback so the
+    Apple HIG look survives while the webfonts load.
+  */
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont,
+    "SF Pro Text", "SF Pro Display", system-ui, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-arabic: var(--font-cairo), "Cairo", Tahoma, "Segoe UI", Arial,
+    sans-serif;
+  --shadow-soft: 0 4px 24px rgb(0 0 0 / 0.04);
+  --shadow-soft-lg: 0 8px 40px rgb(0 0 0 / 0.08);
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Ad banners: 1200 × 600 px (2:1) — same ratio on landing page and shop */
+  --aspect-banner: 2 / 1;
+
+  --animate-float: float 6s ease-in-out infinite;
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-14px);
+    }
+  }
+
+  --animate-slideUp: slideUp 0.3s var(--ease-spring) forwards;
+  @keyframes slideUp {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-10px);
+      opacity: 0;
+    }
+  }
+
+  /* Infinite marquee - Base animation moves left */
+  --animate-marquee: marquee 40s linear infinite;
+  @keyframes marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @keyframes marquee-rtl {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(50%, 0, 0);
+    }
+  }
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-::-webkit-scrollbar {
-  display: none;
+/* 
+  Marquee direction is reversed for RTL to maintain natural reading flow.
+  The content is duplicated inside a single flex container, and moving it by 
+  half its width ensures a seamless loop.
+*/
+
+/*
+  All global element styles live in @layer base so Tailwind utilities
+  (which live in a later cascade layer) can override them. Unlayered
+  rules would beat every utility class in Tailwind v4.
+*/
+@layer base {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  html {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    scroll-behavior: auto;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-sans);
+    background: #fff;
+    color: #1d1d1f;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Main container */
+  #__next {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* RTL/LTR Support */
+  [dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+  }
+  
+  [dir="rtl"],
+  [dir="rtl"] body {
+    font-family: var(--font-arabic);
+  }
+
+  /*
+    Marquee tracks must stay LTR even on Arabic pages. Page-level RTL sets
+    text-align: right, which right-aligns w-max children and pushes the
+    duplicated loop off-screen before the animation can recycle it.
+  */
+  .marquee-viewport {
+    direction: ltr;
+    text-align: left;
+  }
+
+  [dir="rtl"] .animate-marquee,
+  [dir="rtl"] .marquee-track {
+    animation-name: marquee;
+    animation-direction: normal;
+  }
+
+  /* Fix image display */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
 }
 
-/* Hide scrollbar for IE, Edge and Firefox */
-html {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-  scroll-behavior: smooth;
+/* Arabic (Cairo) balancing — deliberately unlayered so these beat the
+  Tailwind utilities they correct:
+  - Arabic script is connected; negative letter-spacing breaks ligatures.
+  - Cairo runs visually heavier/thinner than Inter at the extremes, so
+    extrabold and light are pulled one step toward the middle.
+*/
+html[dir="rtl"] .tracking-tighter,
+html[dir="rtl"] .tracking-tight {
+  letter-spacing: 0;
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  font-family: "Segoe UI", "Arial", sans-serif;
-  background: #fff;
-  color: #222;
-  overflow-x: hidden;
+html[dir="rtl"] .font-extrabold {
+  font-weight: 700;
 }
 
-/* Main container */
-#__next {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* RTL/LTR Support */
-[dir="rtl"] {
-  direction: rtl;
-  text-align: right;
-}
-
-[dir="ltr"] {
-  direction: ltr;
-  text-align: left;
+html[dir="rtl"] .font-light {
+  font-weight: 400;
 }
 
 /* Custom styles */
-.section-padding {
-  padding-top: 6rem;
-  padding-bottom: 5rem;
-}
+@layer components {
+  .section-padding {
+    /* 8px-grid section rhythm: 48px mobile / 80px desktop */
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
 
-.container-width {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
+  @media (min-width: 768px) {
+    .section-padding {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+  }
 
-/* Fix image display */
-img {
-  max-width: 100%;
-  height: auto;
-}
+  .container-width {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
 
-/* Custom navbar height */
-.navbar-container {
-  height: 90px !important;
-  min-height: 90px !important;
-}
+  /* Custom navbar height */
+  .navbar-container {
+    height: 90px !important;
+    min-height: 90px !important;
+  }
 
-.navbar-logo {
-  width: 70px !important;
-  height: 70px !important;
-}
+  .navbar-logo {
+    object-fit: contain;
+  }
 
-/*
-:root {
-  --main-color: #f2055c69;
+  /* Reserve space for fixed mobile bottom nav + safe area */
+  .mobile-bottom-nav-padding {
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  @media (min-width: 1024px) {
+    .mobile-bottom-nav-padding {
+      padding-bottom: 0;
+    }
+  }
 }
-*/
 
 /* Dual Range Slider Styles */
 .slider-thumb-min,
@@ -106,7 +233,7 @@ img {
   cursor: pointer;
   pointer-events: all;
   border: 2px solid #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 .slider-thumb-min::-moz-range-thumb,
@@ -118,9 +245,9 @@ img {
   cursor: pointer;
   pointer-events: all;
   border: 2px solid #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 .slider-thumb-max {
-  z-index: 2;
+  z-index: 20;
 }

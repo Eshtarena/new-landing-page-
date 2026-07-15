@@ -1,37 +1,46 @@
-import React from "react";
 import { useRouter } from "next/router";
+
+type Locale = "en" | "ar";
 
 export default function LanguageSwitcher() {
   const router = useRouter();
   const { pathname, asPath, query } = router;
 
-  const switchLanguage = (locale: string) => {
-    router.push({ pathname, query }, asPath, { locale });
+  const switchLanguage = async (locale: Locale) => {
+    if (router.locale === locale) {
+      return;
+    }
+
+    if (typeof window !== "undefined") {
+      (window as typeof window & { __preserveScrollOnNextRoute?: boolean }).__preserveScrollOnNextRoute =
+        true;
+    }
+
+    await router.push({ pathname, query }, asPath, { locale, scroll: false });
   };
 
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center gap-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]">
       <button
         onClick={() => switchLanguage("en")}
-        className={`px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${
+        className={`min-w-11 min-h-11 px-3 text-sm rounded-full transition-colors duration-200 ease-spring ${
           router.locale === "en"
-            ? "bg-white text-[#340040]"
-            : "text-white/80 hover:text-white"
+            ? "text-white font-semibold bg-white/10"
+            : "text-white/70 hover:text-white hover:bg-white/10"
         }`}
       >
-        English
+        EN
       </button>
-      <span className="text-white/60">|</span>
       <button
         onClick={() => switchLanguage("ar")}
-        className={`px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${
+        className={`min-w-11 min-h-11 px-3 text-sm rounded-full transition-colors duration-200 ease-spring ${
           router.locale === "ar"
-            ? "bg-white text-[#340040]"
-            : "text-white/80 hover:text-white"
+            ? "text-white font-semibold bg-white/10"
+            : "text-white/70 hover:text-white hover:bg-white/10"
         }`}
       >
-        العربية
+        عربي
       </button>
     </div>
   );
-} 
+}

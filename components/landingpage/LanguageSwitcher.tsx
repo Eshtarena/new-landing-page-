@@ -5,14 +5,17 @@ export default function LanguageSwitcher() {
   const router = useRouter();
   const { pathname, asPath, query } = router;
 
-  const switchLanguage = (locale: string): void => {
-    // Only switch if it's a different locale
-    if (router.locale !== locale) {
-      router.push({ pathname, query }, asPath, { locale }).then(() => {
-        // Force reload the page to ensure all media and styles are properly updated
-        window.location.reload();
-      });
+  const switchLanguage = async (locale: string): Promise<void> => {
+    if (router.locale === locale) {
+      return;
     }
+
+    if (typeof window !== "undefined") {
+      (window as typeof window & { __preserveScrollOnNextRoute?: boolean }).__preserveScrollOnNextRoute =
+        true;
+    }
+
+    await router.push({ pathname, query }, asPath, { locale, scroll: false });
   };
 
   return (

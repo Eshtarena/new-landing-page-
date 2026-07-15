@@ -1,106 +1,227 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
+import { useSwipeable } from 'react-swipeable';
+import { useBanners } from '../../hooks/useBanners';
 
 interface Slide {
-  id: number;
-  image: string;
+  id: string | number;
+  image: {
+    en: string;
+    ar: string;
+  };
   title: string;
   link: string;
 }
 
-export default function HeroSlider() {
-  const [currentSlide, setCurrentSlide] = useState<number>(0);
+const FALLBACK_SLIDES = [
+  { id: 1, image: { en: '/banners/english/1.webp', ar: '/banners/arabic/1.webp' }, titleKey: 'navbar.shopNow' },
+  { id: 2, image: { en: '/banners/english/2.webp', ar: '/banners/arabic/2.webp' }, titleKey: 'deals.title' },
+  { id: 3, image: { en: '/banners/english/3.webp', ar: '/banners/arabic/3.webp' }, titleKey: 'about.mainTitleLine1' }
+];
 
-  const slides: Slide[] = [
-    {
-      id: 1,
-      image: '/banners/english/1.webp',
-      title: 'Best Price Guarantee',
-      link: '#'
-    },
-    {
-      id: 2,
-      image: '/banners/english/2.webp',
-      title: 'Latest Smartphones',
-      link: '#'
-    },
-    {
-      id: 3,
-      image: '/banners/english/3.webp',
-      title: 'Fashion Deals',
-      link: '#'
-    }
-  ];
+export default function HeroSlider() {
+  const { t, i18n } = useTranslation('common');
+  const [slide, setSlide] = useState(1);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isAutoplay, setIsAutoplay] = useState(true);
+  const lang = (i18n.language || 'en') as 'en' | 'ar';
+  const isRTL = lang === 'ar';
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const { banners, isLoading, error } = useBanners();
+
+  const usingFallback = !isLoading && (error !== null || banners.length === 0);
+  const slides: Slide[] = usingFallback
+    ? FALLBACK_SLIDES.map((item) => ({ ...item, title: t(item.titleKey), link: '#' }))
+    : banners.map((banner) => ({
+        id: banner.id,
+        image: { en: banner.imageUrl_en, ar: banner.imageUrl_ar },
+        title: (lang === 'ar' ? banner.title_ar : banner.title_en) || t('navbar.shopNow'),
+        link: banner.linkUrl
+      }));
+
+  const extendedSlides =
+    slides.length > 1
+      ? [slides[slides.length - 1], ...slides, slides[0]]
+      : slides;
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
+    setSlide(1);
+    setIsTransitioning(false);
+  }, [slides.length, lang]);
 
-    return () => clearInterval(timer);
+  const pauseAutoplay = useCallback(() => {
+    setIsAutoplay(false);
+    setTimeout(() => setIsAutoplay(true), 5000);
+  }, []);
+
+  const nextSlide = useCallback(() => {
+    if (slides.length <= 1) return;
+    setIsTransitioning(true);
+    setSlide((prev) => prev + 1);
   }, [slides.length]);
 
-  const nextSlide = (): void => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  const prevSlide = useCallback(() => {
+    if (slides.length <= 1) return;
+    setIsTransitioning(true);
+    setSlide((prev) => prev - 1);
+  }, [slides.length]);
+
+  const goToSlide = useCallback(
+    (targetIndex: number) => {
+      if (slides.length <= 1) return;
+      const currentIndex =
+        slide === 0
+          ? slides.length - 1
+          : slide === slides.length + 1
+          ? 0
+          : slide - 1;
+      if (targetIndex === currentIndex) return;
+      setIsTransitioning(true);
+      setSlide(targetIndex + 1);
+      pauseAutoplay();
+    },
+    [slides.length, slide, pauseAutoplay]
+  );
+
+  const handleTransitionEnd = () => {
+    if (!isTransitioning) return;
+    setIsTransitioning(false);
+    if (slide >= slides.length + 1) {
+      setSlide(1);
+    } else if (slide === 0) {
+      setSlide(slides.length);
+    }
   };
 
-  const prevSlide = (): void => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  };
+  useEffect(() => {
+    if (slides.length < 2 || !isAutoplay) return;
+
+    timeoutRef.current = setTimeout(() => {
+      nextSlide();
+    }, 5000);
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [slide, slides.length, isAutoplay, nextSlide]);
+
+  const handlers = useSwipeable({
+    onSwipedLeft: () => {
+      if (isRTL) {
+        prevSlide();
+      } else {
+        nextSlide();
+      }
+      pauseAutoplay();
+    },
+    onSwipedRight: () => {
+      if (isRTL) {
+        nextSlide();
+      } else {
+        prevSlide();
+      }
+      pauseAutoplay();
+    },
+    trackMouse: true,
+    trackTouch: true,
+    preventScrollOnSwipe: true,
+    delta: 10,
+  });
+
+  const activeIndex =
+    slide === 0
+      ? slides.length - 1
+      : slide === slides.length + 1
+      ? 0
+      : slide - 1;
+
+  const getSliderStyle = () => ({
+    transform: `translateX(-${slide * 100}%)`,
+    transition: isTransitioning
+      ? 'transform 500ms cubic-bezier(0.32, 0.72, 0, 1)'
+      : 'none',
+    willChange: isTransitioning ? 'transform' : 'auto',
+  });
+
+  if (isLoading) {
+    return (
+      <div className="relative w-full aspect-banner rounded-2xl sm:rounded-3xl md:rounded-4xl overflow-hidden my-3 sm:my-4 md:my-6 shadow-soft-lg bg-gray-200 animate-pulse" />
+    );
+  }
 
   return (
-    <div className="relative h-[250px] md:h-[500px] rounded-lg overflow-hidden my-4">
-      {/* Slides */}
-      <div className="relative h-full">
-        {slides.map((slide, index) => (
-          <div
-            key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-500 ${
-              index === currentSlide ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <Image
-              src={slide.image}
-              alt={slide.title}
-              fill
-              style={{ objectFit: 'cover', width: '100%' }}
-              priority={index === 0}
+    <div className="relative my-3 sm:my-4 md:my-6">
+      <div
+        className="relative w-full aspect-banner rounded-2xl sm:rounded-3xl md:rounded-4xl overflow-hidden shadow-soft-lg bg-primary-500 touch-pan-y select-none"
+        {...handlers}
+      >
+        <div
+          dir="ltr"
+          className="flex h-full"
+          style={getSliderStyle()}
+          onTransitionEnd={handleTransitionEnd}
+        >
+          {extendedSlides.map((item, index) => (
+            <div key={`${item.id}-${index}`} className="relative h-full w-full shrink-0">
+              <Image
+                src={item.image[lang]}
+                alt={item.title}
+                fill
+                draggable={false}
+                className="object-cover w-full h-full pointer-events-none"
+                priority={index === 1}
+                loading={index === 1 ? 'eager' : 'lazy'}
+                sizes="(max-width: 768px) 100vw, 1600px"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/60 via-black/0 to-black/0" />
+              <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6 md:p-12 z-10">
+                {item.link && item.link !== '#' ? (
+                  <Link href={item.link} className="block max-w-xl">
+                    <h2 className="text-lg sm:text-2xl md:text-5xl font-bold tracking-tight text-white leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]">
+                      {item.title}
+                    </h2>
+                  </Link>
+                ) : (
+                  <h2 className="text-lg sm:text-2xl md:text-5xl font-bold tracking-tight text-white max-w-xl leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]">
+                    {item.title}
+                  </h2>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 md:h-32 bg-linear-to-t from-primary-800/40 to-transparent z-10" />
+      </div>
+
+      {/* Slide indicators — below banner on mobile so they don't cover artwork */}
+      {slides.length > 1 && (
+        <div
+          className="flex justify-center gap-2 mt-3 md:mt-0 md:absolute md:inset-x-0 md:bottom-8 md:z-20"
+          role="tablist"
+          aria-label="Banner slides"
+        >
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              type="button"
+              onClick={() => goToSlide(index)}
+              aria-label={`Go to slide ${index + 1}`}
+              aria-current={index === activeIndex ? 'true' : undefined}
+              role="tab"
+              className={`h-1.5 rounded-full transition-all duration-300 ease-out cursor-pointer min-w-3 min-h-3 ${
+                index === activeIndex
+                  ? 'w-6 bg-primary-500 md:bg-white'
+                  : 'w-1.5 bg-primary-500/25 hover:bg-primary-500/40 md:bg-white/50 md:hover:bg-white/70'
+              }`}
             />
-          </div>
-        ))}
-      </div>
-
-      {/* Navigation Arrows */}
-      <button
-        onClick={prevSlide}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 hover:bg-white"
-      >
-        <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-        </svg>
-      </button>
-
-      <button
-        onClick={nextSlide}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 hover:bg-white"
-      >
-        <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
-
-      {/* Dots */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentSlide(index)}
-            className={`w-2 h-2 rounded-full transition-colors ${
-              index === currentSlide ? 'bg-white' : 'bg-white/50'
-            }`}
-          />
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
-} 
+}

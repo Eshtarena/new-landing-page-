@@ -1,14 +1,14 @@
 /* React Select Styles */
 .react-select .react-select__control {
-  @apply border border-gray-300 rounded-lg shadow-sm transition-colors;
+  @apply border border-gray-200 rounded-xl bg-gray-50 px-2 py-1.5 transition-all min-h-11;
 }
 
 .react-select .react-select__control:hover {
-  @apply border-gray-400;
+  @apply border-gray-300;
 }
 
 .react-select .react-select__control--is-focused {
-  @apply border-[#340040] ring-2 ring-purple-200 ring-opacity-50;
+  @apply border-transparent bg-white ring-2 ring-[#340040];
   box-shadow: none;
 }
 
@@ -21,7 +21,12 @@
 }
 
 .react-select .react-select__menu {
-  @apply border border-gray-200 rounded-lg shadow-lg bg-white z-50;
+  @apply border border-black/5 rounded-xl bg-white z-50 overflow-hidden;
+  box-shadow: var(--shadow-soft-lg);
+}
+
+.react-select .react-select__option {
+  @apply min-h-11;
 }
 
 .react-select .react-select__option {

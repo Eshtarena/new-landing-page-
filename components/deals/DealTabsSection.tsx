@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Deal } from '../../types/deals';
-import { COLORS } from '../../utils/colors';
+import React, { useState } from "react";
+import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next/pages";
+import { Deal } from "../../types/deals";
 
 interface DealTabsSectionProps {
   deal: Deal;
@@ -9,264 +10,262 @@ interface DealTabsSectionProps {
 interface TabConfig {
   id: string;
   label: string;
-  icon: React.ReactNode;
 }
 
 export default function DealTabsSection({ deal }: DealTabsSectionProps) {
-  const [activeTab, setActiveTab] = useState('description');
+  const { t, i18n } = useTranslation("common");
+  const router = useRouter();
+  const queryLang = Array.isArray(router.query.lang)
+    ? router.query.lang[0]
+    : router.query.lang;
+  const resolvedLang = queryLang || i18n.language || router.locale || "en";
+  const isRTL = resolvedLang === "ar";
+  const locale = isRTL ? "ar-SA" : "en-US";
+  const tx = (key: string, en: string, ar: string) =>
+    t(key, { defaultValue: isRTL ? ar : en });
+  const [activeTab, setActiveTab] = useState("description");
 
   const tabs: TabConfig[] = [
     {
-      id: 'description',
-      label: 'Description',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
-        </svg>
-      )
+      id: "description",
+      label: tx("dealDetails.tabs.description", "Description", "الوصف"),
     },
     {
-      id: 'details',
-      label: 'Details',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      )
+      id: "details",
+      label: tx("dealDetails.tabs.details", "Details", "التفاصيل"),
     },
     {
-      id: 'terms',
-      label: 'Terms & Conditions',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-        </svg>
-      )
+      id: "terms",
+      label: tx("dealDetails.tabs.terms", "Terms & Conditions", "الشروط والأحكام"),
     },
-    {
-      id: 'reviews',
-      label: 'Reviews',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-        </svg>
-      )
-    }
   ];
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case 'description':
-        return <DescriptionTab deal={deal} />;
-      case 'details':
-        return <DetailsTab deal={deal} />;
-      case 'terms':
-        return <TermsTab deal={deal} />;
-      case 'reviews':
-        return <ReviewsTab deal={deal} />;
+      case "description":
+        return <DescriptionTab deal={deal} tx={tx} />;
+      case "details":
+        return <DetailsTab deal={deal} tx={tx} locale={locale} />;
+      case "terms":
+        return <TermsTab deal={deal} tx={tx} isRTL={isRTL} />;
       default:
-        return <DescriptionTab deal={deal} />;
+        return <DescriptionTab deal={deal} tx={tx} />;
     }
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-      {/* Tab Navigation */}
-      <div className="border-b border-gray-200">
-        <nav className="flex">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 flex items-center justify-center px-4 py-4 text-sm font-medium transition-colors duration-200 ${
-                activeTab === tab.id
-                  ? 'border-b-2 text-white'
-                  : 'text-gray-500 hover:text-gray-700'
-              }`}
-              style={{
-                borderBottomColor: activeTab === tab.id ? COLORS.darkViolet : 'transparent',
-                backgroundColor: activeTab === tab.id ? COLORS.darkViolet : 'transparent'
-              }}
-            >
-              <span className="mr-2">{tab.icon}</span>
-              {tab.label}
-            </button>
-          ))}
+    <div className="rounded-2xl bg-white shadow-soft border border-black/5 overflow-hidden">
+      <div className="border-b border-black/5 px-4 pt-4 sm:px-6">
+        <nav
+          className="flex gap-2 overflow-x-auto pb-4"
+          role="tablist"
+          aria-label={tx("dealDetails.pageTitle", "Deal Details", "تفاصيل العرض")}
+        >
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => setActiveTab(tab.id)}
+                className={`shrink-0 rounded-full px-4 py-2.5 text-sm font-medium transition-all duration-200 ease-spring min-h-11 ${
+                  isActive
+                    ? "bg-primary-500 text-white shadow-soft"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800"
+                }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
         </nav>
       </div>
 
-      {/* Tab Content */}
-      <div className="p-6">
-        {renderTabContent()}
-      </div>
+      <div className="p-6 sm:p-8">{renderTabContent()}</div>
     </div>
   );
 }
 
-// Description Tab Component
-const DescriptionTab = ({ deal }: { deal: Deal }) => (
-  <div className="space-y-4">
-    <h3 className="text-xl font-semibold" style={{ color: COLORS.darkViolet }}>
-      About This Deal
-    </h3>
-    <div className="prose max-w-none">
-      <p className="text-gray-700 leading-relaxed">
-        {deal.description}
-      </p>
-      <p className="text-gray-700 leading-relaxed mt-4">
-        This exclusive deal offers you the opportunity to save significantly on premium products. 
-        Our carefully curated selection ensures you get the best value for your money while 
-        experiencing top-quality items.
-      </p>
-      <ul className="list-disc list-inside text-gray-700 mt-4 space-y-2">
-        <li>Premium quality guaranteed</li>
-        <li>Fast delivery within 2-3 business days</li>
-        <li>30-day return policy</li>
-        <li>Customer support available 24/7</li>
-      </ul>
-    </div>
-  </div>
+const SectionTitle = ({ title }: { title: string }) => (
+  <h2 className="text-lg font-semibold tracking-tight text-gray-900">{title}</h2>
 );
 
-// Details Tab Component
-const DetailsTab = ({ deal }: { deal: Deal }) => (
-  <div className="space-y-4">
-    <h3 className="text-xl font-semibold" style={{ color: COLORS.darkViolet }}>
-      Deal Details
-    </h3>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div className="space-y-3">
-        <div className="flex justify-between py-2 border-b border-gray-100">
-          <span className="font-medium text-gray-600">Category:</span>
-          <span className="text-gray-900">{deal.category || 'General'}</span>
-        </div>
-        <div className="flex justify-between py-2 border-b border-gray-100">
-          <span className="font-medium text-gray-600">Supplier:</span>
-          <span className="text-gray-900">{deal.supplier || 'Eshtarena Partner'}</span>
-        </div>
-        <div className="flex justify-between py-2 border-b border-gray-100">
-          <span className="font-medium text-gray-600">Deal Type:</span>
-          <span className="text-gray-900 capitalize">{deal.dealType}</span>
-        </div>
-        <div className="flex justify-between py-2 border-b border-gray-100">
-          <span className="font-medium text-gray-600">Location:</span>
-          <span className="text-gray-900">{deal.location.text}</span>
-        </div>
-      </div>
-      <div className="space-y-3">
-        <div className="flex justify-between py-2 border-b border-gray-100">
-          <span className="font-medium text-gray-600">Total Quantity:</span>
-          <span className="text-gray-900">{deal.quantity.sold + deal.quantity.available}</span>
-        </div>
-        <div className="flex justify-between py-2 border-b border-gray-100">
-          <span className="font-medium text-gray-600">Sold:</span>
-          <span className="text-gray-900">{deal.quantity.sold}</span>
-        </div>
-        <div className="flex justify-between py-2 border-b border-gray-100">
-          <span className="font-medium text-gray-600">Available:</span>
-          <span className="text-gray-900">{deal.quantity.available}</span>
-        </div>
-        <div className="flex justify-between py-2 border-b border-gray-100">
-          <span className="font-medium text-gray-600">Status:</span>
-          <span className={`font-medium ${deal.isActive ? 'text-green-600' : 'text-red-600'}`}>
-            {deal.isActive ? 'Active' : 'Inactive'}
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-);
+const DescriptionTab = ({
+  deal,
+  tx,
+}: {
+  deal: Deal;
+  tx: (key: string, en: string, ar: string) => string;
+}) => {
+  const aboutText = deal.detailContent?.about || deal.description;
 
-// Terms Tab Component
-const TermsTab = ({ deal }: { deal: Deal }) => (
-  <div className="space-y-4">
-    <h3 className="text-xl font-semibold" style={{ color: COLORS.darkViolet }}>
-      Terms & Conditions
-    </h3>
-    <div className="prose max-w-none text-gray-700">
-      <div className="space-y-4">
-        <div>
-          <h4 className="font-semibold text-gray-900">1. Deal Validity</h4>
-          <p>This deal is valid until the timer expires or all quantities are sold, whichever comes first.</p>
-        </div>
-        <div>
-          <h4 className="font-semibold text-gray-900">2. Payment Terms</h4>
-          <p>Payment must be completed within 24 hours of joining the deal to secure your spot.</p>
-        </div>
-        <div>
-          <h4 className="font-semibold text-gray-900">3. Delivery</h4>
-          <p>Delivery will commence once the deal reaches minimum participation requirements.</p>
-        </div>
-        <div>
-          <h4 className="font-semibold text-gray-900">4. Cancellation Policy</h4>
-          <p>Cancellations are allowed up to 2 hours after joining the deal, subject to availability.</p>
-        </div>
-        <div>
-          <h4 className="font-semibold text-gray-900">5. Returns & Refunds</h4>
-          <p>Standard return policy applies. Items must be in original condition within 30 days of delivery.</p>
-        </div>
-      </div>
+  return (
+    <div className="max-w-3xl space-y-5">
+      <SectionTitle title={tx("dealDetails.aboutTitle", "About This Deal", "نبذة عن العرض")} />
+      {aboutText ? (
+        <p className="text-[15px] leading-7 text-gray-600 whitespace-pre-line">{aboutText}</p>
+      ) : (
+        <p className="text-gray-500">
+          {tx(
+            "dealDetails.noDescription",
+            "No description is available for this deal yet.",
+            "لا يوجد وصف متاح لهذا العرض حتى الآن."
+          )}
+        </p>
+      )}
     </div>
-  </div>
-);
+  );
+};
 
-// Reviews Tab Component
-const ReviewsTab = ({ deal }: { deal: Deal }) => (
-  <div className="space-y-6">
-    <h3 className="text-xl font-semibold" style={{ color: COLORS.darkViolet }}>
-      Customer Reviews
-    </h3>
-    
-    {/* Rating Summary */}
-    <div className="bg-gray-50 rounded-lg p-4">
-      <div className="flex items-center space-x-4">
-        <div className="text-3xl font-bold" style={{ color: COLORS.darkViolet }}>
-          4.8
-        </div>
-        <div className="flex-1">
-          <div className="flex items-center mb-1">
-            {[...Array(5)].map((_, i) => (
-              <svg
-                key={i}
-                className={`w-5 h-5 ${i < 5 ? 'text-yellow-400' : 'text-gray-300'}`}
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-            ))}
+const DetailsTab = ({
+  deal,
+  tx,
+  locale,
+}: {
+  deal: Deal;
+  tx: (key: string, en: string, ar: string) => string;
+  locale: string;
+}) => {
+  const details = [
+    {
+      label: tx("dealDetails.details.supplier", "Supplier", "المورد"),
+      value: deal.supplier || tx("dealDetails.details.partner", "Eshtarena Partner", "شريك اشترينا"),
+    },
+    {
+      label: tx("dealDetails.details.dealType", "Deal type", "نوع العرض"),
+      value:
+        deal.dealType === "original"
+          ? tx("dealDetails.dealType.original", "Product deal", "عرض منتج")
+          : deal.dealType === "cold"
+          ? tx("dealDetails.dealType.cold", "Cold deal", "عرض بارد")
+          : tx("dealDetails.dealType.voucher", "Voucher deal", "عرض كوبونات"),
+    },
+    { label: tx("dealDetails.details.location", "Location", "الموقع"), value: deal.location.text },
+    {
+      label: tx("dealDetails.details.totalQuantity", "Total quantity", "إجمالي الكمية"),
+      value: (deal.quantity.sold + deal.quantity.available).toLocaleString(locale),
+    },
+    {
+      label: tx("dealDetails.sold", "Sold", "تم البيع"),
+      value: deal.quantity.sold.toLocaleString(locale),
+    },
+    {
+      label: tx("dealDetails.available", "Available", "المتاح"),
+      value: deal.quantity.available.toLocaleString(locale),
+    },
+    {
+      label: tx("dealDetails.details.status", "Status", "الحالة"),
+      value: deal.isActive
+        ? tx("dealDetails.status.active", "Active", "نشط")
+        : tx("dealDetails.status.inactive", "Inactive", "غير نشط"),
+    },
+  ];
+
+  if (deal.productName) {
+    details.unshift({
+      label: tx("dealDetails.details.product", "Product", "المنتج"),
+      value: deal.productName,
+    });
+  }
+
+  return (
+    <div className="space-y-5">
+      <SectionTitle title={tx("dealDetails.details.title", "Deal Details", "تفاصيل العرض")} />
+      <dl className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {details.map((item) => (
+          <div
+            key={item.label}
+            className="rounded-xl border border-gray-100 bg-gray-50/80 px-4 py-3.5"
+          >
+            <dt className="text-xs font-medium uppercase tracking-wide text-gray-500 mb-1">
+              {item.label}
+            </dt>
+            <dd className="text-sm font-semibold text-gray-900">{item.value}</dd>
           </div>
-          <p className="text-sm text-gray-600">Based on 127 reviews</p>
-        </div>
-      </div>
+        ))}
+      </dl>
     </div>
+  );
+};
 
-    {/* Sample Reviews */}
-    <div className="space-y-4">
-      {[
-        { name: 'Ahmed S.', rating: 5, comment: 'Excellent deal! Fast delivery and great quality products.' },
-        { name: 'Fatima M.', rating: 5, comment: 'Very satisfied with my purchase. Will definitely buy again.' },
-        { name: 'Omar K.', rating: 4, comment: 'Good value for money. Delivery was a bit slow but overall happy.' }
-      ].map((review, index) => (
-        <div key={index} className="border-b border-gray-100 pb-4 last:border-b-0">
-          <div className="flex items-center justify-between mb-2">
-            <span className="font-medium text-gray-900">{review.name}</span>
-            <div className="flex items-center">
-              {[...Array(5)].map((_, i) => (
-                <svg
-                  key={i}
-                  className={`w-4 h-4 ${i < review.rating ? 'text-yellow-400' : 'text-gray-300'}`}
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              ))}
+const TermsTab = ({
+  deal,
+  tx,
+  isRTL,
+}: {
+  deal: Deal;
+  tx: (key: string, en: string, ar: string) => string;
+  isRTL: boolean;
+}) => {
+  const content = deal.detailContent;
+  const hasStructuredTerms = Boolean(
+    content?.terms ||
+      content?.paymentTerms ||
+      content?.deliveryTerms?.length ||
+      content?.customerPaymentTerms?.length
+  );
+
+  return (
+    <div className="max-w-3xl space-y-5">
+      <SectionTitle
+        title={tx("dealDetails.tabs.terms", "Terms & Conditions", "الشروط والأحكام")}
+      />
+
+      {!hasStructuredTerms ? (
+        <p className="text-gray-500">
+          {tx(
+            "dealDetails.noTerms",
+            "No terms and conditions are available for this deal yet.",
+            "لا توجد شروط وأحكام متاحة لهذا العرض حتى الآن."
+          )}
+        </p>
+      ) : (
+        <div className="space-y-4 text-gray-600">
+          {content?.terms ? (
+            <div className="rounded-xl border border-gray-100 bg-gray-50/80 p-5">
+              <p className={`text-[15px] leading-7 whitespace-pre-line ${isRTL ? "text-right" : "text-left"}`}>
+                {content.terms}
+              </p>
             </div>
-          </div>
-          <p className="text-gray-700">{review.comment}</p>
+          ) : null}
+
+          {content?.paymentTerms ? (
+            <div className="rounded-xl border border-gray-100 bg-gray-50/80 p-5">
+              <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                {tx("dealDetails.terms.payment", "Payment Terms", "شروط الدفع")}
+              </h3>
+              <p className={`text-[15px] leading-7 whitespace-pre-line ${isRTL ? "text-right" : "text-left"}`}>
+                {content.paymentTerms}
+              </p>
+            </div>
+          ) : null}
+
+          {content?.deliveryTerms?.map((term, index) => (
+            <div key={`delivery-${index}`} className="rounded-xl border border-gray-100 bg-gray-50/80 p-5">
+              <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                {tx("dealDetails.terms.delivery", "Delivery Terms", "شروط التوصيل")}
+                {content.deliveryTerms && content.deliveryTerms.length > 1 ? ` ${index + 1}` : ""}
+              </h3>
+              <p className={`text-[15px] leading-7 whitespace-pre-line ${isRTL ? "text-right" : "text-left"}`}>
+                {term}
+              </p>
+            </div>
+          ))}
+
+          {content?.customerPaymentTerms?.map((term, index) => (
+            <div key={`payment-term-${index}`} className="rounded-xl border border-gray-100 bg-gray-50/80 p-5">
+              {term.title ? (
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">{term.title}</h3>
+              ) : null}
+              <p className={`text-[15px] leading-7 whitespace-pre-line ${isRTL ? "text-right" : "text-left"}`}>
+                {term.content}
+              </p>
+            </div>
+          ))}
         </div>
-      ))}
+      )}
     </div>
-  </div>
-);
+  );
+};

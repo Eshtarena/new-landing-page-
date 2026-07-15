@@ -1,21 +1,74 @@
+import { NextRouter } from 'next/router';
 import { Deal } from '../types/deals';
+
+const normalizeRouteParam = (value: string | string[] | undefined): string | undefined => {
+  if (Array.isArray(value)) {
+    return value[0];
+  }
+  return value;
+};
+
+const resolveRouteContext = (router: NextRouter) => {
+  const langFromQuery = normalizeRouteParam(router.query.lang);
+  const countryCodeFromQuery = normalizeRouteParam(router.query.countryCode);
+  const lang = langFromQuery || router.locale || 'en';
+  return {
+    lang,
+    countryCode: countryCodeFromQuery,
+  };
+};
 
 /**
  * Navigate to deal details page
  * @param router - Next.js router instance
  * @param deal - Deal object
  */
-export const navigateToDealDetails = (router: any, deal: Deal) => {
-  router.push(`/deal-details/${deal.id}`);
+export const navigateToDealDetails = (router: NextRouter, deal: Deal) => {
+  const { lang, countryCode } = resolveRouteContext(router);
+
+  router.push(
+    {
+      pathname: `/deal-details/${deal.id}`,
+      query: {
+        // Backend has separate detail endpoints per deal type (voucher/original/cold) —
+        // the type must travel with the link so the detail page knows which one to call.
+        type: deal.dealType,
+        ...(countryCode ? { countryCode } : {}),
+        ...(lang ? { lang } : {}),
+      },
+    },
+    undefined,
+    {
+      locale: lang,
+    }
+  );
 };
 
 /**
  * Get deal details URL
  * @param dealId - Deal ID
+ * @param params - Optional language, country, and deal-type context
  * @returns URL string for deal details page
  */
-export const getDealDetailsUrl = (dealId: string) => {
-  return `/deal-details/${dealId}`;
+export const getDealDetailsUrl = (
+  dealId: string,
+  params?: { lang?: string; countryCode?: string; dealType?: Deal["dealType"] }
+) => {
+  const query = new URLSearchParams();
+  if (params?.dealType) {
+    query.set("type", params.dealType);
+  }
+  if (params?.lang) {
+    query.set("lang", params.lang);
+  }
+  if (params?.countryCode) {
+    query.set("countryCode", params.countryCode);
+  }
+
+  const queryString = query.toString();
+  return queryString
+    ? `/deal-details/${dealId}?${queryString}`
+    : `/deal-details/${dealId}`;
 };
 
 /**
@@ -24,7 +77,7 @@ export const getDealDetailsUrl = (dealId: string) => {
  * @param deal - Deal object
  * @param source - Source component name for analytics
  */
-export const handleDealClick = (router: any, deal: Deal, source?: string) => {
+export const handleDealClick = (router: NextRouter, deal: Deal, source?: string) => {
   if (source) {
     console.log(`Deal clicked from ${source}:`, deal);
   } else {

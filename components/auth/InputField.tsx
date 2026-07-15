@@ -46,19 +46,19 @@ export default function InputField({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           disabled={disabled}
-          className={`w-full px-4 py-2 border rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-purple-200 focus:ring-opacity-50 ${
-            isPasswordField ? 'pr-10' : ''
+          className={`w-full min-h-11 px-4 py-3 border rounded-xl transition-all focus:outline-none focus:ring-2 ${
+            isPasswordField ? 'pr-12' : ''
           } ${
             error
-              ? 'border-red-500 focus:border-red-500'
-              : 'border-gray-300 focus:border-[#340040]'
+              ? 'border-red-400 focus:ring-red-400 focus:border-transparent'
+              : 'border-gray-200 focus:ring-[#340040] focus:border-transparent'
           } ${disabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'}`}
         />
         {isPasswordField && (
           <button
             type="button"
             onClick={togglePasswordVisibility}
-            className={`absolute inset-y-0 ${isRTL ? 'left-0 pl-3' : 'right-0 pr-3'} flex items-center text-gray-400 hover:text-gray-600 focus:outline-none`}
+            className={`absolute inset-y-0 ${isRTL ? 'left-0' : 'right-0'} flex items-center justify-center min-w-11 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors duration-200`}
             disabled={disabled}
           >
             {showPassword ? (

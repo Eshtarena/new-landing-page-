@@ -19,7 +19,7 @@ export default function Logo({
 }: LogoProps) {
   const logoElement = (
     <Image
-      src="/eshtarena_logo.svg"
+      src="/Group.svg"
       alt="Eshtarena"
       width={width}
       height={height}

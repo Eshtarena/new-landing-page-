@@ -17,6 +17,8 @@ export const LANGUAGE_NAMES = {
   ar: 'العربية'
 } as const;
 
+export const DASHBOARD_LOGIN_URL = 'https://dashboard.eshtarena.com/login';
+
 // Route builder functions (country code first, then language)
 export const buildAuthRoute = (countryCode: string, lang: string, path: string = '') => {
   return `/${countryCode}/${lang}${path}`;
@@ -33,7 +35,7 @@ export const buildRegisterRoute = (countryCode: string, lang: string, type?: 'pe
 };
 
 export const buildHomeRoute = (countryCode: string, lang: string) => {
-  return buildAuthRoute(countryCode, lang, '');
+  return `/${countryCode}`;
 };
 
 // Validation functions

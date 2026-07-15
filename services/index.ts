@@ -1,3 +1,8 @@
 export * from "./terms.service";
 export * from "./privacy.service";
-// Export other services here as they are added 
+export * from "./contact.service";
+export * from "./social.service";
+export * from "./advice.service";
+export * from "./banners.service";
+export * from "./categories.service";
+export * from "./deals.service";

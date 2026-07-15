@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Deal, DealType } from '../types/deals';
+import { Deal } from '../types/deals';
 import { FilterState } from '../components/ecommerce/FilterComponent';
 
 export function useDealsFilter(deals: Deal[]) {
@@ -60,8 +60,7 @@ export function useDealsFilter(deals: Deal[]) {
 // Helper function to determine category from deal data
 function getDealCategoryFromData(deal: Deal): string | null {
   const title = deal.title.toLowerCase();
-  const description = deal.description?.toLowerCase() || '';
-  
+
   if (title.includes('sneaker') || title.includes('fashion') || title.includes('clothing')) {
     return 'Fashion';
   }

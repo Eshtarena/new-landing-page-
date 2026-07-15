@@ -12,7 +12,7 @@ export default function Home() {
 }
 
 // Maintain i18n support
-export async function getStaticProps({ locale }) {
+export async function getStaticProps() {
   return {
     props: {},
   };

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { DealImage } from '../../types/deals';
 
 interface ImageCarouselProps {
@@ -9,6 +10,8 @@ interface ImageCarouselProps {
   showDots?: boolean;
   showArrows?: boolean;
   aspectRatio?: 'square' | 'video' | 'wide';
+  currentIndex?: number;
+  onIndexChange?: (index: number) => void;
 }
 
 export default function ImageCarousel({
@@ -18,9 +21,20 @@ export default function ImageCarousel({
   autoScrollInterval = 3000,
   showDots = true,
   showArrows = false,
-  aspectRatio = 'video'
+  aspectRatio = 'video',
+  currentIndex: controlledIndex,
+  onIndexChange,
 }: ImageCarouselProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [uncontrolledIndex, setUncontrolledIndex] = useState(0);
+  const isControlled = controlledIndex !== undefined;
+  const currentIndex = isControlled ? controlledIndex : uncontrolledIndex;
+
+  const setCurrentIndex = (index: number) => {
+    if (!isControlled) {
+      setUncontrolledIndex(index);
+    }
+    onIndexChange?.(index);
+  };
 
   const aspectRatioClasses = {
     square: 'aspect-square',
@@ -29,25 +43,25 @@ export default function ImageCarousel({
   };
 
   useEffect(() => {
-    if (!autoScroll || images.length <= 1) return;
+    if (!autoScroll || images.length <= 1 || isControlled) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex(prev => (prev + 1) % images.length);
+      setUncontrolledIndex((prev) => (prev + 1) % images.length);
     }, autoScrollInterval);
 
     return () => clearInterval(interval);
-  }, [autoScroll, autoScrollInterval, images.length]);
+  }, [autoScroll, autoScrollInterval, images.length, isControlled]);
 
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
   };
 
   const goToPrevious = () => {
-    setCurrentIndex(prev => prev === 0 ? images.length - 1 : prev - 1);
+    setCurrentIndex(currentIndex === 0 ? images.length - 1 : currentIndex - 1);
   };
 
   const goToNext = () => {
-    setCurrentIndex(prev => (prev + 1) % images.length);
+    setCurrentIndex((currentIndex + 1) % images.length);
   };
 
   if (images.length === 0) {
@@ -60,17 +74,19 @@ export default function ImageCarousel({
 
   // Check if className contains height classes (h-*), if so, skip aspect ratio
   const hasFixedHeight = className.includes('h-');
-  const containerClasses = hasFixedHeight 
-    ? 'w-full h-full rounded-lg overflow-hidden bg-gray-100'
-    : `${aspectRatioClasses[aspectRatio]} rounded-lg overflow-hidden bg-gray-100`;
+  const containerClasses = hasFixedHeight
+    ? 'relative w-full h-full rounded-lg overflow-hidden bg-gray-100'
+    : `relative ${aspectRatioClasses[aspectRatio]} rounded-lg overflow-hidden bg-gray-100`;
 
   return (
     <div className={`relative ${className}`}>
       <div className={containerClasses}>
-        <img
+        <Image
           src={images[currentIndex].src}
           alt={images[currentIndex].alt}
-          className="w-full h-full object-cover transition-opacity duration-300"
+          fill
+          sizes="100vw"
+          className="object-cover transition-opacity duration-300"
           loading="lazy"
         />
         
@@ -78,20 +94,22 @@ export default function ImageCarousel({
         {showArrows && images.length > 1 && (
           <>
             <button
+              type="button"
               onClick={goToPrevious}
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-1 rounded-full hover:bg-opacity-70 transition-all"
+              className="absolute left-3 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-gray-800 shadow-soft backdrop-blur-sm transition-all hover:bg-white"
               aria-label="Previous image"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
             <button
+              type="button"
               onClick={goToNext}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-1 rounded-full hover:bg-opacity-70 transition-all"
+              className="absolute right-3 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-gray-800 shadow-soft backdrop-blur-sm transition-all hover:bg-white"
               aria-label="Next image"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
@@ -119,7 +137,7 @@ export default function ImageCarousel({
 
       {/* Image Counter */}
       {images.length > 1 && (
-        <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
+        <div className="absolute top-3 end-3 rounded-full bg-black/55 px-2.5 py-1 text-xs font-medium text-white backdrop-blur-sm">
           {currentIndex + 1} / {images.length}
         </div>
       )}

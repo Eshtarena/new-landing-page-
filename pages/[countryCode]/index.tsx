@@ -1,15 +1,13 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import MainNavbar from "../../components/ecommerce/MainNavbar";
-import CategoryMenu from "../../components/ecommerce/CategoryMenu";
-import PromoBanner from "../../components/ecommerce/PromoBanner";
 import HeroSlider from "../../components/ecommerce/HeroSlider";
 import CategoryShortcuts from "../../components/ecommerce/CategoryShortcuts";
-import FeaturedDeals from "../../components/ecommerce/FeaturedDeals";
 import MegaDeals from "../../components/ecommerce/MegaDeals";
-import NotFoundPage from "../../components/NotFoundPage";
+import SiteFooter from "../../components/SiteFooter";
 
 interface CountryNames {
   [key: string]: string;
@@ -26,36 +24,56 @@ const countryNames: CountryNames = {
 
 export default function CountryHomePage({ countryCode }: Props) {
   const router = useRouter();
-
-  // Determine language from router or default to 'en'
   const lang = router.locale || "en";
+  const [openMobileFilter, setOpenMobileFilter] = useState<(() => void) | null>(
+    null
+  );
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleRegisterMobileFilter = useCallback((openFilter: () => void) => {
+    setOpenMobileFilter(() => openFilter);
+  }, []);
 
   return (
     <>
       <Head>
-        <title>
-          Eshtarena - {countryNames[countryCode] || countryCode?.toUpperCase()}
-        </title>
+        <title>{`Eshtarena - ${countryNames[countryCode] || countryCode?.toUpperCase()}`}</title>
         <meta
           name="description"
           content="Your one-stop shop for all your needs"
         />
       </Head>
 
-      <div className="min-h-screen bg-gray-50">
-        <MainNavbar countryCode={countryCode} lang={lang} />
-        {/* <CategoryMenu /> */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <HeroSlider />
-          <CategoryShortcuts />
-          <MegaDeals />
+      <div className="min-h-screen bg-white flex flex-col">
+        <MainNavbar
+          countryCode={countryCode}
+          lang={lang}
+          onMobileFilterOpen={openMobileFilter ?? undefined}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+        />
+        <main className="flex-1 w-full min-w-0">
+          {!searchQuery.trim() && (
+            <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8">
+              <HeroSlider />
+              <CategoryShortcuts />
+            </div>
+          )}
+          <MegaDeals
+            onRegisterMobileFilter={handleRegisterMobileFilter}
+            search={searchQuery}
+          />
         </main>
+        <SiteFooter />
       </div>
     </>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  params,
+  locale,
+}) => {
   const { countryCode } = params as { countryCode: string };
 
   // Validate country code
@@ -69,6 +87,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   return {
     props: {
       countryCode: countryCode.toLowerCase(),
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
     },
   };
 };

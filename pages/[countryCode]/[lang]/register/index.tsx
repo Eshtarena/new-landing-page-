@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next/pages';
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 import Button from '../../../../components/auth/Button';
 import { AccountType } from '../../../../types/auth';
 import { 
@@ -52,10 +53,12 @@ export default function RegisterPage({ lang, countryCode }: RegisterPageProps) {
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           {/* Logo */}
           <div className="flex justify-center">
-            <img
-              className="w-32 h-auto"
-              src="/eshtarena_logo.svg"
+            <Image
+              src="/Group.svg"
               alt="Eshtarena"
+              width={200}
+              height={108}
+              className="object-contain"
             />
           </div>
           
@@ -224,7 +227,7 @@ export default function RegisterPage({ lang, countryCode }: RegisterPageProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params, locale }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const { lang, countryCode } = params as { lang: string; countryCode: string };
   
   // Validate language and country codes
