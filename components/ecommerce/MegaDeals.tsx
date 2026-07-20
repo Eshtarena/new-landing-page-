@@ -15,6 +15,8 @@ interface MegaDealsProps {
   /** When set, deals are scoped to this category (also reads `?category=` from the URL). */
   initialCategoryId?: string;
   search?: string;
+  /** Set to false to hide the fixed mobile bottom nav (e.g. on the dedicated shop page, where the top navbar is the sole navigation). */
+  showMobileBottomNav?: boolean;
 }
 
 const INITIAL_FILTERS: FilterState = {
@@ -30,6 +32,7 @@ export default function MegaDeals({
   onRegisterMobileFilter,
   initialCategoryId,
   search,
+  showMobileBottomNav = true,
 }: MegaDealsProps) {
   const { t, i18n } = useTranslation("common");
   const isRTL = i18n.language === "ar";
@@ -94,18 +97,27 @@ export default function MegaDeals({
     handleDealClick(router, deal, "MegaDeals");
   };
 
+  const defaultTitle = t("navbar.deals");
+  const mobileDefaultTitle = t("store.popularDeals", { defaultValue: defaultTitle });
   const sectionTitle = trimmedSearch
     ? t("store.searchResults", { query: trimmedSearch })
     : categoryParam && categoryTitle
       ? categoryTitle
-      : t("navbar.deals");
+      : defaultTitle;
+  const mobileSectionTitle = trimmedSearch
+    ? t("store.searchResults", { query: trimmedSearch })
+    : categoryParam && categoryTitle
+      ? categoryTitle
+      : mobileDefaultTitle;
   const filterKey = categoryParam || "all";
 
   return (
     <div
       ref={dealsSectionRef}
       id="deals"
-      className="bg-white min-h-0 lg:min-h-screen lg:py-8 mobile-bottom-nav-padding scroll-mt-24"
+      className={`bg-white min-h-0 lg:min-h-screen lg:py-8 scroll-mt-24 ${
+        showMobileBottomNav ? "mobile-bottom-nav-padding" : "pb-10 lg:pb-0"
+      }`}
       dir={isRTL ? "rtl" : "ltr"}
     >
       <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8 pt-3 sm:pt-4 lg:pt-0">
@@ -122,27 +134,16 @@ export default function MegaDeals({
 
           {/* Main Content */}
           <div className="flex-1 min-w-0">
-            {/* Mobile header with filter trigger */}
-            <div className="lg:hidden flex items-center justify-between gap-3 mb-4">
-              <div className="min-w-0">
-                <h2 className="text-lg sm:text-xl font-bold tracking-tight text-primary-500 truncate">
-                  {sectionTitle}
-                </h2>
-                <p className="text-xs sm:text-sm text-gray-600">
-                  {isRTL
-                    ? `عرض ${filteredCount} من ${totalDeals} عرض`
-                    : `Showing ${filteredCount} of ${totalDeals} deals`}
-                </p>
-              </div>
-              <button
-                onClick={() => setIsMobileFilterOpen(true)}
-                className="inline-flex items-center gap-2 min-h-11 px-4 py-2 text-sm font-medium text-primary-500 bg-primary-50 border border-primary-500/10 rounded-full hover:bg-primary-100 transition-colors duration-200 ease-spring shrink-0"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
-                </svg>
-                {isRTL ? "تصفية" : "Filter"}
-              </button>
+            {/* Mobile header */}
+            <div className="lg:hidden mb-4">
+              <h2 className="text-lg sm:text-xl font-bold tracking-tight text-primary-500 truncate">
+                {mobileSectionTitle}
+              </h2>
+              <p className="text-xs sm:text-sm text-gray-600">
+                {isRTL
+                  ? `عرض ${filteredCount} من ${totalDeals} عرض`
+                  : `Showing ${filteredCount} of ${totalDeals} deals`}
+              </p>
             </div>
 
             {/* Desktop header */}
@@ -158,7 +159,7 @@ export default function MegaDeals({
             </div>
 
             {isLoading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {Array.from({ length: 8 }).map((_, index) => (
                   <div
                     key={index}
@@ -189,7 +190,7 @@ export default function MegaDeals({
                 </p>
               </div>
             ) : filteredDeals.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {filteredDeals.map((deal) => (
                   <DealCard
                     key={deal.id}
@@ -234,9 +235,11 @@ export default function MegaDeals({
         </div>
       </div>
 
-      <div className="lg:hidden">
-        <MobileBottomNav activeTab="home" />
-      </div>
+      {showMobileBottomNav && (
+        <div className="lg:hidden">
+          <MobileBottomNav activeTab="home" />
+        </div>
+      )}
 
       {isMobile && (
         <FilterComponent

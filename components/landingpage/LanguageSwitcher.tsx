@@ -1,7 +1,24 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 
-export default function LanguageSwitcher() {
+function GlobeIcon({ className = 'w-4 h-4' }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+      />
+    </svg>
+  );
+}
+
+interface LanguageSwitcherProps {
+  variant?: 'default' | 'compact';
+}
+
+export default function LanguageSwitcher({ variant = 'default' }: LanguageSwitcherProps) {
   const router = useRouter();
   const { pathname, asPath, query } = router;
 
@@ -17,6 +34,23 @@ export default function LanguageSwitcher() {
 
     await router.push({ pathname, query }, asPath, { locale, scroll: false });
   };
+
+  if (variant === 'compact') {
+    const isArabic = router.locale === 'ar';
+    const nextLocale = isArabic ? 'en' : 'ar';
+
+    return (
+      <button
+        type="button"
+        onClick={() => switchLanguage(nextLocale)}
+        className="inline-flex items-center gap-1.5 min-h-10 px-2.5 rounded-full text-white/90 hover:text-white hover:bg-white/10 transition-colors duration-200 ease-spring"
+        aria-label={isArabic ? 'Switch to English' : 'Switch to Arabic'}
+      >
+        <GlobeIcon />
+        <span className="text-sm font-medium">{isArabic ? 'ع' : 'en'}</span>
+      </button>
+    );
+  }
 
   return (
     <div className="relative inline-block text-left">

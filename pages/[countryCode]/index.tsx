@@ -6,6 +6,7 @@ import { serverSideTranslations } from "next-i18next/pages/serverSideTranslation
 import MainNavbar from "../../components/ecommerce/MainNavbar";
 import HeroSlider from "../../components/ecommerce/HeroSlider";
 import CategoryShortcuts from "../../components/ecommerce/CategoryShortcuts";
+import SupplierMarquee from "../../components/ecommerce/SupplierMarquee";
 import MegaDeals from "../../components/ecommerce/MegaDeals";
 import SiteFooter from "../../components/SiteFooter";
 
@@ -37,7 +38,7 @@ export default function CountryHomePage({ countryCode }: Props) {
   return (
     <>
       <Head>
-        <title>{`Eshtarena - ${countryNames[countryCode] || countryCode?.toUpperCase()}`}</title>
+        <title>{`Sharena - ${countryNames[countryCode] || countryCode?.toUpperCase()}`}</title>
         <meta
           name="description"
           content="Your one-stop shop for all your needs"
@@ -56,12 +57,14 @@ export default function CountryHomePage({ countryCode }: Props) {
           {!searchQuery.trim() && (
             <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8">
               <HeroSlider />
+              <SupplierMarquee />
               <CategoryShortcuts />
             </div>
           )}
           <MegaDeals
             onRegisterMobileFilter={handleRegisterMobileFilter}
             search={searchQuery}
+            showMobileBottomNav={false}
           />
         </main>
         <SiteFooter />

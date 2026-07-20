@@ -21,9 +21,25 @@ const BACKEND_DEAL_TYPE: Record<DealType, string> = {
 
 const UI_DEAL_TYPE: Record<string, DealType> = {
   "Voucher Deal": "voucher",
+  "Gift Voucher Deal": "voucher",
   "Original Deal": "original",
   "Cold Deal": "cold",
 };
+
+function resolvePublicDealType(
+  data: RawPublicDealDetailResponse,
+  hintDealType?: DealType | null
+): DealType | null {
+  const mapped = UI_DEAL_TYPE[data.type];
+  if (mapped) return mapped;
+  if (data.voucher) return "voucher";
+  if (hintDealType) return hintDealType;
+  if (data.deal) {
+    if (/cold/i.test(data.type)) return "cold";
+    if (/original|product|area/i.test(data.type)) return "original";
+  }
+  return null;
+}
 
 const ALL_KSA_TEXT: Record<Locale, string> = { en: "All KSA", ar: "جميع أنحاء المملكة" };
 const SELECTED_CITIES_TEXT: Record<Locale, string> = { en: "Selected cities", ar: "مدن مختارة" };
@@ -331,6 +347,7 @@ function buildHomeQuery(params: HomeFeedParams): URLSearchParams {
 // ---------------------------------------------------------------------------
 
 interface RawSupplier {
+  _id?: string;
   name_en: string;
   name_ar: string;
   pic: string;
@@ -355,7 +372,7 @@ interface RawVoucherDetail {
   quantity?: number;
   sold?: number;
   supplier?: RawSupplier;
-  terms?: LocalizedValue;
+  terms?: unknown[];
   cities?: RawCity[];
   about?: { content_en?: string; content_ar?: string };
   customerPaymentTerms?: RawCustomerPaymentTerm[];
@@ -414,6 +431,10 @@ function supplierLogo(supplier: RawSupplier | undefined): string | undefined {
   return resolvePublicAsset("supplier", supplier.pic) || undefined;
 }
 
+function supplierId(supplier: RawSupplier | undefined): string | undefined {
+  return supplier?._id || undefined;
+}
+
 function citiesLocation(
   allKsa: boolean,
   cities: RawCity[] | undefined,
@@ -451,10 +472,11 @@ export function mapVoucherDetailToDeal(
     isActive: isStatusActive(raw.status),
     supplier: supplierName(raw.supplier, locale),
     supplierLogo: supplierLogo(raw.supplier),
+    supplierId: supplierId(raw.supplier),
     voucherValue: raw.voucherValue,
     detailContent: buildDetailContent({
       about: raw.about,
-      terms: raw.terms,
+      deliveryTerms: raw.terms,
       customerPaymentTerms: raw.customerPaymentTerms,
       locale,
     }),
@@ -491,6 +513,7 @@ function mapDealDetailToDeal(
     isActive: isStatusActive(raw.status),
     supplier: supplierName(raw.supplier, locale),
     supplierLogo: supplierLogo(raw.supplier),
+    supplierId: supplierId(raw.supplier),
     marketPrice: raw.product.marketPrice ?? raw.dealPrice,
     detailContent: buildDetailContent({
       about: raw.about,
@@ -509,9 +532,10 @@ function mapDealDetailToDeal(
 export function mapPublicDealDetailResponse(
   data: RawPublicDealDetailResponse,
   locale: Locale,
-  fallbackId?: string
+  fallbackId?: string,
+  hintDealType?: DealType | null
 ): Deal {
-  const dealType = UI_DEAL_TYPE[data.type];
+  const dealType = resolvePublicDealType(data, hintDealType);
   if (!dealType) {
     throw new Error(`Unsupported deal type: ${data.type}`);
   }
@@ -608,6 +632,6 @@ export class DealsService {
       throw new ApiError(data.message || data.error, 404);
     }
 
-    return mapPublicDealDetailResponse(data, locale, id);
+    return mapPublicDealDetailResponse(data, locale, id, dealType);
   }
 }

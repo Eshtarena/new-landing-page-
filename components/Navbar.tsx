@@ -146,7 +146,7 @@ export default function Navbar() {
             <Link href="/" className="relative block h-12 w-32 md:h-14 md:w-36">
               <Image
                 src="/Group.svg"
-                alt="Eshtarena Logo"
+                alt="Sharena Logo"
                 fill
                 sizes="128px"
                 className="navbar-logo object-contain object-left"

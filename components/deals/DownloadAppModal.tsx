@@ -71,7 +71,7 @@ export default function DownloadAppModal({ isOpen, onClose }: DownloadAppModalPr
 
         <div className="text-center">
           <h2 id="download-app-title" className="text-2xl font-bold tracking-tight text-primary-500">
-            {tx("dealDetails.downloadApp.title", "Get the Eshtarena App", "حمّل تطبيق اشترينا")}
+            {tx("dealDetails.downloadApp.title", "Get the Sharena App", "حمّل تطبيق اشترينا")}
           </h2>
           <p className="mt-2 text-gray-600">
             {tx(

@@ -1,11 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { DealTimer } from "../../types/deals";
+
+function timerToMilliseconds(timer: DealTimer): number {
+  return (
+    timer.days * 86_400_000 +
+    timer.hours * 3_600_000 +
+    timer.minutes * 60_000 +
+    timer.seconds * 1_000
+  );
+}
+
+function formatExpirationTime(timestamp: number, locale: string): string {
+  return new Intl.DateTimeFormat(locale, {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  }).format(new Date(timestamp));
+}
 
 interface CountdownTimerProps {
   timer: DealTimer;
   className?: string;
   textColor?: string;
   onTimerEnd?: () => void;
+  showEndTime?: boolean;
+  endTimePrefix?: string;
   labels?: {
     days: string;
     hours: string;
@@ -20,6 +39,8 @@ export default function CountdownTimer({
   className = "",
   textColor = "text-blue-600",
   onTimerEnd,
+  showEndTime = false,
+  endTimePrefix = "Ends at",
   labels = {
     days: "Day",
     hours: "Hrs",
@@ -29,6 +50,17 @@ export default function CountdownTimer({
   locale = "en",
 }: CountdownTimerProps) {
   const [timeLeft, setTimeLeft] = useState(timer);
+  const expirationTimeRef = useRef(Date.now() + timerToMilliseconds(timer));
+
+  useEffect(() => {
+    expirationTimeRef.current = Date.now() + timerToMilliseconds(timer);
+    setTimeLeft(timer);
+  }, [timer.days, timer.hours, timer.minutes, timer.seconds]);
+
+  const formattedEndTime = useMemo(
+    () => formatExpirationTime(expirationTimeRef.current, locale),
+    [timer.days, timer.hours, timer.minutes, timer.seconds, locale]
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -102,6 +134,11 @@ export default function CountdownTimer({
           </React.Fragment>
         ))}
       </div>
+      {showEndTime && (
+        <span className="text-[10px] text-gray-500 mt-1 whitespace-nowrap">
+          {endTimePrefix} {formattedEndTime}
+        </span>
+      )}
     </div>
   );
 }

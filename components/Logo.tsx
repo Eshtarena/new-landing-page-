@@ -20,7 +20,7 @@ export default function Logo({
   const logoElement = (
     <Image
       src="/Group.svg"
-      alt="Eshtarena"
+      alt="Sharena"
       width={width}
       height={height}
       className={`object-contain ${className}`}

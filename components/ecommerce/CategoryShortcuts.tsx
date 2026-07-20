@@ -11,7 +11,6 @@ interface Shortcut {
   link: string;
 }
 
-// Used only while categories are loading or if /v1/user/categories is unreachable.
 const FALLBACK_SHORTCUTS: Shortcut[] = [
   { id: 1, title: 'Donate For Gaza', image: '/dummy_images/palastine.png', link: '/donate' },
   { id: 5, title: "Men's Fashion", image: '/dummy_images/man_fashon.png', link: '/mens-fashion' },
@@ -26,7 +25,7 @@ const FALLBACK_SHORTCUTS: Shortcut[] = [
 ];
 
 export default function CategoryShortcuts() {
-  const { i18n } = useTranslation('common');
+  const { t, i18n } = useTranslation('common');
   const isRTL = i18n.language === 'ar';
   const { categories, isLoading, error } = useCategories();
 
@@ -45,20 +44,31 @@ export default function CategoryShortcuts() {
   }
 
   return (
-    <div className="py-4 sm:py-6 md:py-8 overflow-hidden w-full group">
-      {/* dir="ltr" isolates the track from page-level RTL text-align so the loop stays in view */}
+    <section className="py-4 sm:py-6 md:py-8 overflow-hidden w-full group">
+      <div className="md:hidden flex items-center justify-between mb-3">
+        <h2 className="text-lg font-bold tracking-tight text-primary-500">
+          {t('store.categoriesSection')}
+        </h2>
+        <Link
+          href="/store"
+          className="text-sm font-semibold text-primary-500 hover:text-primary-500/80 transition-colors"
+        >
+          {t('store.seeMore')}
+        </Link>
+      </div>
+
       <div className="relative overflow-hidden text-left" dir="ltr">
         <div className="absolute inset-y-0 left-0 w-20 bg-linear-to-r from-white to-transparent z-10 pointer-events-none" />
         <div className="absolute inset-y-0 right-0 w-20 bg-linear-to-l from-white to-transparent z-10 pointer-events-none" />
 
-        <div className="flex w-max animate-[marquee_20s_linear_infinite] gap-x-8 group-hover:[animation-play-state:paused]">
+        <div className="flex w-max animate-[marquee_55s_linear_infinite_reverse] gap-x-8 py-1 group-hover:[animation-play-state:paused]">
           {[...shortcuts, ...shortcuts].map((category, index) => (
             <Link
               key={`${category.id}-${index}`}
               href={category.link}
               className="flex flex-col items-center gap-y-1.5 sm:gap-y-2 shrink-0 group/item w-20 sm:w-24 md:w-28"
             >
-              <div className="relative w-16 h-16 rounded-full overflow-hidden ring-1 ring-black/5 shadow-soft group-hover/item:ring-2 group-hover/item:ring-primary-500 transition-all duration-200 ease-spring">
+              <div className="relative w-16 h-16 rounded-none overflow-hidden ring-2 ring-black/[0.06] shadow-soft transition-all duration-200 ease-spring group-hover/item:ring-primary-500 group-hover/item:shadow-[0_4px_16px_rgba(52,0,64,0.18)] group-hover/item:scale-105">
                 <Image
                   src={category.image}
                   alt={category.title}
@@ -73,6 +83,6 @@ export default function CategoryShortcuts() {
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

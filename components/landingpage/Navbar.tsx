@@ -169,13 +169,13 @@ export default function Navbar() {
   return (
     <nav
       className={`fixed inset-x-0 z-50 transition-all duration-300 ease-spring ${
-        isScrolled ? "top-4 px-3 sm:px-5 lg:px-8" : "top-0 px-0"
+        isScrolled ? "top-3 px-4 sm:px-6 lg:px-10" : "top-0 px-0"
       }`}
     >
       <div
         className={`mx-auto overflow-hidden duration-300 ease-spring ${
           isScrolled
-            ? "w-[90%] max-w-5xl rounded-[1.75rem]"
+            ? "w-full max-w-7xl rounded-[1.75rem]"
             : "w-full max-w-[100vw] rounded-none"
         } ${
           hasGlass
@@ -203,7 +203,7 @@ export default function Navbar() {
             >
               <Image
                 src="/Group.svg"
-                alt="Eshtarena Logo"
+                alt="Sharena Logo"
                 fill
                 sizes="128px"
                 className="object-contain object-left"
@@ -261,8 +261,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center gap-x-2">
-            <LanguageSwitcher />
+          <div className="md:hidden flex items-center">
             <button
               onClick={() => {
                 if (isMobileMenuOpen) {
@@ -364,6 +363,9 @@ export default function Navbar() {
             >
               {t("navbar.shopNow")}
             </Link>
+            <div className="flex items-center justify-center pt-4 mt-3 border-t border-white/10">
+              <LanguageSwitcher />
+            </div>
             </div>
           </div>
         </div>

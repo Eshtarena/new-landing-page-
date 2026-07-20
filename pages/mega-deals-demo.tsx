@@ -6,7 +6,7 @@ export default function MegaDealsDemo() {
   return (
     <>
       <Head>
-        <title>Mega Deals Demo - Eshtarena</title>
+        <title>Mega Deals Demo - Sharena</title>
         <meta name="description" content="Demo of the new mega deals section with deal cards" />
       </Head>
 

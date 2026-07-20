@@ -28,7 +28,7 @@ export default function NotFoundPage({
   return (
     <>
       <Head>
-        <title>{`${title} - Eshtarena`}</title>
+        <title>{`${title} - Sharena`}</title>
         <meta name="description" content="The page you're looking for doesn't exist." />
       </Head>
       

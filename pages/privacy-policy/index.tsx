@@ -21,7 +21,7 @@ export default function PrivacyPolicy({ policies }: PrivacyPolicyProps) {
   return (
     <>
       <Head>
-        <title>{`${t("privacy.pageTitle")} | Eshtarena`}</title>
+        <title>{`${t("privacy.pageTitle")} | Sharena`}</title>
         <meta name="description" content={t("privacy.pageDescription")} />
       </Head>
 

@@ -61,7 +61,7 @@ export default function AboutSection({socialData} ) {
             <div className="relative aspect-3/4 motion-safe:animate-float">
               <Image
                 src={yourNeedsImage}
-                alt="Eshtarena App Screenshots"
+                alt="Sharena App Screenshots"
                 fill
                 className="object-contain drop-shadow-2xl"
                 priority

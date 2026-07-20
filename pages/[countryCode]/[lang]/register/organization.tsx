@@ -208,7 +208,7 @@ export default function OrganizationRegistrationPage({ lang, countryCode }: Orga
 
   const getPageTitle = () => {
     const countryName = getCountryDisplayName(countryCode);
-    return `${t('auth.organizationRegistration.title')} - Eshtarena ${countryName}`;
+    return `${t('auth.organizationRegistration.title')} - Sharena ${countryName}`;
   };
 
   const switchLanguage = (newLang: string) => {
@@ -219,7 +219,7 @@ export default function OrganizationRegistrationPage({ lang, countryCode }: Orga
     <>
       <Head>
         <title>{getPageTitle()}</title>
-        <meta name="description" content={`Create your organization Eshtarena account in ${countryCode.toUpperCase()}`} />
+        <meta name="description" content={`Create your organization Sharena account in ${countryCode.toUpperCase()}`} />
       </Head>
 
       <div className={`min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 ${lang === 'ar' ? 'rtl' : 'ltr'}`} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
@@ -228,7 +228,7 @@ export default function OrganizationRegistrationPage({ lang, countryCode }: Orga
           <div className="flex justify-center">
             <Image
               src="/Group.svg"
-              alt="Eshtarena"
+              alt="Sharena"
               width={200}
               height={108}
               className="object-contain"

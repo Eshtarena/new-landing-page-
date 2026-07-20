@@ -21,7 +21,7 @@ export default function Footer({ socialData }: FooterProps) {
             <Link href="/" className="w-[300px] h-[120px] relative">
               <Image
                 src="/Group.svg"
-                alt="Eshtarena"
+                alt="Sharena"
                 fill
                 priority
                 className="object-contain brightness-0 invert"
@@ -107,7 +107,7 @@ export default function Footer({ socialData }: FooterProps) {
               )}
             </div>
             <p className="text-sm opacity-80 text-center md:text-start">
-              © {new Date().getFullYear()} All rights reserved by Eshtrayna L.T.D IBC.
+              © {new Date().getFullYear()} All rights reserved by Sharena L.T.D IBC.
             </p>
           </div>
         </div>

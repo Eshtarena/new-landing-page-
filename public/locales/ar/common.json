@@ -9,8 +9,15 @@
   },
   "store": {
     "searchPlaceholder": "ابحث عن العروض...",
+    "mobileSearchPlaceholder": "ابحث أو امسح باركود المنتج",
     "searchAriaLabel": "البحث عن العروض",
-    "searchResults": "نتائج البحث عن \"{{query}}\""
+    "scanAriaLabel": "مسح باركود المنتج",
+    "searchResults": "نتائج البحث عن \"{{query}}\"",
+    "supplierSection": "المورد",
+    "categoriesSection": "الفئات",
+    "seeAll": "عرض الكل",
+    "seeMore": "عرض المزيد",
+    "popularDeals": "العروض الشائعة"
   },
   "about": {
     "mainTitleLine1": "استمتع بقوة",
@@ -60,6 +67,8 @@
     "dealPrice": "سعر العرض",
     "voucherValue": "قيمة الكوبون",
     "save": "وفر",
+    "progress": "التقدم",
+    "total": "الإجمالي",
     "priceRange": "نطاق السعر",
     "priceRangeTo": "إلى",
     "priceRangeMin": "الحد الأدنى",
@@ -70,17 +79,24 @@
     "loading": "جاري تحميل تفاصيل العرض...",
     "back": "رجوع",
     "joinDeal": "انضم للعرض",
+    "share": "مشاركة العرض",
     "supportText": "Download the app to join this deal and complete your purchase securely.",
     "endsIn": "ينتهي العرض خلال",
+    "endsAt": "ينتهي في",
     "sold": "تم البيع",
     "available": "المتاح",
     "tabs": {
       "description": "الوصف",
       "details": "التفاصيل",
       "terms": "الشروط والأحكام",
-      "reviews": "التقييمات"
+      "reviews": "التقييمات",
+      "deal": "العرض",
+      "product": "المنتج",
+      "delivery": "التوصيل",
+      "payment": "الدفع"
     },
     "timer": {
+      "day": "يوم",
       "days": "يوم",
       "hours": "ساعة",
       "minutes": "دقيقة",
@@ -105,6 +121,10 @@
       "general": "عام",
       "partner": "شريك اشترينا"
     },
+    "supplier": {
+      "subtitle": "مورد العرض",
+      "viewProfile": "عرض الملف"
+    },
     "dealType": {
       "original": "عرض منتج",
       "cold": "عرض بارد",
@@ -117,7 +137,8 @@
     "stats": {
       "sold": "تم البيع",
       "available": "المتاح",
-      "total": "الإجمالي"
+      "total": "الإجمالي",
+      "progress": "التقدم"
     },
     "terms": {
       "payment": "شروط الدفع",
@@ -173,6 +194,22 @@
     },
     "noDescription": "لا يوجد وصف متاح لهذا العرض حتى الآن.",
     "noTerms": "لا توجد شروط وأحكام متاحة لهذا العرض حتى الآن.",
+    "accordions": {
+      "specialSpecs": "مواصفات خاصة",
+      "originalDeal": "ما هو العرض الأصلي؟",
+      "expertAdvice": "نصائح خبير المشتريات",
+      "noSpecialSpecs": "لا توجد مواصفات خاصة متاحة لهذا العرض.",
+      "originalDealFallback": "العروض الأصلية هي عروض شراء جماعي على منتجات أصلية. انضم مع مشترين آخرين للحصول على سعر العرض والتوفير معًا.",
+      "expertAdviceFallback": "راجع تفاصيل العرض، وقارن السعر في السوق بسعر العرض، وانضم قبل نفاد الكمية لتأمين توفيرك."
+    },
+    "delivery": {
+      "title": "شروط توصيل اشترينا",
+      "default1": "يستغرق التوصيل عادةً من 2 إلى 5 أيام عمل بعد إغلاق العرض وتأكيد الدفع.",
+      "default2": "تعتمد التغطية على مدينتك المختارة. يقوم شركاء اشترينا بالتوصيل في المناطق المدعومة داخل المملكة."
+    },
+    "payment": {
+      "default": "يجب إتمام الدفع خلال 24 ساعة من الانضمام للعرض لتأكيد الحجز."
+    },
     "downloadApp": {
       "title": "حمّل تطبيق اشترينا",
       "description": "امسح رمز QR بهاتفك لتحميل التطبيق والانضمام لهذا العرض.",
@@ -181,6 +218,45 @@
       "googlePlay": "احصل عليه من Google Play",
       "appleQrAlt": "رمز App Store",
       "googleQrAlt": "رمز Google Play"
+    }
+  },
+  "supplierDetails": {
+    "loading": "جاري تحميل ملف المورد...",
+    "back": "رجوع",
+    "pageTitle": "ملف المورد",
+    "aboutTitle": "نبذة عن المورد",
+    "browseDeals": "تصفح العروض",
+    "founded": "تأسست عام",
+    "website": "الموقع الإلكتروني",
+    "phone": "الهاتف",
+    "links": "الروابط",
+    "categories": "التصنيفات",
+    "coverage": "التغطية",
+    "allKsa": "جميع أنحاء المملكة",
+    "districts": "الأحياء",
+    "branchCity": "المدينة",
+    "hours": "ساعات العمل",
+    "viewOnMap": "عرض على الخريطة",
+    "dealsCount": "{{count}} عرض",
+    "noOverview": "لا توجد نبذة متاحة عن هذا المورد حتى الآن.",
+    "noBranches": "لا توجد فروع مدرجة لهذا المورد حتى الآن.",
+    "noProductDeals": "لا توجد عروض منتجات متاحة من هذا المورد حتى الآن.",
+    "noColdDeals": "لا توجد عروض باردة متاحة من هذا المورد حتى الآن.",
+    "noVouchers": "لا توجد كوبونات متاحة من هذا المورد حتى الآن.",
+    "tabs": {
+      "about": "نبذة",
+      "branches": "الفروع",
+      "productDeals": "عروض المنتجات",
+      "coldDeals": "العروض الباردة",
+      "vouchers": "الكوبونات"
+    },
+    "notFound": {
+      "title": "المورد غير موجود",
+      "description": "المورد الذي تبحث عنه غير موجود أو ربما تمت إزالته."
+    },
+    "error": {
+      "title": "تعذر تحميل بيانات المورد",
+      "description": "حدث خطأ أثناء جلب بيانات المورد. يرجى المحاولة مرة أخرى."
     }
   },
   "contact": {
@@ -349,7 +425,7 @@
       "rememberMe": "تذكرني",
       "forgotPassword": "نسيت كلمة المرور؟",
       "signInButton": "تسجيل الدخول",
-      "newToEshtarena": "جديد على اشترينا؟",
+      "newToSharena": "جديد على اشترينا؟",
       "createAccount": "إنشاء حساب",
       "errorGeneral": "فشل تسجيل الدخول. يرجى التحقق من بيانات الدخول والمحاولة مرة أخرى."
     },

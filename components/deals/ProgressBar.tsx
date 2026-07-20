@@ -6,7 +6,7 @@ interface ProgressBarProps {
   dealType: DealType;
   className?: string;
   showLabels?: boolean;
-  height?: "sm" | "md" | "lg";
+  height?: "sm" | "md" | "lg" | "xl";
   labels?: {
     progress?: string;
     total?: string;
@@ -38,6 +38,7 @@ export default function ProgressBar({
     sm: "h-2",
     md: "h-2.5",
     lg: "h-3",
+    xl: "h-4",
   };
 
   return (

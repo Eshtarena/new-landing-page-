@@ -40,8 +40,8 @@ export default function StorePage() {
   }, []);
 
   const pageTitle = categoryTitle
-    ? `${categoryTitle} | Eshtarena`
-    : "Store | Eshtarena";
+    ? `${categoryTitle} | Sharena`
+    : "Store | Sharena";
 
   return (
     <>
@@ -53,8 +53,8 @@ export default function StorePage() {
             categoryTitle
               ? isRTL
                 ? `تصفح عروض ${categoryTitle} على إشتارينا`
-                : `Browse ${categoryTitle} deals on Eshtarena`
-              : "Browse deals by category on Eshtarena"
+                : `Browse ${categoryTitle} deals on Sharena`
+              : "Browse deals by category on Sharena"
           }
         />
       </Head>

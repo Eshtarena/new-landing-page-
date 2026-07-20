@@ -7,13 +7,15 @@ export const API_ENDPOINTS = {
   CONTACT_US: "/v1/contact-us",
   SOCIAL_LINKS: "/v1/about/links",
   ADVICE: "/v1/advice",
-  ADS: "/v1/user/ads",
+  PUBLIC_ADS: "/v1/public/ads",
   CATEGORIES: "/v1/user/categories",
   HOME: "/v1/user/home",
+  SUPPLIERS: "/v1/user/suppliers",
   VOUCHER_DETAIL: (id: string) => `/v1/user/voucher/${id}`,
   ORIGINAL_DETAIL: (id: string) => `/v1/user/orginal-details/${id}`,
   COLD_DETAIL: (id: string) => `/v1/user/cold-details/${id}`,
   PUBLIC_DEAL_DETAIL: (id: string) => `/v1/public/deals/${id}`,
+  PUBLIC_SUPPLIER_DETAIL: (id: string) => `/v1/public/suppliers/${id}`,
 } as const;
 
 export class ApiError extends Error {

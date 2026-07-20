@@ -35,7 +35,7 @@ export default function RegisterPage({ lang, countryCode }: RegisterPageProps) {
 
   const getPageTitle = () => {
     const countryName = getCountryDisplayName(countryCode);
-    return `${t('auth.register.title')} - Eshtarena ${countryName}`;
+    return `${t('auth.register.title')} - Sharena ${countryName}`;
   };
 
   const switchLanguage = (newLang: string) => {
@@ -46,7 +46,7 @@ export default function RegisterPage({ lang, countryCode }: RegisterPageProps) {
     <>
       <Head>
         <title>{getPageTitle()}</title>
-        <meta name="description" content={`Create your Eshtarena account in ${countryCode.toUpperCase()}`} />
+        <meta name="description" content={`Create your Sharena account in ${countryCode.toUpperCase()}`} />
       </Head>
 
       <div className={`min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 ${lang === 'ar' ? 'rtl' : 'ltr'}`} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
@@ -55,7 +55,7 @@ export default function RegisterPage({ lang, countryCode }: RegisterPageProps) {
           <div className="flex justify-center">
             <Image
               src="/Group.svg"
-              alt="Eshtarena"
+              alt="Sharena"
               width={200}
               height={108}
               className="object-contain"

@@ -1,7 +1,7 @@
-import { API_ENDPOINTS, fetchWithOptionalAuth, handleApiResponse, resolvePublicAsset } from "./config";
+import { API_BASE_URL, API_ENDPOINTS, handleApiResponse, resolvePublicAsset } from "./config";
 import type { Banner } from "../types/banner";
 
-// Raw shape of GET /v1/user/ads, verified against the backend controller.
+// Raw shape of GET /v1/public/ads, verified against the backend controller.
 interface RawAd {
   _id: string;
   uuid?: number;
@@ -9,6 +9,8 @@ interface RawAd {
   title_ar?: string;
   link: string;
   pic: string;
+  /** Optional mobile-breakpoint image; not every ad has one. */
+  mobPic?: string | null;
   startDate?: string;
   endDate?: string;
   status: string;
@@ -24,10 +26,12 @@ interface AdsResponse {
 /** There is only one image per ad — same URL is used for both locales. */
 export function mapAdToBanner(ad: RawAd, index: number): Banner {
   const imageUrl = resolvePublicAsset("ads", ad.pic);
+  const mobileImageUrl = ad.mobPic ? resolvePublicAsset("ads", ad.mobPic) : null;
   return {
     id: ad._id,
     imageUrl_en: imageUrl,
     imageUrl_ar: imageUrl,
+    mobileImageUrl,
     linkUrl: ad.link || "#",
     order: index,
     isActive: ad.status === "Running",
@@ -42,7 +46,7 @@ export class BannersService {
     query.set("page", String(params.page ?? 1));
     query.set("size", String(params.size ?? 20));
 
-    const response = await fetchWithOptionalAuth(`${API_ENDPOINTS.ADS}?${query.toString()}`);
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.PUBLIC_ADS}?${query.toString()}`);
     const data = await handleApiResponse<AdsResponse>(response);
 
     return (data.ads || [])

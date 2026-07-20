@@ -53,6 +53,8 @@ export interface BaseDeal {
   category?: string;
   supplier?: string;
   supplierLogo?: string;
+  /** Backend supplier id, when present — links the DealSupplierSection to a supplier profile. */
+  supplierId?: string;
   productName?: string;
   detailContent?: DealDetailContent;
 }

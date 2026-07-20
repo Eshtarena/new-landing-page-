@@ -84,7 +84,7 @@ export default function LoginPage({ lang, countryCode }: LoginPageProps) {
 
   const getPageTitle = () => {
     const countryName = getCountryDisplayName(countryCode);
-    return `${t('auth.login.title')} - Eshtarena ${countryName}`;
+    return `${t('auth.login.title')} - Sharena ${countryName}`;
   };
 
   const switchLanguage = (newLang: string) => {
@@ -104,7 +104,7 @@ export default function LoginPage({ lang, countryCode }: LoginPageProps) {
     <>
       <Head>
         <title>{getPageTitle()}</title>
-        <meta name="description" content={`Login to your Eshtarena account in ${countryCode.toUpperCase()}`} />
+        <meta name="description" content={`Login to your Sharena account in ${countryCode.toUpperCase()}`} />
       </Head>
 
       <div className={`min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 ${lang === 'ar' ? 'rtl' : 'ltr'}`} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
@@ -113,7 +113,7 @@ export default function LoginPage({ lang, countryCode }: LoginPageProps) {
           <div className="flex justify-center">
             <Image
               src="/Group.svg"
-              alt="Eshtarena"
+              alt="Sharena"
               width={200}
               height={108}
               className="object-contain"
@@ -220,7 +220,7 @@ export default function LoginPage({ lang, countryCode }: LoginPageProps) {
                   <div className="w-full border-t border-gray-300" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">{t('auth.login.newToEshtarena')}</span>
+                  <span className="px-2 bg-white text-gray-500">{t('auth.login.newToSharena')}</span>
                 </div>
               </div>
 

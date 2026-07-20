@@ -11,6 +11,8 @@ interface Slide {
     en: string;
     ar: string;
   };
+  /** Mobile-breakpoint image; null falls back to `image[lang]`. */
+  mobileImage: string | null;
   title: string;
   link: string;
 }
@@ -33,10 +35,11 @@ export default function HeroSlider() {
 
   const usingFallback = !isLoading && (error !== null || banners.length === 0);
   const slides: Slide[] = usingFallback
-    ? FALLBACK_SLIDES.map((item) => ({ ...item, title: t(item.titleKey), link: '#' }))
+    ? FALLBACK_SLIDES.map((item) => ({ ...item, mobileImage: null, title: t(item.titleKey), link: '#' }))
     : banners.map((banner) => ({
         id: banner.id,
         image: { en: banner.imageUrl_en, ar: banner.imageUrl_ar },
+        mobileImage: banner.mobileImageUrl,
         title: (lang === 'ar' ? banner.title_ar : banner.title_en) || t('navbar.shopNow'),
         link: banner.linkUrl
       }));
@@ -167,15 +170,29 @@ export default function HeroSlider() {
         >
           {extendedSlides.map((item, index) => (
             <div key={`${item.id}-${index}`} className="relative h-full w-full shrink-0">
+              {/* next/image has no <picture>/<source> support, so art direction (distinct
+                  mobile vs desktop crops) is done with two Image elements swapped by breakpoint. */}
+              {item.mobileImage ? (
+                <Image
+                  src={item.mobileImage}
+                  alt={item.title}
+                  fill
+                  draggable={false}
+                  className="object-cover w-full h-full pointer-events-none md:hidden"
+                  priority={index === 1}
+                  loading={index === 1 ? 'eager' : 'lazy'}
+                  sizes="100vw"
+                />
+              ) : null}
               <Image
                 src={item.image[lang]}
                 alt={item.title}
                 fill
                 draggable={false}
-                className="object-cover w-full h-full pointer-events-none"
+                className={`object-cover w-full h-full pointer-events-none ${item.mobileImage ? 'hidden md:block' : ''}`}
                 priority={index === 1}
                 loading={index === 1 ? 'eager' : 'lazy'}
-                sizes="(max-width: 768px) 100vw, 1600px"
+                sizes={item.mobileImage ? '1600px' : '(max-width: 768px) 100vw, 1600px'}
               />
               <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/60 via-black/0 to-black/0" />
               <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6 md:p-12 z-10">

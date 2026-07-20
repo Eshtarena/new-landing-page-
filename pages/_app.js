@@ -23,7 +23,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>Eshtarena</title>
+        <title>Sharena</title>
         <meta name="description" content="The Group Shopping App" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

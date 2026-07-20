@@ -1,10 +1,16 @@
 import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next/pages";
 import { Deal } from "../../types/deals";
+import DealAccordion, { DealAccordionItem } from "./DealAccordion";
+import PricingDisplay from "./PricingDisplay";
+import ProgressBar from "./ProgressBar";
 
 interface DealTabsSectionProps {
   deal: Deal;
+  variant?: "default" | "mobile";
 }
 
 interface TabConfig {
@@ -12,7 +18,7 @@ interface TabConfig {
   label: string;
 }
 
-export default function DealTabsSection({ deal }: DealTabsSectionProps) {
+export default function DealTabsSection({ deal, variant = "default" }: DealTabsSectionProps) {
   const { t, i18n } = useTranslation("common");
   const router = useRouter();
   const queryLang = Array.isArray(router.query.lang)
@@ -23,9 +29,9 @@ export default function DealTabsSection({ deal }: DealTabsSectionProps) {
   const locale = isRTL ? "ar-SA" : "en-US";
   const tx = (key: string, en: string, ar: string) =>
     t(key, { defaultValue: isRTL ? ar : en });
-  const [activeTab, setActiveTab] = useState("description");
+  const [activeTab, setActiveTab] = useState(variant === "mobile" ? "deal" : "description");
 
-  const tabs: TabConfig[] = [
+  const desktopTabs: TabConfig[] = [
     {
       id: "description",
       label: tx("dealDetails.tabs.description", "Description", "الوصف"),
@@ -40,7 +46,16 @@ export default function DealTabsSection({ deal }: DealTabsSectionProps) {
     },
   ];
 
-  const renderTabContent = () => {
+  const mobileTabs: TabConfig[] = [
+    { id: "deal", label: tx("dealDetails.tabs.deal", "Deal", "العرض") },
+    { id: "product", label: tx("dealDetails.tabs.product", "Product", "المنتج") },
+    { id: "delivery", label: tx("dealDetails.tabs.delivery", "Delivery", "التوصيل") },
+    { id: "payment", label: tx("dealDetails.tabs.payment", "Payment", "الدفع") },
+  ];
+
+  const tabs = variant === "mobile" ? mobileTabs : desktopTabs;
+
+  const renderDesktopTabContent = () => {
     switch (activeTab) {
       case "description":
         return <DescriptionTab deal={deal} tx={tx} />;
@@ -52,6 +67,55 @@ export default function DealTabsSection({ deal }: DealTabsSectionProps) {
         return <DescriptionTab deal={deal} tx={tx} />;
     }
   };
+
+  const renderMobileTabContent = () => {
+    switch (activeTab) {
+      case "deal":
+        return <MobileDealTab deal={deal} tx={tx} locale={locale} />;
+      case "product":
+        return <MobileProductTab deal={deal} tx={tx} locale={locale} />;
+      case "delivery":
+        return <MobileDeliveryTab deal={deal} tx={tx} isRTL={isRTL} />;
+      case "payment":
+        return <MobilePaymentTab deal={deal} tx={tx} isRTL={isRTL} />;
+      default:
+        return <MobileDealTab deal={deal} tx={tx} locale={locale} />;
+    }
+  };
+
+  if (variant === "mobile") {
+    return (
+      <div>
+        <nav
+          className="flex border-b border-gray-200 bg-[#F0F0F5]"
+          role="tablist"
+          aria-label={tx("dealDetails.pageTitle", "Deal Details", "تفاصيل العرض")}
+        >
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex-1 py-3.5 text-sm font-medium transition-colors min-h-11 ${
+                  isActive
+                    ? "text-primary-500 border-b-2 border-primary-500"
+                    : "text-gray-400 border-b-2 border-transparent"
+                }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
+        </nav>
+
+        <div className="px-4 py-5 pb-28">{renderMobileTabContent()}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-2xl bg-white shadow-soft border border-black/5 overflow-hidden">
@@ -83,7 +147,7 @@ export default function DealTabsSection({ deal }: DealTabsSectionProps) {
         </nav>
       </div>
 
-      <div className="p-6 sm:p-8">{renderTabContent()}</div>
+      <div className="p-6 sm:p-8">{renderDesktopTabContent()}</div>
     </div>
   );
 }
@@ -91,6 +155,304 @@ export default function DealTabsSection({ deal }: DealTabsSectionProps) {
 const SectionTitle = ({ title }: { title: string }) => (
   <h2 className="text-lg font-semibold tracking-tight text-gray-900">{title}</h2>
 );
+
+const MobileSupplierCard = ({
+  deal,
+  tx,
+}: {
+  deal: Deal;
+  tx: (key: string, en: string, ar: string) => string;
+}) => {
+  const content = (
+    <>
+      <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-gray-100 bg-white">
+        {deal.supplierLogo ? (
+          <Image
+            src={deal.supplierLogo}
+            alt={deal.supplier || "Supplier"}
+            fill
+            sizes="40px"
+            className="object-cover"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-primary-50 text-xs font-bold text-primary-500">
+            {(deal.supplier || "S").slice(0, 2).toUpperCase()}
+          </div>
+        )}
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-semibold text-primary-500 truncate">{deal.supplier}</p>
+        {deal.supplierId ? (
+          <p className="text-xs text-gray-500">
+            {tx("dealDetails.supplier.viewProfile", "View Profile", "عرض الملف")}
+          </p>
+        ) : null}
+      </div>
+      {deal.supplierId ? (
+        <svg
+          className="h-4 w-4 shrink-0 text-gray-400 rtl:rotate-180"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+      ) : null}
+    </>
+  );
+
+  const className =
+    "flex items-center gap-3 rounded-2xl border border-gray-200 bg-white px-4 py-3";
+
+  if (!deal.supplierId) {
+    return <div className={className}>{content}</div>;
+  }
+
+  return (
+    <Link
+      href={`/supplier-details/${deal.supplierId}`}
+      className={`${className} transition-colors hover:bg-gray-50 active:bg-gray-100`}
+    >
+      {content}
+    </Link>
+  );
+};
+
+const MobileDealTab = ({
+  deal,
+  tx,
+  locale,
+}: {
+  deal: Deal;
+  tx: (key: string, en: string, ar: string) => string;
+  locale: string;
+}) => {
+  const content = deal.detailContent;
+  const accordionItems: DealAccordionItem[] = [
+    {
+      id: "special-specs",
+      title: tx(
+        "dealDetails.accordions.specialSpecs",
+        "Special specifications",
+        "مواصفات خاصة"
+      ),
+      content:
+        deal.description ||
+        content?.about ||
+        tx(
+          "dealDetails.accordions.noSpecialSpecs",
+          "No special specifications available for this deal.",
+          "لا توجد مواصفات خاصة متاحة لهذا العرض."
+        ),
+    },
+    {
+      id: "original-deal",
+      title: tx(
+        "dealDetails.accordions.originalDeal",
+        "What is Original deal?",
+        "ما هو العرض الأصلي؟"
+      ),
+      content:
+        content?.terms ||
+        tx(
+          "dealDetails.accordions.originalDealFallback",
+          "Original deals are group-buy offers on authentic products. Join with other buyers to unlock the deal price and save together.",
+          "العروض الأصلية هي عروض شراء جماعي على منتجات أصلية. انضم مع مشترين آخرين للحصول على سعر العرض والتوفير معًا."
+        ),
+    },
+    {
+      id: "expert-advice",
+      title: tx(
+        "dealDetails.accordions.expertAdvice",
+        "Purchasing expert advice",
+        "نصائح خبير المشتريات"
+      ),
+      content:
+        content?.about ||
+        content?.customerPaymentTerms?.[0]?.content ||
+        tx(
+          "dealDetails.accordions.expertAdviceFallback",
+          "Review the deal details, compare market price with deal price, and join before quantities run out to secure your savings.",
+          "راجع تفاصيل العرض، وقارن السعر في السوق بسعر العرض، وانضم قبل نفاد الكمية لتأمين توفيرك."
+        ),
+    },
+  ].filter((item) => item.content);
+
+  return (
+    <div className="space-y-4">
+      {deal.supplier ? (
+        <MobileSupplierCard deal={deal} tx={tx} />
+      ) : null}
+
+      <PricingDisplay
+        deal={deal}
+        showSavings={true}
+        layout="horizontal"
+        className="bg-white border-gray-200"
+        locale={locale}
+        labels={{
+          voucherValue: tx("deals.voucherValue", "Voucher value", "قيمة الكوبون"),
+          marketPrice: tx("deals.marketPrice", "Market price", "السعر في السوق"),
+          dealPrice: tx("deals.dealPrice", "Deal Price", "سعر العرض"),
+          save: tx("deals.save", "Save", "وفر"),
+        }}
+      />
+
+      <ProgressBar
+        quantity={deal.quantity}
+        dealType={deal.dealType}
+        showLabels={true}
+        height="lg"
+        locale={locale}
+        labels={{
+          progress: tx("dealDetails.stats.progress", "Progress", "التقدم"),
+          total: tx("dealDetails.stats.total", "Total", "الإجمالي"),
+          sold: tx("dealDetails.sold", "Sold", "تم البيع"),
+          available: tx("dealDetails.available", "Available", "المتاح"),
+        }}
+      />
+
+      <DealAccordion items={accordionItems} defaultOpenIds={["special-specs", "original-deal"]} />
+    </div>
+  );
+};
+
+const MobileProductTab = ({
+  deal,
+  tx,
+  locale,
+}: {
+  deal: Deal;
+  tx: (key: string, en: string, ar: string) => string;
+  locale: string;
+}) => {
+  const aboutText = deal.detailContent?.about || deal.description;
+
+  return (
+    <div className="space-y-4">
+      {deal.productName ? (
+        <div className="rounded-2xl border border-gray-200 bg-white px-4 py-3">
+          <p className="text-xs text-gray-500 mb-1">
+            {tx("dealDetails.details.product", "Product", "المنتج")}
+          </p>
+          <p className="text-sm font-semibold text-primary-500">{deal.productName}</p>
+        </div>
+      ) : null}
+
+      <div className="space-y-3">
+        <SectionTitle title={tx("dealDetails.aboutTitle", "About This Deal", "نبذة عن العرض")} />
+        {aboutText ? (
+          <p className="text-sm leading-relaxed text-gray-500 whitespace-pre-line">{aboutText}</p>
+        ) : (
+          <p className="text-sm text-gray-500">
+            {tx(
+              "dealDetails.noDescription",
+              "No description is available for this deal yet.",
+              "لا يوجد وصف متاح لهذا العرض حتى الآن."
+            )}
+          </p>
+        )}
+      </div>
+
+      <DetailsTab deal={deal} tx={tx} locale={locale} />
+    </div>
+  );
+};
+
+const MobileDeliveryTab = ({
+  deal,
+  tx,
+  isRTL,
+}: {
+  deal: Deal;
+  tx: (key: string, en: string, ar: string) => string;
+  isRTL: boolean;
+}) => {
+  const deliveryTerms = deal.detailContent?.deliveryTerms || [];
+  const textAlign = isRTL ? "text-right" : "text-left";
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-base font-semibold text-primary-500">
+        {tx("dealDetails.delivery.title", "Sharena delivery terms", "شروط توصيل اشترينا")}
+      </h2>
+
+      {deliveryTerms.length > 0 ? (
+        deliveryTerms.map((term, index) => (
+          <p key={`delivery-${index}`} className={`text-sm leading-relaxed text-gray-500 ${textAlign}`}>
+            {term}
+          </p>
+        ))
+      ) : (
+        <>
+          <p className={`text-sm leading-relaxed text-gray-500 ${textAlign}`}>
+            {tx(
+              "dealDetails.delivery.default1",
+              "Delivery typically takes 2-5 business days after the deal closes and payment is confirmed.",
+              "يستغرق التوصيل عادةً من 2 إلى 5 أيام عمل بعد إغلاق العرض وتأكيد الدفع."
+            )}
+          </p>
+          <p className={`text-sm leading-relaxed text-gray-500 ${textAlign}`}>
+            {tx(
+              "dealDetails.delivery.default2",
+              "Coverage depends on your selected city. Sharena partners deliver across supported regions in KSA.",
+              "تعتمد التغطية على مدينتك المختارة. يقوم شركاء اشترينا بالتوصيل في المناطق المدعومة داخل المملكة."
+            )}
+          </p>
+        </>
+      )}
+    </div>
+  );
+};
+
+const MobilePaymentTab = ({
+  deal,
+  tx,
+  isRTL,
+}: {
+  deal: Deal;
+  tx: (key: string, en: string, ar: string) => string;
+  isRTL: boolean;
+}) => {
+  const content = deal.detailContent;
+  const textAlign = isRTL ? "text-right" : "text-left";
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-base font-semibold text-primary-500">
+        {tx("dealDetails.terms.payment", "Payment Terms", "شروط الدفع")}
+      </h2>
+
+      {content?.paymentTerms ? (
+        <p className={`text-sm leading-relaxed text-gray-500 whitespace-pre-line ${textAlign}`}>
+          {content.paymentTerms}
+        </p>
+      ) : null}
+
+      {content?.customerPaymentTerms?.map((term, index) => (
+        <div key={`payment-${index}`} className="space-y-1">
+          {term.title ? (
+            <h3 className="text-sm font-semibold text-primary-500">{term.title}</h3>
+          ) : null}
+          <p className={`text-sm leading-relaxed text-gray-500 whitespace-pre-line ${textAlign}`}>
+            {term.content}
+          </p>
+        </div>
+      ))}
+
+      {!content?.paymentTerms && !content?.customerPaymentTerms?.length ? (
+        <p className={`text-sm leading-relaxed text-gray-500 ${textAlign}`}>
+          {tx(
+            "dealDetails.payment.default",
+            "Payment must be completed within 24 hours of joining the deal to secure your spot.",
+            "يجب إتمام الدفع خلال 24 ساعة من الانضمام للعرض لتأكيد الحجز."
+          )}
+        </p>
+      ) : null}
+    </div>
+  );
+};
 
 const DescriptionTab = ({
   deal,
@@ -131,7 +493,7 @@ const DetailsTab = ({
   const details = [
     {
       label: tx("dealDetails.details.supplier", "Supplier", "المورد"),
-      value: deal.supplier || tx("dealDetails.details.partner", "Eshtarena Partner", "شريك اشترينا"),
+      value: deal.supplier || tx("dealDetails.details.partner", "Sharena Partner", "شريك اشترينا"),
     },
     {
       label: tx("dealDetails.details.dealType", "Deal type", "نوع العرض"),

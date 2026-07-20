@@ -21,7 +21,7 @@ export default function TermsAndConditions({ terms }: TermsAndConditionsProps) {
   return (
     <>
       <Head>
-        <title>{`${t("terms.pageTitle")} | Eshtarena`}</title>
+        <title>{`${t("terms.pageTitle")} | Sharena`}</title>
         <meta name="description" content={t("terms.pageDescription")} />
       </Head>
 

@@ -18,7 +18,7 @@ export default function AdvicePage({ articles }: AdvicePageProps) {
   return (
     <>
       <Head>
-        <title>{`${t("advice.pageTitle")} | Eshtarena`}</title>
+        <title>{`${t("advice.pageTitle")} | Sharena`}</title>
         <meta name="description" content={t("advice.pageDescription")} />
       </Head>
 
