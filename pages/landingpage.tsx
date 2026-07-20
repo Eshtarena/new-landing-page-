@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { GetStaticProps, GetStaticPropsContext } from "next";
-import Head from "next/head";
 import { useRouter } from "next/router";
-import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next/pages";
+import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import Navbar from "../components/landingpage/Navbar";
 import Footer from "../components/landingpage/Footer";
 import BannersSection from "../components/landingpage/BannersSection";
@@ -11,23 +10,12 @@ import AboutSection from "../components/landingpage/AboutSection";
 import DealsSection from "../components/landingpage/DealsSection";
 import ContactSection from "../components/landingpage/ContactSection";
 import SuppliersRequests from "../components/landingpage/SuppliersRequests";
-import { fetchSocialLinks } from "../utils/api";
-
-interface SocialLink {
-  platform: string;
-  url: string;
-}
-
-interface SocialData {
-  social: SocialLink[];
-  apple: string;
-  google: string;
-}
+import { SocialService, type SocialLinksData } from "../services";
 
 export default function LandingPage() {
-  const { t, i18n } = useTranslation("common");
+  const { i18n } = useTranslation("common");
   const router = useRouter();
-  const [socialData, setSocialData] = useState<SocialData>({
+  const [socialData, setSocialData] = useState<SocialLinksData>({
     social: [],
     apple: "",
     google: "",
@@ -42,7 +30,7 @@ export default function LandingPage() {
   useEffect(() => {
     const loadSocialLinks = async () => {
       try {
-        const data = await fetchSocialLinks();
+        const data = await SocialService.getLinks();
         setSocialData(data);
       } catch (error) {
         console.error("Error loading social links:", error);
@@ -83,19 +71,7 @@ export default function LandingPage() {
   }, [router.asPath]);
 
   return (
-    <>
-      <Head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-        if (typeof window !== 'undefined') {
-          window.scrollTo(0, 0);
-        }
-      `,
-          }}
-        />
-      </Head>
-      <div className={`min-h-screen ${i18n.language === "ar" ? "rtl" : "ltr"}`}>
+    <div className={`min-h-screen ${i18n.language === "ar" ? "rtl" : "ltr"}`}>
         <Navbar />
         <main>
           {/* Banner Section */}
@@ -115,7 +91,6 @@ export default function LandingPage() {
         </main>
         <Footer socialData={socialData} />
       </div>
-    </>
   );
 }
 

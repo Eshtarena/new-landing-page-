@@ -1,12 +1,13 @@
 import React from 'react';
 import Image from 'next/image';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next/pages';
 import { useRouter } from 'next/router';
+import { STORES_IMAGES_LINKS } from '../../../utils/consts';
 
 export default function HeroSection() {
-  const { t } = useTranslation('common');
+  const { t, i18n } = useTranslation('common');
   const router = useRouter();
-  const isArabic = router.locale === 'ar';
+  const isArabic = i18n.language === 'ar';
 
   return (
     <section className="relative min-h-screen bg-[#340040] flex items-center">
@@ -29,35 +30,31 @@ export default function HeroSection() {
             <p className="text-xl text-white/80 mb-8">
               {t('hero.description')}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-wrap gap-4 items-center">
               {/* App Store Button */}
               <a
                 href="#"
-                className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-[#340040] bg-white hover:bg-white/90 md:text-lg"
+                className="w-[160px] h-[48px] relative transition-all duration-300 hover:-translate-y-1"
               >
                 <Image
-                  src="/apple_store.svg"
+                  src={isArabic ? STORES_IMAGES_LINKS.ar.apple : STORES_IMAGES_LINKS.en.apple}
                   alt="App Store"
-                  width={24}
-                  height={24}
-                  className="mr-2"
+                  fill
+                  className="object-contain"
                 />
-                App Store
               </a>
               
               {/* Google Play Button */}
               <a
                 href="#"
-                className="inline-flex items-center justify-center px-8 py-3 border border-white text-base font-medium rounded-md text-white hover:bg-white/10 md:text-lg"
+                className="w-[160px] h-[48px] relative transition-all duration-300 hover:-translate-y-1"
               >
                 <Image
-                  src="/google_play.svg"
+                  src={isArabic ? STORES_IMAGES_LINKS.ar.google : STORES_IMAGES_LINKS.en.google}
                   alt="Google Play"
-                  width={24}
-                  height={24}
-                  className="mr-2"
+                  fill
+                  className="object-contain"
                 />
-                Google Play
               </a>
             </div>
           </div>

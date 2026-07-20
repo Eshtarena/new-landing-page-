@@ -24,6 +24,19 @@ export interface DealImage {
   alt: string;
 }
 
+export interface DealTermItem {
+  title: string;
+  content: string;
+}
+
+export interface DealDetailContent {
+  about?: string;
+  terms?: string;
+  paymentTerms?: string;
+  deliveryTerms?: string[];
+  customerPaymentTerms?: DealTermItem[];
+}
+
 export interface BaseDeal {
   id: string;
   title: string;
@@ -41,14 +54,11 @@ export interface BaseDeal {
   statusLabel?: "On going" | "Ended";
   category?: string;
   supplier?: string;
-  /** Supplier logo URL (from API supplier.pic) */
-  supplierPic?: string;
-}
-
-/** Payment term item for voucher (from API customerPaymentTerms) */
-export interface VoucherPaymentTerm {
-  title: string;
-  description: string;
+  supplierLogo?: string;
+  /** Backend supplier id, when present — links the DealSupplierSection to a supplier profile. */
+  supplierId?: string;
+  productName?: string;
+  detailContent?: DealDetailContent;
 }
 
 export interface VoucherDeal extends BaseDeal {
@@ -95,21 +105,21 @@ export const DEAL_THEMES: Record<DealType, DealTheme> = {
   voucher: {
     primary: COLORS.voucherDeal, 
     secondary: `${COLORS.voucherDeal}30`, 
-    badge: `${COLORS.voucherDeal}E6`, 
+    badge: COLORS.voucherDeal, 
     progressBar: COLORS.voucherDeal,
-    text: COLORS.darkViolet
+    text: '#ffffff'
   },
   cold: {
     primary: COLORS.darkViolet, 
     secondary: `${COLORS.darkViolet}30`, 
-    badge: `${COLORS.darkViolet}E6`, 
+    badge: COLORS.darkViolet, 
     progressBar: COLORS.darkViolet,
     text: '#ffffff'
   },
   original: {
     primary: COLORS.originalDeal, 
     secondary: `${COLORS.originalDeal}30`, 
-    badge: `${COLORS.originalDeal}E6`, 
+    badge: COLORS.originalDeal, 
     progressBar: COLORS.originalDeal,
     text: '#ffffff'
   }

@@ -21,18 +21,18 @@ export default function Button({
   loading = false,
   className = ''
 }: ButtonProps) {
-  const baseClasses = 'font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
-  
+  const baseClasses = 'inline-flex items-center justify-center font-semibold rounded-full transition-colors duration-200 ease-spring focus:outline-none focus:ring-2 focus:ring-offset-2';
+
   const variantClasses = {
-    primary: 'bg-[#340040] text-white focus:ring-purple-500',
-    secondary: 'bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500',
-    outline: 'border-2 border-[#340040] text-[#340040] hover:bg-[#340040] hover:text-white focus:ring-purple-500'
+    primary: 'bg-[#340040] text-white hover:bg-[#340040]/90 focus:ring-[#340040]',
+    secondary: 'bg-gray-200/70 text-[#1d1d1f] hover:bg-gray-200 focus:ring-gray-400',
+    outline: 'border border-[#340040]/30 text-[#340040] hover:bg-[#340040] hover:border-[#340040] hover:text-white focus:ring-[#340040]'
   };
-  
+
   const sizeClasses = {
-    sm: 'px-3 py-1 text-sm',
-    md: 'px-4 py-2 text-base',
-    lg: 'px-6 py-3 text-base'
+    sm: 'min-h-11 px-4 py-2 text-sm',
+    md: 'min-h-11 px-5 py-2.5 text-base',
+    lg: 'min-h-12 px-6 py-3 text-base'
   };
   
   const disabledClasses = disabled || loading 

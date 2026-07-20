@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next/pages';
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 import InputField from '../../../../components/auth/InputField';
 import Button from '../../../../components/auth/Button';
 import Stepper from '../../../../components/auth/Stepper';
@@ -167,7 +168,7 @@ export default function PersonalRegistrationPage({ lang, countryCode }: Personal
 
   const getPageTitle = () => {
     const countryName = getCountryDisplayName(countryCode);
-    return `${t('auth.personalRegistration.title')} - Eshtarena ${countryName}`;
+    return `${t('auth.personalRegistration.title')} - Sharena ${countryName}`;
   };
 
   const switchLanguage = (newLang: string) => {
@@ -178,17 +179,19 @@ export default function PersonalRegistrationPage({ lang, countryCode }: Personal
     <>
       <Head>
         <title>{getPageTitle()}</title>
-        <meta name="description" content={`Create your personal Eshtarena account in ${countryCode.toUpperCase()}`} />
+        <meta name="description" content={`Create your personal Sharena account in ${countryCode.toUpperCase()}`} />
       </Head>
 
       <div className={`min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 ${lang === 'ar' ? 'rtl' : 'ltr'}`} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           {/* Logo */}
           <div className="flex justify-center">
-            <img
-              className="w-32 h-auto"
-              src="/eshtarena_logo.svg"
-              alt="Eshtarena"
+            <Image
+              src="/Group.svg"
+              alt="Sharena"
+              width={200}
+              height={108}
+              className="object-contain"
             />
           </div>
           
@@ -392,7 +395,7 @@ export default function PersonalRegistrationPage({ lang, countryCode }: Personal
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params, locale }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const { lang, countryCode } = params as { lang: string; countryCode: string };
   
   // Validate language and country codes

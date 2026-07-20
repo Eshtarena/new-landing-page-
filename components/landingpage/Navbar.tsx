@@ -1,44 +1,59 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useTranslation } from "next-i18next";
-import { useState, useEffect, useCallback } from "react";
+import { useTranslation } from "next-i18next/pages";
+import { useState, useEffect, useCallback, useRef } from "react";
 import LanguageSwitcher from "../../components/LanguageSwitcher";
 import { useRouter } from "next/router";
+import { DASHBOARD_LOGIN_URL } from "../../utils/routes";
 
 export default function Navbar() {
   const { t } = useTranslation("common");
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isMobileMenuOpenRef = useRef(false);
   const [activeSection, setActiveSection] = useState("");
   const [isClosing, setIsClosing] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  // false on the server render so hydration matches; synced in useEffect
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    isMobileMenuOpenRef.current = isMobileMenuOpen;
+  }, [isMobileMenuOpen]);
 
   const closeMenu = useCallback(() => {
-    if (isMobileMenuOpen) {
+    if (isMobileMenuOpenRef.current) {
       setIsClosing(true);
       setTimeout(() => {
         setIsMobileMenuOpen(false);
         setIsClosing(false);
       }, 300);
     }
+  }, []);
+
+  // Prevent background scroll while the mobile menu is open (avoids layout jumps)
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+
+    const scrollY = window.scrollY;
+    const { style } = document.body;
+    style.position = "fixed";
+    style.top = `-${scrollY}px`;
+    style.left = "0";
+    style.right = "0";
+    style.overflow = "hidden";
+
+    return () => {
+      style.position = "";
+      style.top = "";
+      style.left = "";
+      style.right = "";
+      style.overflow = "";
+      window.scrollTo(0, scrollY);
+    };
   }, [isMobileMenuOpen]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      // Show navbar when scrolling up or at the top
-      if (currentScrollY < lastScrollY || currentScrollY < 100) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-
-      // Close mobile menu on scroll
-      closeMenu();
-
-      // Update active section
+    const updateActiveSection = (currentScrollY: number) => {
       const sections = ["home", "about", "deals", "contact"];
       const scrollPosition = currentScrollY + 100;
 
@@ -51,22 +66,34 @@ export default function Navbar() {
             scrollPosition < offsetTop + offsetHeight
           ) {
             setActiveSection(section);
-            break;
+            return;
           }
         }
       }
 
-      // Set home as active if we're at the very top
       if (currentScrollY < 100) {
         setActiveSection("home");
       }
-
-      setLastScrollY(currentScrollY);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    const syncScrollState = (currentScrollY: number) => {
+      setIsScrolled(currentScrollY >= 50);
+      updateActiveSection(currentScrollY);
+    };
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      setIsScrolled(currentScrollY >= 50);
+      updateActiveSection(currentScrollY);
+    };
+
+    // Sync state on mount without closing an open menu
+    syncScrollState(window.scrollY);
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [closeMenu, lastScrollY]);
+  }, [closeMenu]);
 
   const handleNavClick = async (e, sectionId) => {
     e.preventDefault();
@@ -113,52 +140,80 @@ export default function Navbar() {
   };
 
   const getLinkClassName = (sectionId, isMobile = false) => {
+    const isActive =
+      sectionId === "advice"
+        ? router.pathname === "/advice"
+        : activeSection === sectionId;
+
     const baseClasses = isMobile
-      ? "block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-      : "transition-colors duration-200 px-3";
+      ? "flex items-center min-h-11 px-4 py-2.5 rounded-xl text-base font-medium transition-colors duration-200 ease-spring"
+      : "inline-flex items-center min-h-11 transition-colors duration-200 ease-spring px-1 text-sm font-medium";
 
     const activeClasses = isMobile
-      ? "bg-white text-[#340040]"
-      : "text-white font-bold";
+      ? "bg-white text-primary-500"
+      : "text-white font-semibold drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]";
 
     const inactiveClasses = isMobile
-      ? "text-white hover:bg-white hover:text-[#340040]"
-      : "text-gray-300 hover:text-white";
+      ? "text-white/90 hover:bg-white/10 hover:text-white"
+      : "text-white/70 hover:text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]";
 
     return `${baseClasses} ${
-      activeSection === sectionId ? activeClasses : inactiveClasses
+      isActive ? activeClasses : inactiveClasses
     }`;
   };
 
+  // Glass is needed whenever the nav floats as a pill, or the mobile menu
+  // is open over the transparent top state (keeps the menu legible)
+  const hasGlass = isScrolled || isMobileMenuOpen;
+
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
-        isVisible ? "translate-y-0 bg-[#340040] shadow-lg" : "-translate-y-full"
+      className={`fixed inset-x-0 z-50 transition-all duration-300 ease-spring ${
+        isScrolled ? "top-3 px-4 sm:px-6 lg:px-10" : "top-0 px-0"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
-        <div className="flex items-center justify-between h-24">
+      <div
+        className={`mx-auto overflow-hidden duration-300 ease-spring ${
+          isScrolled
+            ? "w-full max-w-7xl rounded-[1.75rem]"
+            : "w-full max-w-[100vw] rounded-none"
+        } ${
+          hasGlass
+            ? `bg-primary-500/85 backdrop-blur-2xl backdrop-saturate-150 shadow-2xl shadow-black/20 transition-[background-color,backdrop-filter,box-shadow,border-color] ${
+                isScrolled ? "border border-white/10" : "border-none"
+              }`
+            : "bg-linear-to-b from-primary-800/60 via-primary-800/25 to-transparent backdrop-blur-[0px] shadow-none border-none transition-[background-color,backdrop-filter,box-shadow,border-color]"
+        } transition-[width,max-width]`}
+      >
+        <div
+          className={`flex items-center justify-between gap-x-3 sm:gap-x-6 px-4 sm:px-6 lg:px-8 transition-all duration-300 ease-spring ${
+            isScrolled ? "h-14 sm:h-16 md:h-18" : "h-16 sm:h-18 md:h-20"
+          }`}
+        >
           {/* Logo */}
-          <div className="flex-shrink-0 flex items-center">
+          <div className="shrink-0 flex items-center">
             <a
               href="#home"
               onClick={(e) => handleNavClick(e, "home")}
-              className="cursor-pointer"
+              className={`relative block transition-all duration-300 ease-spring ${
+                isScrolled
+                  ? "h-9 w-24 sm:h-10 sm:w-28 md:h-11 md:w-32"
+                  : "h-10 w-28 sm:h-11 sm:w-32 md:h-14 md:w-36"
+              }`}
             >
               <Image
-                src="/eshtarena_logo.svg"
-                alt="Eshtarena Logo"
-                width={250}
-                height={250}
-                style={{ width: "300px", height: "auto" }}
-                className="navbar-logo"
+                src="/Group.svg"
+                alt="Sharena Logo"
+                fill
+                sizes="128px"
+                className="object-contain object-left"
                 priority
               />
             </a>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex md:items-center md:justify-center flex-1 space-x-8">
+          <div className="hidden md:flex md:items-center md:justify-center flex-1 gap-x-8">
             <a
               href="#about"
               onClick={(e) => handleNavClick(e, "about")}
@@ -173,6 +228,12 @@ export default function Navbar() {
             >
               {t("navbar.deals")}
             </a>
+            <Link
+              href="/advice"
+              className={getLinkClassName("advice")}
+            >
+              {t("navbar.advice")}
+            </Link>
             <a
               href="#contact"
               onClick={(e) => handleNavClick(e, "contact")}
@@ -180,27 +241,38 @@ export default function Navbar() {
             >
               {t("navbar.contact")}
             </a>
+          </div>
+
+          {/* Desktop Actions */}
+          <div className="hidden md:flex md:items-center gap-x-4">
             <a
-              href="https://dashboard.eshtarena.com/login"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white  px-3 py-1 rounded hover:bg-white hover:text-[#340040] transition-colors duration-200"
+              href={DASHBOARD_LOGIN_URL}
+              className="inline-flex items-center min-h-11 text-sm font-medium text-white/80 px-4 rounded-full hover:text-white hover:bg-white/10 transition-all duration-200 ease-spring drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]"
             >
               {t("navbar.login")}
             </a>
-          </div>
-
-          {/* Language Switcher */}
-          <div className="hidden md:flex items-center">
+            <Link
+              href="/egy"
+              className="inline-flex items-center min-h-11 bg-white text-primary-500 text-sm font-semibold px-5 rounded-full shadow-soft hover:bg-white/90 transition-all duration-200 ease-spring"
+            >
+              {t("navbar.shopNow")}
+            </Link>
             <LanguageSwitcher />
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center">
-            <LanguageSwitcher />
             <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-white p-2 ml-4 rounded-md hover:bg-white/10 focus:outline-none"
+              onClick={() => {
+                if (isMobileMenuOpen) {
+                  closeMenu();
+                } else {
+                  setIsMobileMenuOpen(true);
+                }
+              }}
+              className="flex items-center justify-center w-11 h-11 text-white rounded-full hover:bg-white/10 focus:outline-none transition-colors duration-200 ease-spring"
+              aria-expanded={isMobileMenuOpen}
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
             >
               {isMobileMenuOpen ? (
                 <svg
@@ -237,11 +309,18 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         <div
-          className={`md:hidden transition-all duration-300 ease-in-out ${
-            isMobileMenuOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
-          } ${isClosing ? "animate-slideUp" : ""} overflow-hidden`}
+          className={`md:hidden grid transition-[grid-template-rows,opacity] duration-300 ease-spring ${
+            isMobileMenuOpen && !isClosing
+              ? "grid-rows-[1fr] opacity-100"
+              : "grid-rows-[0fr] opacity-0"
+          }`}
         >
-          <div className="px-2 pt-2 pb-3 space-y-1">
+          <div className="overflow-hidden">
+            <div
+              className={`px-4 pt-3 pb-5 space-y-1 border-t border-white/10 transition-opacity duration-300 ease-spring ${
+                isMobileMenuOpen && !isClosing ? "opacity-100" : "opacity-0"
+              }`}
+            >
             <a
               href="#about"
               onClick={(e) => handleNavClick(e, "about")}
@@ -256,6 +335,13 @@ export default function Navbar() {
             >
               {t("navbar.deals")}
             </a>
+            <Link
+              href="/advice"
+              onClick={closeMenu}
+              className={getLinkClassName("advice", true)}
+            >
+              {t("navbar.advice")}
+            </Link>
             <a
               href="#contact"
               onClick={(e) => handleNavClick(e, "contact")}
@@ -264,13 +350,23 @@ export default function Navbar() {
               {t("navbar.contact")}
             </a>
             <a
-              href="https://dashboard.eshtarena.com/login"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white hover:text-[#340040] transition-colors duration-200"
+              href={DASHBOARD_LOGIN_URL}
+              onClick={closeMenu}
+              className="flex items-center min-h-11 px-4 py-2.5 rounded-xl text-base font-medium text-white/90 hover:bg-white/10 hover:text-white transition-colors duration-200 ease-spring"
             >
               {t("navbar.login")}
             </a>
+            <Link
+              href="/egy"
+              onClick={closeMenu}
+              className="flex items-center justify-center min-h-11 mt-2 px-4 py-2.5 rounded-full text-base font-semibold bg-white text-primary-500 hover:bg-white/90 transition-all duration-200 ease-spring"
+            >
+              {t("navbar.shopNow")}
+            </Link>
+            <div className="flex items-center justify-center pt-4 mt-3 border-t border-white/10">
+              <LanguageSwitcher />
+            </div>
+            </div>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useTranslation } from "next-i18next";
-import { useState, useEffect, useCallback } from "react";
+import { useTranslation } from "next-i18next/pages";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useRouter } from "next/router";
 
@@ -9,36 +9,28 @@ export default function Navbar() {
   const { t } = useTranslation("common");
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isMobileMenuOpenRef = useRef(false);
   const [activeSection, setActiveSection] = useState("");
   const [isClosing, setIsClosing] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollYRef = useRef(0);
+
+  useEffect(() => {
+    isMobileMenuOpenRef.current = isMobileMenuOpen;
+  }, [isMobileMenuOpen]);
 
   const closeMenu = useCallback(() => {
-    if (isMobileMenuOpen) {
+    if (isMobileMenuOpenRef.current) {
       setIsClosing(true);
       setTimeout(() => {
         setIsMobileMenuOpen(false);
         setIsClosing(false);
       }, 300);
     }
-  }, [isMobileMenuOpen]);
+  }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      // Show navbar when scrolling up or at the top
-      if (currentScrollY < lastScrollY || currentScrollY < 100) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-
-      // Close mobile menu on scroll
-      closeMenu();
-
-      // Update active section
+    const updateActiveSection = (currentScrollY: number) => {
       const sections = ["about", "deals", "contact"];
       const scrollPosition = currentScrollY + 100;
 
@@ -51,19 +43,35 @@ export default function Navbar() {
             scrollPosition < offsetTop + offsetHeight
           ) {
             setActiveSection(section);
-            break;
+            return;
           }
         }
       }
+    };
 
-      setLastScrollY(currentScrollY);
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const lastScrollY = lastScrollYRef.current;
+
+      if (currentScrollY < lastScrollY || currentScrollY < 100) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+
+      closeMenu();
+      updateActiveSection(currentScrollY);
+      lastScrollYRef.current = currentScrollY;
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [closeMenu, lastScrollY]);
+  }, [closeMenu]);
 
-  const handleNavClick = async (e, sectionId) => {
+  const handleNavClick = async (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    sectionId: string
+  ) => {
     e.preventDefault();
 
     // If not on the landing page, navigate to it first
@@ -107,18 +115,18 @@ export default function Navbar() {
     }
   };
 
-  const getLinkClassName = (sectionId, isMobile = false) => {
+  const getLinkClassName = (sectionId: string, isMobile = false) => {
     const baseClasses = isMobile
-      ? "block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-      : "transition-colors duration-200 px-3";
+      ? "flex items-center min-h-11 px-4 py-2.5 rounded-xl text-base font-medium transition-colors duration-200 ease-spring"
+      : "inline-flex items-center min-h-11 transition-colors duration-200 ease-spring px-1 text-sm font-medium";
 
     const activeClasses = isMobile
       ? "bg-white text-[#340040]"
-      : "text-white font-bold";
+      : "text-white font-semibold";
 
     const inactiveClasses = isMobile
-      ? "text-white hover:bg-white hover:text-[#340040]"
-      : "text-gray-300 hover:text-white";
+      ? "text-white/90 hover:bg-white/10 hover:text-white"
+      : "text-white/70 hover:text-white";
 
     return `${baseClasses} ${
       activeSection === sectionId ? activeClasses : inactiveClasses
@@ -127,29 +135,28 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
-        isVisible ? "translate-y-0 bg-[#340040] shadow-lg" : "-translate-y-full"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-spring ${
+        isVisible ? "translate-y-0" : "-translate-y-full"
+      } bg-[#340040]/70 backdrop-blur-xl`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
-        <div className="flex items-center justify-between h-24">
+        <div className="flex items-center justify-between h-16 md:h-20 gap-x-6">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="cursor-pointer">
+            <Link href="/" className="relative block h-12 w-32 md:h-14 md:w-36">
               <Image
-                src="/eshtarena_logo.svg"
-                alt="Eshtarena Logo"
-                width={250}
-                height={250}
-                style={{ width: "300px", height: "auto" }}
-                className="navbar-logo"
+                src="/Group.svg"
+                alt="Sharena Logo"
+                fill
+                sizes="128px"
+                className="navbar-logo object-contain object-left"
                 priority
               />
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex md:items-center md:justify-center flex-1 space-x-8">
+          <div className="hidden md:flex md:items-center md:justify-center flex-1 gap-x-8">
             <a
               href="#about"
               onClick={(e) => handleNavClick(e, "about")}
@@ -175,7 +182,7 @@ export default function Navbar() {
               href="https://eshtarena.com/login"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white  px-3 py-1 rounded hover:bg-white hover:text-[#340040] transition-colors duration-200"
+              className="inline-flex items-center min-h-11 text-sm font-medium text-white/80 px-4 rounded-full hover:text-white hover:bg-white/10 transition-colors duration-200 ease-spring"
             >
               {t("navbar.login")}
             </a>
@@ -187,11 +194,11 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
+          <div className="md:hidden flex items-center gap-x-2">
             <LanguageSwitcher />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-white p-2 ml-4 rounded-md hover:bg-white/10 focus:outline-none"
+              className="flex items-center justify-center w-11 h-11 text-white rounded-full hover:bg-white/10 focus:outline-none transition-colors duration-200 ease-spring"
             >
               {isMobileMenuOpen ? (
                 <svg
@@ -228,11 +235,13 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         <div
-          className={`md:hidden transition-all duration-300 ease-in-out ${
-            isMobileMenuOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
-          } ${isClosing ? "animate-slideUp" : ""} overflow-hidden`}
+          className={`md:hidden transition-all duration-300 ease-spring ${
+            isMobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          } ${
+            isClosing ? "animate-slideUp" : ""
+          } overflow-hidden border-t border-white/10`}
         >
-          <div className="px-2 pt-2 pb-3 space-y-1">
+          <div className="px-3 pt-3 pb-4 space-y-1">
             <a
               href="#about"
               onClick={(e) => handleNavClick(e, "about")}
@@ -258,7 +267,7 @@ export default function Navbar() {
               href="https://eshtarena.com/login"
               target="_blank"
               rel="noopener noreferrer"
-              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white hover:text-[#340040] transition-colors duration-200"
+              className="flex items-center min-h-11 px-4 py-2.5 rounded-xl text-base font-medium text-white/90 hover:bg-white/10 hover:text-white transition-colors duration-200 ease-spring"
             >
               {t("navbar.login")}
             </a>

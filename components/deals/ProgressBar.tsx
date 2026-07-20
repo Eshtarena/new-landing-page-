@@ -6,9 +6,14 @@ interface ProgressBarProps {
   dealType: DealType;
   className?: string;
   showLabels?: boolean;
-  height?: "sm" | "md" | "lg";
-  soldLabel?: string;
-  availableLabel?: string;
+  height?: "sm" | "md" | "lg" | "xl";
+  labels?: {
+    progress?: string;
+    total?: string;
+    sold?: string;
+    available?: string;
+  };
+  locale?: string;
 }
 
 export default function ProgressBar({
@@ -17,8 +22,13 @@ export default function ProgressBar({
   className = "",
   showLabels = true,
   height = "md",
-  soldLabel = "Sold",
-  availableLabel = "Available",
+  labels = {
+    progress: "Progress",
+    total: "Total",
+    sold: "Sold",
+    available: "Available",
+  },
+  locale = "en",
 }: ProgressBarProps) {
   const total = quantity.sold + quantity.available;
   const progressPercentage = total > 0 ? (quantity.sold / total) * 100 : 0;
@@ -26,12 +36,22 @@ export default function ProgressBar({
 
   const heightClasses = {
     sm: "h-2",
-    md: "h-3",
-    lg: "h-4",
+    md: "h-2.5",
+    lg: "h-3",
+    xl: "h-4",
   };
 
   return (
     <div className={`w-full ${className}`}>
+      {showLabels && (
+        <div className="flex justify-between items-center text-xs text-primary-500 mb-1.5">
+          <span>{labels.progress}</span>
+          <span className="font-bold">
+            {labels.total} {total.toLocaleString(locale)}
+          </span>
+        </div>
+      )}
+
       <div
         className={`rounded-full overflow-hidden ${heightClasses[height]}`}
         style={{ backgroundColor: theme.secondary }}
@@ -44,22 +64,28 @@ export default function ProgressBar({
           }}
         />
       </div>
+
       {showLabels && (
-        <div className="flex justify-between text-gray-600 mt-2">
-          <span className="text-sm">{quantity.sold} {soldLabel}</span>
-          <span className="text-sm">{quantity.available} {availableLabel}</span>
+        <div className="flex justify-between text-xs text-primary-500 mt-1.5">
+          <span>
+            {labels.sold} {quantity.sold.toLocaleString(locale)}
+          </span>
+          <span>
+            {labels.available} {quantity.available.toLocaleString(locale)}
+          </span>
         </div>
       )}
     </div>
   );
 }
 
-// Simplified version without labels for compact layouts
 export function SimpleProgressBar({
   quantity,
   dealType,
   className = "",
   height = "sm",
+  labels,
+  locale,
 }: Omit<ProgressBarProps, "showLabels">) {
   return (
     <ProgressBar
@@ -68,6 +94,8 @@ export function SimpleProgressBar({
       className={className}
       showLabels={false}
       height={height}
+      labels={labels}
+      locale={locale}
     />
   );
 }

@@ -15,7 +15,7 @@ export default function DealShowcasePage() {
   return (
     <>
       <Head>
-        <title>Deal Card Components Showcase - Eshtarena</title>
+        <title>Deal Card Components Showcase - Sharena</title>
         <meta name="description" content="Showcase of reusable deal card components" />
       </Head>
       

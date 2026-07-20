@@ -1,19 +1,32 @@
 import React from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { DASHBOARD_LOGIN_URL } from '../../utils/routes';
 
 interface MobileBottomNavProps {
   activeTab?: string;
 }
 
+const goToDashboardLogin = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  event.preventDefault();
+  window.location.assign(DASHBOARD_LOGIN_URL);
+};
+
 export default function MobileBottomNav({ activeTab = 'home' }: MobileBottomNavProps) {
+  const router = useRouter();
+  const countryCode = Array.isArray(router.query.countryCode)
+    ? router.query.countryCode[0]
+    : router.query.countryCode || 'egy';
+
   const navItems = [
-    { id: 'home', label: 'Home', icon: 'home' },
-    { id: 'vouchers', label: 'Vouchers', icon: 'vouchers' },
-    { id: 'deals', label: 'My deals', icon: 'deals' },
-    { id: 'profile', label: 'Profile', icon: 'profile' }
+    { id: 'home', label: 'Home', icon: 'home', href: `/${countryCode}` },
+    { id: 'vouchers', label: 'Vouchers', icon: 'vouchers', href: `/${countryCode}#deals` },
+    { id: 'deals', label: 'My deals', icon: 'deals', href: DASHBOARD_LOGIN_URL },
+    { id: 'profile', label: 'Profile', icon: 'profile', href: DASHBOARD_LOGIN_URL }
   ];
 
   const getIcon = (iconType: string, isActive: boolean) => {
-    const colorClass = isActive ? 'text-purple-600' : 'text-gray-400';
+    const colorClass = isActive ? 'text-primary-500' : 'text-gray-400';
     
     switch (iconType) {
       case 'home':
@@ -46,23 +59,37 @@ export default function MobileBottomNav({ activeTab = 'home' }: MobileBottomNavP
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 z-40">
+    <div className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-2xl backdrop-saturate-150 border-t border-black/10 px-4 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] z-40">
       <div className="flex justify-around">
         {navItems.map((item) => {
           const isActive = activeTab === item.id;
-          return (
-            <button
-              key={item.id}
-              className="flex flex-col items-center py-2 px-3 min-w-0 flex-1"
-            >
+          const isExternal = item.href.startsWith('http');
+          const className = "flex flex-col items-center justify-center min-h-11 py-2 px-3 min-w-0 flex-1 rounded-xl transition-colors duration-200 ease-spring";
+          const content = (
+            <>
               {getIcon(item.icon, isActive)}
-              <span className={`text-xs mt-1 ${isActive ? 'text-purple-600 font-medium' : 'text-gray-400'}`}>
+              <span className={`text-xs mt-1 ${isActive ? 'text-primary-500 font-medium' : 'text-gray-400'}`}>
                 {item.label}
               </span>
               {isActive && (
-                <div className="w-1 h-1 bg-purple-600 rounded-full mt-1"></div>
+                <div className="w-1 h-1 bg-primary-500 rounded-full mt-1"></div>
               )}
-            </button>
+            </>
+          );
+
+          return isExternal ? (
+            <a
+              key={item.id}
+              href={DASHBOARD_LOGIN_URL}
+              onClick={goToDashboardLogin}
+              className={className}
+            >
+              {content}
+            </a>
+          ) : (
+            <Link key={item.id} href={item.href} className={className}>
+              {content}
+            </Link>
           );
         })}
       </div>

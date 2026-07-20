@@ -160,16 +160,20 @@ export const validateCompanyName = (name: string): string | undefined => {
 };
 
 // Generic form validation function
-export const validateForm = (data: any, validators: { [key: string]: (value: any) => string | undefined }): FormErrors => {
+export const validateForm = <T extends Record<string, unknown>>(
+  data: T,
+  validators: { [K in keyof T]?: (value: T[K]) => string | undefined }
+): FormErrors => {
   const errors: FormErrors = {};
-  
+
   Object.keys(validators).forEach(field => {
-    const validator = validators[field];
-    const error = validator(data[field]);
+    const key = field as keyof T;
+    const validator = validators[key];
+    const error = validator?.(data[key]);
     if (error) {
       errors[field] = error;
     }
   });
-  
+
   return errors;
 }; 

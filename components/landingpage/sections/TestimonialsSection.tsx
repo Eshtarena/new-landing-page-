@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next/pages';
 import Image from 'next/image';
 
 interface Testimonial {
@@ -115,7 +115,7 @@ export default function TestimonialsSection() {
               </div>
             </div>
             <blockquote className="text-gray-600 text-lg italic">
-              "{testimonials[activeIndex].content}"
+              &quot;{testimonials[activeIndex].content}&quot;
             </blockquote>
           </div>
 

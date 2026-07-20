@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { useTranslation } from "next-i18next";
+import React, { useState, useEffect, useRef } from "react";
+import { useForm, useWatch, Controller, Resolver } from "react-hook-form";
+import { useTranslation } from "next-i18next/pages";
 import Select from "react-select";
-import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
-import { object, string } from "yup";
+import { object, string, InferType } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { submitContactForm } from "../utils/api";
+import { ContactService } from "../services";
 import "react-phone-number-input/style.css";
-import axios from "axios";
 
 // List of countries
 const countries = [
@@ -37,34 +35,10 @@ const countryToCode = {
   EG: "+20",
 };
 
-// Add this CSS at the top of the file after the imports
-const phoneInputCustomStyles = `
-  .PhoneInput {
-    display: flex;
-    align-items: center;
-  }
-  .PhoneInputCountry {
-    position: relative;
-    align-self: stretch;
-    display: flex;
-    align-items: center;
-    margin-right: 8px;
-  }
-  .PhoneInputCountrySelect {
-    display: none;
-  }
-  .PhoneInputCountryIcon {
-    display: none;
-  }
-  .PhoneInputCountrySelectArrow {
-    display: none;
-  }
-`;
-
 export default function ContactForm() {
   const { t, i18n } = useTranslation("common");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null);
+  const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -84,7 +58,10 @@ export default function ContactForm() {
     email: string()
       .required(t("contact.form.validation.email.required"))
       .email(t("contact.form.validation.email.invalid")),
-    country: object()
+    country: object({
+      value: string().required(),
+      label: string().required(),
+    })
       .required(t("contact.form.validation.country.required"))
       .nullable(),
     phone: string()
@@ -99,16 +76,17 @@ export default function ContactForm() {
       .max(1000, t("contact.form.validation.message.max")),
   });
 
+  type ContactFormValues = InferType<typeof schema>;
+
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
     reset,
-    watch,
     setValue,
-  } = useForm({
-    resolver: yupResolver(schema),
+  } = useForm<ContactFormValues>({
+    resolver: yupResolver(schema) as Resolver<ContactFormValues>,
     defaultValues: {
       name: "",
       email: "",
@@ -118,46 +96,28 @@ export default function ContactForm() {
     },
   });
 
-  const selectedCountryValue = watch("country");
+  const selectedCountryValue = useWatch({ control, name: "country" });
 
-  let handleSendMessage = async (data) => {
-    let response;
-    console.log(data);
-    const { country, ...sendData } = data;
-    console.log(sendData);
-    if (!errors.name && !errors.email && !errors.message && !errors.phone) {
-      var config = {
-        method: "post",
-        maxBodyLength: Infinity,
-        url: `https://api.eshtarena.com/v1/contact-us`,
-        data: sendData,
-      };
-      response = await axios(config);
-      console.log(response);
-      if (response.data.message === "success") {
-        reset();
-        setPhoneNumber("");
-        setShowConfirmation(true);
-        setTimeout(() => setShowConfirmation(false), 2000);
-      }
-    }
-    reset();
-  };
+  const phoneNumberRef = useRef(phoneNumber);
+  useEffect(() => {
+    phoneNumberRef.current = phoneNumber;
+  });
+
   // Update phone number when country changes
   useEffect(() => {
     if (selectedCountryValue?.value) {
-      const countryCode = countryToCode[selectedCountryValue.value];
-      const numberWithoutCode = phoneNumber.replace(/^\+\d{1,4}\s*/, "");
+      const countryCode = countryToCode[selectedCountryValue.value as keyof typeof countryToCode];
+      const numberWithoutCode = phoneNumberRef.current.replace(/^\+\d{1,4}\s*/, "");
       const newPhoneNumber = countryCode + " " + numberWithoutCode;
       setPhoneNumber(newPhoneNumber);
       setValue("phone", newPhoneNumber);
     }
   }, [selectedCountryValue, setValue]);
 
-  const handlePhoneChange = (e) => {
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const countryCode = selectedCountryValue?.value
-      ? countryToCode[selectedCountryValue.value]
+      ? countryToCode[selectedCountryValue.value as keyof typeof countryToCode]
       : "+20";
 
     // Only allow digits after country code
@@ -170,81 +130,75 @@ export default function ContactForm() {
     setValue("phone", newPhoneNumber);
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: ContactFormValues) => {
     setIsSubmitting(true);
     setSubmitStatus(null);
     setErrorMessage("");
 
     try {
-      const result = await submitContactForm(data);
+      await ContactService.submit({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        message: data.message,
+      });
       setSubmitStatus("success");
       reset();
       setPhoneNumber("");
+      setShowConfirmation(true);
+      setTimeout(() => setShowConfirmation(false), 2000);
     } catch (error) {
       setSubmitStatus("error");
-      setErrorMessage(error.message || t("contact.form.error"));
+      setErrorMessage(error instanceof Error ? error.message : t("contact.form.error"));
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const getInputClassName = (error) => `
-    w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors
+  const getInputClassName = (error: unknown) => `
+    w-full min-h-11 rounded-xl border bg-gray-50 px-4 py-3 placeholder:text-gray-400 focus:bg-white focus:ring-2 focus:border-transparent transition-all outline-none
     ${
       error
-        ? "border-red-500 focus:ring-red-200"
-        : "border-gray-300 focus:ring-purple-200 focus:border-[#340040]"
+        ? "border-red-400 focus:ring-red-400"
+        : "border-gray-200 focus:ring-primary-500"
     }
   `;
 
   return (
     <>
       {showConfirmation && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            background: "rgba(0,0,0,0.4)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 9999,
-          }}
-        >
-          <div
-            style={{
-              background: "#fff",
-              padding: "2rem 3rem",
-              borderRadius: "1rem",
-              boxShadow: "0 2px 16px rgba(0,0,0,0.15)",
-              textAlign: "center",
-              minWidth: "250px",
-            }}
-          >
-            <span style={{ fontSize: "2rem", color: "#340040" }}>✔️</span>
-            <div
-              style={{
-                marginTop: "1rem",
-                fontSize: "1.2rem",
-                color: "#340040",
-              }}
-            >
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-soft-lg border border-black/5 px-12 py-8 text-center min-w-[250px]">
+            <div className="mx-auto w-12 h-12 rounded-full bg-primary-500/10 flex items-center justify-center">
+              <svg
+                className="w-6 h-6 text-primary-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+            </div>
+            <div className="mt-4 text-lg font-semibold text-primary-500">
               {t("contact.form.success")}
             </div>
           </div>
         </div>
       )}
       <form
-        onSubmit={handleSubmit(handleSendMessage)}
+        onSubmit={handleSubmit(onSubmit)}
         className="space-y-6"
         dir={i18n.dir()}
       >
         {/* Name Input */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
             {t("contact.form.name")}
           </label>
           <input
@@ -260,7 +214,7 @@ export default function ContactForm() {
 
         {/* Email Input */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
             {t("contact.form.email")}
           </label>
           <input
@@ -276,7 +230,7 @@ export default function ContactForm() {
 
         {/* Country Select */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
             {t("contact.form.country")}
           </label>
           <Controller
@@ -285,6 +239,7 @@ export default function ContactForm() {
             render={({ field }) => (
               <Select
                 {...field}
+                instanceId="contact-country"
                 options={countryOptions}
                 className={`react-select ${
                   errors.country ? "react-select-error" : ""
@@ -304,7 +259,7 @@ export default function ContactForm() {
 
         {/* Phone Input */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
             {t("contact.form.phone")}
           </label>
           <input
@@ -321,7 +276,7 @@ export default function ContactForm() {
 
         {/* Message Input */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
             {t("contact.form.message")}
           </label>
           <textarea
@@ -343,11 +298,11 @@ export default function ContactForm() {
             type="submit"
             disabled={isSubmitting}
             className={`
-              w-full px-6 py-3 text-white rounded-lg transition-colors duration-200
+              w-full min-h-12 px-6 py-3.5 text-white font-semibold rounded-full transition-colors duration-200 ease-spring
               ${
                 isSubmitting
                   ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-[#340040] hover:bg-opacity-90"
+                  : "bg-primary-500 hover:bg-primary-500/90"
               }
             `}
           >
@@ -359,12 +314,12 @@ export default function ContactForm() {
 
         {/* Status Messages */}
         {submitStatus === "success" && (
-          <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-green-600">
+          <div className="p-4 bg-green-50 border border-green-200/60 rounded-xl text-green-700">
             {t("contact.form.success")}
           </div>
         )}
         {submitStatus === "error" && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-600">
+          <div className="p-4 bg-red-50 border border-red-200/60 rounded-xl text-red-700">
             {errorMessage}
           </div>
         )}

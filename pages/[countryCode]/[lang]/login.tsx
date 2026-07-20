@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next/pages';
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 import InputField from '../../../components/auth/InputField';
 import Button from '../../../components/auth/Button';
 import { LoginFormData, FormErrors } from '../../../types/auth';
@@ -71,8 +72,8 @@ export default function LoginPage({ lang, countryCode }: LoginPageProps) {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Redirect to dashboard or home page after successful login
-      router.push(buildHomeRoute(countryCode, lang) + '/dashboard');
+      // Redirect to home page after successful login
+      router.push(buildHomeRoute(countryCode, lang));
     } catch (error) {
       console.error('Login failed:', error);
       setErrors({ general: t('auth.login.errorGeneral') });
@@ -83,28 +84,39 @@ export default function LoginPage({ lang, countryCode }: LoginPageProps) {
 
   const getPageTitle = () => {
     const countryName = getCountryDisplayName(countryCode);
-    return `${t('auth.login.title')} - Eshtarena ${countryName}`;
+    return `${t('auth.login.title')} - Sharena ${countryName}`;
   };
 
   const switchLanguage = (newLang: string) => {
-    router.push(buildLoginRoute(countryCode, newLang));
+    if (newLang === lang) {
+      return;
+    }
+
+    if (typeof window !== 'undefined') {
+      (window as typeof window & { __preserveScrollOnNextRoute?: boolean }).__preserveScrollOnNextRoute =
+        true;
+    }
+
+    router.push(buildLoginRoute(countryCode, newLang), undefined, { scroll: false });
   };
 
   return (
     <>
       <Head>
         <title>{getPageTitle()}</title>
-        <meta name="description" content={`Login to your Eshtarena account in ${countryCode.toUpperCase()}`} />
+        <meta name="description" content={`Login to your Sharena account in ${countryCode.toUpperCase()}`} />
       </Head>
 
       <div className={`min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 ${lang === 'ar' ? 'rtl' : 'ltr'}`} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           {/* Logo */}
           <div className="flex justify-center">
-            <img
-              className="w-32 h-auto"
-              src="/eshtarena_logo.svg"
-              alt="Eshtarena"
+            <Image
+              src="/Group.svg"
+              alt="Sharena"
+              width={200}
+              height={108}
+              className="object-contain"
             />
           </div>
           
@@ -208,7 +220,7 @@ export default function LoginPage({ lang, countryCode }: LoginPageProps) {
                   <div className="w-full border-t border-gray-300" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">{t('auth.login.newToEshtarena')}</span>
+                  <span className="px-2 bg-white text-gray-500">{t('auth.login.newToSharena')}</span>
                 </div>
               </div>
 
@@ -231,7 +243,7 @@ export default function LoginPage({ lang, countryCode }: LoginPageProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params, locale }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const { lang, countryCode } = params as { lang: string; countryCode: string };
   
   // Validate language and country codes

@@ -2,49 +2,63 @@
   "navbar": {
     "about": "About Us",
     "deals": "Deals",
+    "advice": "Advice & Tips",
     "contact": "Contact Us",
-    "login": "Login"
+    "login": "Login",
+    "shopNow": "Shop Now"
+  },
+  "store": {
+    "searchPlaceholder": "Search for deals...",
+    "mobileSearchPlaceholder": "Search or scan product barcode",
+    "searchAriaLabel": "Search deals",
+    "scanAriaLabel": "Scan product barcode",
+    "searchResults": "Search results for \"{{query}}\"",
+    "supplierSection": "Supplier",
+    "categoriesSection": "Categories",
+    "seeAll": "See all",
+    "seeMore": "See More",
+    "popularDeals": "Popular deals"
   },
   "about": {
     "mainTitleLine1": "Enjoy the power of",
     "mainTitleLine2": "group purchasing ❤️",
-    "mainDescription": "Eshtarena is the group shopping and purchasing management application for individuals and businesses by offering group purchasing deals on various products from different suppliers to provide the best price ever and the biggest discounts on purchase vouchers.",
-    "priceDescription": "Eshtarena ultimately offers you the best price for the product with the discount of bulk quantities throughout the group offer period 😊",
-    "discountDescription": "Eshtarena also offers you additional upfront discounts through group purchasing offers for vouchers from different suppliers without any irrational terms 😊",
+    "mainDescription": "Sharena is the group shopping and purchasing management application for individuals and businesses by offering group purchasing deals on various products from different suppliers to provide the best price ever and the biggest discounts on purchase vouchers.",
+    "priceDescription": "Sharena ultimately offers you the best price for the product with the discount of bulk quantities throughout the group offer period 😊",
+    "discountDescription": "Sharena also offers you additional upfront discounts through group purchasing offers for vouchers from different suppliers without any irrational terms 😊",
     "downloadTitle": "Download the application now and start your saving journey"
   },
   "deals": {
     "title": "Deals Types",
     "description": "Discover our variety of deals types that designed to save your money and provide the best value for your purchases",
-    "originalDeal": {
-      "title": "What is original deal?",
-      "description": "They are pre-prepared group purchase offers from Eshtarena that specify the price, quantity and supplier for a specific product after receiving price offers from all verified suppliers for this product and choosing the best offer to be presented to you",
+    "productDeal": {
+      "title": "What is product deal?",
+      "description": "They are pre-prepared group purchase offers from Sharena that specify the price, quantity and supplier for a specific product after receiving price offers from all verified suppliers for this product and choosing the best offer to be presented to you",
       "point1": "The offer ends when the specified quantity or deal time ends",
       "point2": "You can buy any quantity you want and get the group offer price automatically at the time of purchase",
-      "point3": "Eshtarena guarantees you the best price for the product in the market throughout the offer",
+      "point3": "Sharena guarantees you the best price for the product in the market throughout the offer",
       "point4": "You can view the supplier profile page, view the return policies and after-sales services",
-      "badge": "Original deal"
+      "badge": "Product deal"
     },
     "coldDeal": {
       "title": "What is Cold deal?",
       "description": "These deals are for specific products that require more time to allow suppliers to compete in an open tender throughout the offer period to offer us the best price.",
-      "refundPolicy": "Buy the quantity you want at the current offer price before the end of the deal period from the mentioned supplier and in case there is a better offer from another supplier, eshtarena will automatically refund the price difference to your bank card used in the purchase.",
+      "refundPolicy": "Buy the quantity you want at the current offer price before the end of the deal period from the mentioned supplier and in case there is a better offer from another supplier, Sharena will automatically refund the price difference to your bank card used in the purchase.",
       "badge": "Cold deal"
     },
     "vouchers": {
       "howToUse": {
         "title": "How can you use the purchase vouchers?",
-        "point1": "After purchasing a voucher for a specific brand from the group purchase offer, the voucher is automatically added to your vouchers' wallet on eshtarena.",
+        "point1": "After purchasing a voucher for a specific brand from the group purchase offer, the voucher is automatically added to your vouchers' wallet on Sharena.",
         "point2": "You can open the voucher from your wallet, view your balance and bill the branch or the supplier's website and mobile app with the voucher barcode number.",
         "point3": "You can cash out the full or partial value of the voucher and spend the remaining balance in future purchases.",
-        "point4": "You will receive a notification from eshtarena after each purchase on what was spent with the remaining balance in this voucher."
+        "point4": "You will receive a notification from Sharena after each purchase on what was spent with the remaining balance in this voucher."
       }
     },
     "voucherDeal": {
       "title": "What is Voucher deal?",
-      "description": "They are pre-prepared group purchase offers from Eshtarena with a specific price, quantity and supplier on a discounted purchase voucher without terms or conditions from various suppliers.",
+      "description": "They are pre-prepared group purchase offers from Sharena with a specific price, quantity and supplier on a discounted purchase voucher without terms or conditions from various suppliers.",
       "point1": "Buy a purchase voucher from the supplier you choose in the group offer at a discounted price and enjoy spending the full voucher value at the supplier without terms or conditions.",
-      "point2": "Save before you buy from the brands you love and pay from your voucher wallet on eshtarena at the supplier's branches or website or mobile app.",
+      "point2": "Save before you buy from the brands you love and pay from your voucher wallet on Sharena at the supplier's branches or website or mobile app.",
       "badge": "Voucher deal"
     },
     "sold": "Sold",
@@ -53,31 +67,196 @@
     "dealPrice": "Deal Price",
     "voucherValue": "Voucher value",
     "save": "Save",
-    "detailsPage": {
-      "pageTitle": "Deal details",
+    "progress": "Progress",
+    "total": "Total",
+    "priceRange": "Price Range",
+    "priceRangeTo": "to",
+    "priceRangeMin": "Min",
+    "priceRangeMax": "Max"
+  },
+  "dealDetails": {
+    "pageTitle": "Deal Details",
+    "loading": "Loading deal details...",
+    "back": "Go Back",
+    "joinDeal": "Join Deal",
+    "share": "Share deal",
+    "supportText": "Download the app to join this deal and complete your purchase securely.",
+    "endsIn": "Deal ends in",
+    "endsAt": "Ends at",
+    "sold": "Sold",
+    "available": "Available",
+    "tabs": {
       "description": "Description",
       "details": "Details",
-      "aboutDeal": "About deal",
-      "payment": "Payment",
-      "termsAndConditions": "Deal terms",
+      "terms": "Terms & Conditions",
       "reviews": "Reviews",
-      "aboutThisDeal": "About This Deal",
-      "joinDeal": "Join Deal",
-      "dealDetails": "Deal Details",
+      "deal": "Deal",
+      "product": "Product",
+      "delivery": "Delivery",
+      "payment": "Payment"
+    },
+    "timer": {
+      "day": "Day",
+      "days": "Days",
+      "hours": "Hrs",
+      "minutes": "Mins",
+      "seconds": "Secs"
+    },
+    "aboutTitle": "About This Deal",
+    "features": {
+      "quality": "Premium quality guaranteed",
+      "delivery": "Fast delivery within 2-3 business days",
+      "returnPolicy": "30-day return policy",
+      "support": "Customer support available 24/7"
+    },
+    "details": {
+      "title": "Deal Details",
       "category": "Category",
       "supplier": "Supplier",
-      "dealType": "Deal Type",
+      "product": "Product",
+      "dealType": "Deal type",
       "location": "Location",
-      "totalQuantity": "Total Quantity",
+      "totalQuantity": "Total quantity",
+      "status": "Status",
+      "general": "General",
+      "partner": "Sharena Partner"
+    },
+    "supplier": {
+      "subtitle": "Deal supplier",
+      "viewProfile": "View Profile"
+    },
+    "dealType": {
+      "original": "Product deal",
+      "cold": "Cold deal",
+      "voucher": "Voucher deal"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "stats": {
       "sold": "Sold",
       "available": "Available",
-      "status": "Status",
-      "customerReviews": "Customer Reviews",
-      "dealNotFound": "Deal Not Found",
-      "dealNotFoundMessage": "The deal you're looking for doesn't exist or may have been removed.",
-      "goBack": "Go Back",
-      "loading": "Loading deal details...",
-      "downloadApp": "Download the app"
+      "total": "Total",
+      "progress": "Progress"
+    },
+    "terms": {
+      "payment": "Payment Terms",
+      "delivery": "Delivery Terms",
+      "items": {
+        "1": {
+          "title": "1. Deal Validity",
+          "description": "This deal is valid until the timer expires or all quantities are sold, whichever comes first."
+        },
+        "2": {
+          "title": "2. Payment Terms",
+          "description": "Payment must be completed within 24 hours of joining the deal to secure your spot."
+        },
+        "3": {
+          "title": "3. Delivery",
+          "description": "Delivery starts once the deal reaches minimum participation requirements."
+        },
+        "4": {
+          "title": "4. Cancellation Policy",
+          "description": "Cancellations are allowed up to 2 hours after joining the deal, subject to availability."
+        },
+        "5": {
+          "title": "5. Returns & Refunds",
+          "description": "Standard return policy applies. Items must be in original condition within 30 days of delivery."
+        }
+      }
+    },
+    "reviews": {
+      "title": "Customer Reviews",
+      "basedOn": "Based on 127 reviews",
+      "samples": {
+        "1": {
+          "name": "Ahmed S.",
+          "comment": "Excellent deal! Fast delivery and great quality products."
+        },
+        "2": {
+          "name": "Fatima M.",
+          "comment": "Very satisfied with my purchase. Will definitely buy again."
+        },
+        "3": {
+          "name": "Omar K.",
+          "comment": "Good value for money. Delivery was a bit slow but overall happy."
+        }
+      }
+    },
+    "notFound": {
+      "title": "Deal Not Found",
+      "description": "The deal you're looking for doesn't exist or may have been removed."
+    },
+    "error": {
+      "title": "Couldn't load this deal",
+      "description": "Something went wrong while fetching this deal. Please try again."
+    },
+    "noDescription": "No description is available for this deal yet.",
+    "noTerms": "No terms and conditions are available for this deal yet.",
+    "accordions": {
+      "specialSpecs": "Special specifications",
+      "originalDeal": "What is Original deal?",
+      "expertAdvice": "Purchasing expert advice",
+      "noSpecialSpecs": "No special specifications available for this deal.",
+      "originalDealFallback": "Original deals are group-buy offers on authentic products. Join with other buyers to unlock the deal price and save together.",
+      "expertAdviceFallback": "Review the deal details, compare market price with deal price, and join before quantities run out to secure your savings."
+    },
+    "delivery": {
+      "title": "Sharena delivery terms",
+      "default1": "Delivery typically takes 2-5 business days after the deal closes and payment is confirmed.",
+      "default2": "Coverage depends on your selected city. Sharena partners deliver across supported regions in KSA."
+    },
+    "payment": {
+      "default": "Payment must be completed within 24 hours of joining the deal to secure your spot."
+    },
+    "downloadApp": {
+      "title": "Get the Sharena App",
+      "description": "Scan a QR code with your phone to download the app and join this deal.",
+      "close": "Close",
+      "appStore": "Download on the App Store",
+      "googlePlay": "Get it on Google Play",
+      "appleQrAlt": "App Store QR code",
+      "googleQrAlt": "Google Play QR code"
+    }
+  },
+  "supplierDetails": {
+    "loading": "Loading supplier profile...",
+    "back": "Go Back",
+    "pageTitle": "Supplier Profile",
+    "aboutTitle": "About",
+    "browseDeals": "Browse Deals",
+    "founded": "Founded",
+    "website": "Website",
+    "phone": "Phone",
+    "links": "Links",
+    "categories": "Categories",
+    "coverage": "Coverage",
+    "allKsa": "All KSA",
+    "districts": "Districts",
+    "branchCity": "City",
+    "hours": "Hours",
+    "viewOnMap": "View on map",
+    "dealsCount": "{{count}} deals",
+    "noOverview": "No overview is available for this supplier yet.",
+    "noBranches": "No branches are listed for this supplier yet.",
+    "noProductDeals": "No product deals available from this supplier yet.",
+    "noColdDeals": "No cold deals available from this supplier yet.",
+    "noVouchers": "No voucher deals available from this supplier yet.",
+    "tabs": {
+      "about": "About",
+      "branches": "Branches",
+      "productDeals": "Product Deals",
+      "coldDeals": "Cold Deals",
+      "vouchers": "Vouchers"
+    },
+    "notFound": {
+      "title": "Supplier Not Found",
+      "description": "The supplier you're looking for doesn't exist or may have been removed."
+    },
+    "error": {
+      "title": "Couldn't load this supplier",
+      "description": "Something went wrong while fetching this supplier. Please try again."
     }
   },
   "contact": {
@@ -100,6 +279,9 @@
       "social": {
         "title": "Follow Us",
         "error": "Failed to load social media links. Please try again later."
+      },
+      "apps": {
+        "title": "Download Our App"
       }
     },
     "form": {
@@ -138,16 +320,16 @@
     }
   },
   "footer": {
-    "copyright": "© {{year}} Eshtarena. All rights reserved.",
     "links": "Links",
     "terms": "Terms & Conditions",
     "privacy": "Privacy Policy",
+    "advice": "Advice & Tips",
     "downloadApp": "Download the app now and start your saving journey"
   },
   "suppliers": {
-    "join_button": "Join Eshtarena Partners and Suppliers",
+    "join_button": "Join Sharena Partners and Suppliers",
     "form": {
-      "title": "Join Eshtarena Partners and Suppliers",
+      "title": "Join Sharena Partners and Suppliers",
       "company_info": "Company Information",
       "company_name": "Company Name",
       "category": "Category",
@@ -211,12 +393,26 @@
   },
   "terms": {
     "pageTitle": "Terms & Policies",
-    "pageDescription": "Review our terms of service, policies, and guidelines for using Eshtarena",
+    "pageDescription": "Review our terms of service, policies, and guidelines for using Sharena",
     "readMore": "Read More"
   },
   "privacy": {
     "pageTitle": "Privacy Policy",
     "pageDescription": "Learn how we collect, use, and protect your personal information"
+  },
+  "advice": {
+    "pageTitle": "Advice & Tips",
+    "pageDescription": "Expert tips on group buying, vouchers, and smart shopping to help you save more on Sharena",
+    "cardTitle": "Purchasing expert advice",
+    "readTime": "{{minutes}} min read",
+    "emptyState": "No articles found in this category. Check back soon for new tips.",
+    "categories": {
+      "all": "All",
+      "savings": "Savings",
+      "deals": "Deals",
+      "shopping": "Shopping",
+      "vouchers": "Vouchers"
+    }
   },
   "auth": {
     "login": {
@@ -229,7 +425,7 @@
       "rememberMe": "Remember me",
       "forgotPassword": "Forgot your password?",
       "signInButton": "Sign in",
-      "newToEshtarena": "New to Eshtarena?",
+      "newToSharena": "New to Sharena?",
       "createAccount": "Create an account",
       "errorGeneral": "Login failed. Please check your credentials and try again."
     },

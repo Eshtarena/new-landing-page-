@@ -1,5 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
 
 interface MobileNavbarProps {
   onFilterClick: () => void;
@@ -32,7 +31,7 @@ export default function MobileNavbar({ onFilterClick }: MobileNavbarProps) {
         <div className="flex items-center">
           <div className="text-white">
             <div className="text-lg font-bold mb-1">اشتريها!</div>
-            <div className="text-2xl font-bold">eshtarena</div>
+            <div className="text-2xl font-bold">Sharena</div>
           </div>
         </div>
         <button className="p-2">

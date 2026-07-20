@@ -19,8 +19,8 @@ export default function Logo({
 }: LogoProps) {
   const logoElement = (
     <Image
-      src="/eshtarena_logo.svg"
-      alt="Eshtarena"
+      src="/Group.svg"
+      alt="Sharena"
       width={width}
       height={height}
       className={`object-contain ${className}`}

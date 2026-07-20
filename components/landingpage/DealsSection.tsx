@@ -1,4 +1,4 @@
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "next-i18next/pages";
 import DealCard from "../DealCard";
 import { DEALS_DATA } from "../../utils/consts";
 
@@ -52,17 +52,17 @@ export default function DealsSection() {
 
   return (
     <section id="deals" className={`w-full ${i18n.language === "ar" ? "rtl" : "ltr"}`}>
-      <div className=" text-center mb-16 md:px-[100px] px-[20px] ">
-        <h2 className="text-4xl md:text-5xl font-bold text-[#340040] mb-6">
+      <div className="text-center mb-6 sm:mb-8 md:mb-10 pt-6 sm:pt-8 md:pt-12 px-4 sm:px-6 lg:px-24">
+        <h2 className="text-2xl sm:text-3xl lg:text-5xl font-extrabold tracking-tight mb-3 sm:mb-4 leading-tight bg-linear-to-r from-primary-500 to-purple-600 bg-clip-text text-transparent w-fit mx-auto">
           {t("deals.title")}
         </h2>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <p className="text-slate-600 text-base sm:text-lg font-light leading-relaxed max-w-2xl mx-auto px-2">
           {t("deals.description")}
         </p>
       </div>
 
-      <div className="flex flex-col       items-center mt-6">
-        {DEALS_DATA.map((deal) => {
+      <div className="flex flex-col items-center">
+        {DEALS_DATA.map((deal, index) => {
           const { title, description, points } = getCardContent(deal);
           return (
             <DealCard
@@ -73,7 +73,7 @@ export default function DealsSection() {
               imageSrc={getImageSrc(deal.imageSrc)}
               imageAlt={deal.imageAlt}
               imageIsPhone={deal.imageIsPhone}
-              isReversed={deal.isReversed}
+              isReversed={index % 2 === 1}
               hasBgColor={deal.hasBgColor}
             />
           );
