@@ -86,7 +86,7 @@ export function mapVoucherApiToDeal(
     isActive,
     statusLabel,
     supplier: v.supplier ? (isEn ? v.supplier.name_en : v.supplier.name_ar) : undefined,
-    supplierPic: v.supplier?.pic ? `${SUPPLIER_IMAGE_BASE}/${v.supplier.pic}` : undefined,
+    supplierLogo: v.supplier?.pic ? `${SUPPLIER_IMAGE_BASE}/${v.supplier.pic}` : undefined,
     paymentTerms: paymentTerms.length ? paymentTerms : undefined,
   };
 }

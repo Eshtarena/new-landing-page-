@@ -29,6 +29,11 @@ export interface DealTermItem {
   content: string;
 }
 
+export interface VoucherPaymentTerm {
+  title: string;
+  description: string;
+}
+
 export interface DealDetailContent {
   about?: string;
   terms?: string;

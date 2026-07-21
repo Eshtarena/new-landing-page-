@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "next-i18next/pages";
 import { Deal, DealType } from "../../types/deals";
 import DealInfoSection from "./DealInfoSection";
 import DealTabsSection from "./DealTabsSection";
@@ -15,7 +15,7 @@ import {
   mapColdApiToDeal,
   mapOriginalApiToDeal,
 } from "../../services/dealDetailsApi";
-import { fetchSocialLinks } from "../../utils/api";
+import { SocialService } from "../../services";
 import { DEAL_DETAILS_LABELS } from "../../utils/dealDetailsLabels";
 
 interface DealDetailsViewProps {
@@ -79,7 +79,7 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
   useEffect(() => {
     const defaultApple = "https://apps.apple.com/app/eshtarena";
     const defaultGoogle = "https://play.google.com/store/apps/details?id=eshtarena.app";
-    fetchSocialLinks()
+    SocialService.getLinks()
       .then((data) => {
         setStoreLinks({
           apple: data.apple || defaultApple,
@@ -285,8 +285,8 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
       </div>
       <div className="container mx-auto px-4 py-6 md:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-          <DealInfoSection deal={deal} lang={lang} storeLinks={storeLinks} />
-          <DealTabsSection deal={deal} lang={lang} variant="payment-and-terms" />
+          <DealInfoSection deal={deal} storeLinks={storeLinks} />
+          <DealTabsSection deal={deal} />
         </div>
       </div>
     </div>

@@ -13,11 +13,16 @@ import DownloadAppModal from "./DownloadAppModal";
 interface DealInfoSectionProps {
   deal: Deal;
   className?: string;
+  storeLinks?: {
+    apple: string;
+    google: string;
+  };
 }
 
 export default function DealInfoSection({
   deal,
   className = "",
+  storeLinks,
 }: DealInfoSectionProps) {
   const { t, i18n } = useTranslation("common");
   const router = useRouter();

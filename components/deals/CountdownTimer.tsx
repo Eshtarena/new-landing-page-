@@ -34,13 +34,6 @@ interface CountdownTimerProps {
   locale?: string;
 }
 
-const DEFAULT_LABELS: CountdownTimerLabels = {
-  days: "Days",
-  hrs: "Hrs",
-  mins: "Mins",
-  secs: "Secs",
-};
-
 export default function CountdownTimer({
   timer,
   className = "",

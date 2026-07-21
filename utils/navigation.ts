@@ -24,8 +24,7 @@ const resolveRouteContext = (router: NextRouter) => {
  * - Cold: /v1/deal/cold/:dealid
  * - Original: /v1/deal/original/:dealid
  */
-export const getDealDetailsUrl = (deal: Deal): string => {
-  console.log('deal', deal);
+export const getSharedDealDetailsUrl = (deal: Deal): string => {
   switch (deal.dealType) {
     case 'voucher':
       return `/v1/deal/voucher/${deal.id}`;

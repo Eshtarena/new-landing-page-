@@ -72,7 +72,7 @@ function mapCommonDealFields(
   v: DealDetailsApiDeal,
   lang: Lang,
   dealType: "cold" | "original"
-): Pick<ColdDeal, "id" | "title" | "description" | "images" | "timer" | "location" | "quantity" | "dealPrice" | "saveAmount" | "currency" | "isActive" | "supplier" | "supplierPic" | "statusLabel"> {
+): Pick<ColdDeal, "id" | "title" | "description" | "images" | "timer" | "location" | "quantity" | "dealPrice" | "saveAmount" | "currency" | "isActive" | "supplier" | "supplierLogo" | "statusLabel"> {
   const isEn = lang === "en";
   const statusLabel = normalizeStatus(v.status);
   const isActive = statusLabel === "On going";
@@ -95,7 +95,7 @@ function mapCommonDealFields(
     isActive,
     statusLabel,
     supplier: v.supplier ? (isEn ? v.supplier.name_en : v.supplier.name_ar) : undefined,
-    supplierPic: v.supplier?.pic ? `${SUPPLIER_IMAGE_BASE}/${v.supplier.pic}` : undefined,
+    supplierLogo: v.supplier?.pic ? `${SUPPLIER_IMAGE_BASE}/${v.supplier.pic}` : undefined,
   };
 }
 
