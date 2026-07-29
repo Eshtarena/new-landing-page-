@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import Logo from "../Logo";
 import LanguageSwitcher from "../landingpage/LanguageSwitcher";
 import { DASHBOARD_LOGIN_URL } from "../../utils/routes";
+import { SHOP_HEADER_STYLE } from "../../utils/shopHeaderStyle";
 
 const goToDashboardLogin = (event: React.MouseEvent<HTMLAnchorElement>) => {
   event.preventDefault();
@@ -17,11 +18,19 @@ interface MainNavbarProps {
   onSearchChange?: (query: string) => void;
 }
 
-const LOGO_PROPS = {
+const MOBILE_LOGO_PROPS = {
+  width: 72,
+  height: 24,
+  className: "w-[68px] h-auto",
+} as const;
+
+const DESKTOP_LOGO_PROPS = {
   width: 100,
   height: 32,
   className: "w-[88px] sm:w-[100px] h-auto",
 } as const;
+
+const HEADER_STYLE = SHOP_HEADER_STYLE;
 
 function SearchIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
@@ -41,8 +50,29 @@ function ScanIcon({ className = "w-5 h-5" }: { className?: string }) {
 
 function FilterIcon({ className = "w-5 h-5" }: { className?: string }) {
   return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M4 8h11"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+      />
+      <circle cx="18" cy="8" r="2" fill="currentColor" />
+      <path
+        d="M4 16h7"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+      />
+      <circle cx="14" cy="16" r="2" fill="currentColor" />
+    </svg>
+  );
+}
+
+function NotificationBellIcon({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
     </svg>
   );
 }
@@ -63,7 +93,7 @@ function MobileSearchField({
   return (
     <div className="relative flex-1 min-w-0">
       <div className="pointer-events-none absolute inset-y-0 inset-s-0 flex items-center ps-3.5">
-        <SearchIcon className="w-[18px] h-[18px] text-gray-400" />
+        <SearchIcon className="w-[18px] h-[18px] text-[#666666]" />
       </div>
       <input
         type="search"
@@ -71,11 +101,11 @@ function MobileSearchField({
         onChange={(e) => onSearchChange(e.target.value)}
         placeholder={placeholder}
         aria-label={ariaLabel}
-        className="w-full min-h-11 ps-10 pe-11 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 bg-white border border-black/10 rounded-full focus:outline-none focus:ring-2 focus:ring-white/60 focus:border-transparent transition-all duration-200 ease-spring shadow-sm"
+        className="w-full min-h-12 ps-10 pe-11 py-3 text-sm text-[#333333] placeholder:text-[#8e8e93] bg-white border-0 rounded-full focus:outline-none focus:ring-2 focus:ring-white/60 transition-all duration-200 ease-spring shadow-sm"
       />
       <button
         type="button"
-        className="absolute inset-y-0 inset-e-0 flex items-center pe-3.5 text-gray-400 hover:text-gray-600 transition-colors"
+        className="absolute inset-y-0 inset-e-0 flex items-center pe-3.5 text-[#666666] hover:text-[#333333] transition-colors"
         aria-label={scanAriaLabel}
       >
         <ScanIcon />
@@ -146,30 +176,36 @@ export default function MainNavbar({
   const mobileFilterButton = onMobileFilterOpen ? (
     <button
       onClick={onMobileFilterOpen}
-      className="md:hidden flex items-center justify-center w-11 h-11 shrink-0 bg-white rounded-xl border border-black/5 shadow-sm hover:bg-gray-50 transition-colors duration-200 ease-spring"
+      className="md:hidden flex items-center justify-center w-11 h-11 shrink-0 bg-white rounded-2xl border-0 shadow-sm hover:bg-gray-50 transition-colors duration-200 ease-spring"
       aria-label="Open filters"
     >
-      <FilterIcon className="w-5 h-5 text-gray-500" />
+      <FilterIcon className="w-5 h-5 text-[#666666]" />
     </button>
   ) : null;
 
   return (
-    <nav className="sticky top-0 z-50 bg-linear-to-br from-primary-900 via-primary-600 to-primary-500 md:bg-primary-500/85 md:backdrop-blur-2xl backdrop-saturate-150 border-b border-white/10 shadow-soft">
-      <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8">
+    <nav
+      className="sticky top-0 z-50 relative rounded-b-[28px] md:rounded-none"
+      style={HEADER_STYLE}
+    >
+      <div className="relative w-full max-w-[1600px] mx-auto px-4 md:px-8">
         {/* Mobile layout */}
-        <div className="flex flex-col gap-2.5 py-2.5 md:hidden">
-          <div className="relative flex items-center justify-between gap-3 min-h-10">
-            <div className="flex items-center shrink-0 z-10">{accountLink}</div>
-            <div className="absolute inset-x-0 flex justify-center pointer-events-none">
-              <div className="pointer-events-auto">
-                <Logo {...LOGO_PROPS} href="/" />
-              </div>
+        <div className="flex flex-col gap-6 pt-6 pb-7 md:hidden">
+          <div className="relative flex items-center justify-center min-h-[44px]">
+            <div className="flex flex-col items-center justify-center">
+              <Logo {...MOBILE_LOGO_PROPS} href="/" />
             </div>
-            <div className="flex items-center shrink-0 z-10">
-              <LanguageSwitcher variant="compact" />
+            <div className="absolute inset-e-0 flex items-center shrink-0">
+              <button
+                type="button"
+                className="inline-flex items-center justify-center w-9 h-9 text-white hover:text-white/90 transition-colors"
+                aria-label="Notifications"
+              >
+                <NotificationBellIcon className="w-5 h-5" />
+              </button>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <MobileSearchField
               searchQuery={searchQuery}
               onSearchChange={handleSearchChange}
@@ -184,7 +220,7 @@ export default function MainNavbar({
         {/* Desktop layout */}
         <div className="hidden md:grid md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-center md:gap-6 lg:gap-8 h-16">
           <div className="shrink-0">
-            <Logo {...LOGO_PROPS} href="/" />
+            <Logo {...DESKTOP_LOGO_PROPS} href="/" />
           </div>
 
           <div className="flex justify-center min-w-0 px-2 lg:px-6">

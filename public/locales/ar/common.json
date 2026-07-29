@@ -17,7 +17,30 @@
     "categoriesSection": "الفئات",
     "seeAll": "عرض الكل",
     "seeMore": "عرض المزيد",
-    "popularDeals": "العروض الشائعة"
+    "suppliersPageTitle": "الموردون",
+    "categoriesPageTitle": "الفئات",
+    "suppliersEmpty": "لا يوجد موردون متاحون.",
+    "categoriesEmpty": "لا توجد فئات متاحة.",
+    "popularDeals": "العروض الشائعة",
+    "allDeals": "جميع العروض",
+    "popularDealsSubtitle": "عرض {{shown}} من {{total}} عرض"
+  },
+  "filters": {
+    "title": "تصفية",
+    "all": "الكل",
+    "type": "النوع",
+    "coldDeals": "عروض باردة",
+    "originalDeals": "عروض أصلية",
+    "vouchers": "كوبونات",
+    "categories": "الفئات",
+    "locations": "المواقع",
+    "chooseCategories": "اختر الفئات",
+    "chooseCity": "اختر المدينة",
+    "from": "من",
+    "to": "إلى",
+    "clearAll": "مسح الكل",
+    "apply": "تطبيق",
+    "back": "رجوع"
   },
   "about": {
     "mainTitleLine1": "استمتع بقوة",

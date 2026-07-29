@@ -34,6 +34,19 @@ export interface DealDetailsApiDeal {
   cities?: unknown[];
   /** Optional about/description content */
   about?: { content_en?: string; content_ar?: string };
+  /** Short deal-specific specs shown in the deal tab accordion. */
+  specialSpecification?: string;
+  product?: {
+    name_en?: string;
+    name_ar?: string;
+    description_en?: string;
+    description_ar?: string;
+    factory_en?: string;
+    factory_ar?: string;
+    country_en?: string;
+    country_ar?: string;
+    pic?: string[];
+  };
   [key: string]: unknown;
 }
 

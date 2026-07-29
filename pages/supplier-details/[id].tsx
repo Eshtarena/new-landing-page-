@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -8,10 +8,38 @@ import { serverSideTranslations } from "next-i18next/pages/serverSideTranslation
 import MainNavbar from "../../components/ecommerce/MainNavbar";
 import SiteFooter from "../../components/SiteFooter";
 import SupplierTabsSection from "../../components/suppliers/SupplierTabsSection";
+import SupplierMobileTabs from "../../components/suppliers/SupplierMobileTabs";
 import { useSupplierDetail } from "../../hooks/useSupplierDetail";
 import { COLORS } from "../../utils/colors";
+import { SHOP_HEADER_STYLE } from "../../utils/shopHeaderStyle";
 
 const DEFAULT_COUNTRY = "egy";
+
+const MOBILE_TABS = [
+  { id: "about", labelKey: "about" },
+  { id: "branches", labelKey: "branches" },
+  { id: "productDeals", labelKey: "originalDeals" },
+  { id: "coldDeals", labelKey: "coldDealsShort" },
+  { id: "vouchers", labelKey: "vouchers" },
+] as const;
+
+function resolveMobileTabLabel(
+  labelKey: (typeof MOBILE_TABS)[number]["labelKey"],
+  tx: (key: string, en: string, ar: string) => string
+) {
+  switch (labelKey) {
+    case "about":
+      return tx("supplierDetails.tabs.about", "About", "نبذة");
+    case "branches":
+      return tx("supplierDetails.tabs.branches", "Branches", "الفروع");
+    case "originalDeals":
+      return tx("supplierDetails.tabs.originalDeals", "Original deals", "العروض الأصلية");
+    case "coldDealsShort":
+      return tx("supplierDetails.tabs.coldDealsShort", "Cold deals", "العروض الباردة");
+    case "vouchers":
+      return tx("supplierDetails.tabs.vouchers", "Vouchers", "الكوبونات");
+  }
+}
 
 export default function SupplierDetailsPage() {
   const router = useRouter();
@@ -22,6 +50,7 @@ export default function SupplierDetailsPage() {
   const tx = (key: string, en: string, ar: string) => t(key, { defaultValue: isRTL ? ar : en });
 
   const supplierId = typeof id === "string" ? id : null;
+  const [activeTab, setActiveTab] = useState("about");
   const {
     supplier,
     originalDeals,
@@ -93,6 +122,10 @@ export default function SupplierDetailsPage() {
   }
 
   const supplierName = isRTL ? supplier.name_ar : supplier.name_en;
+  const mobileTabs = MOBILE_TABS.map((tab) => ({
+    id: tab.id,
+    label: resolveMobileTabLabel(tab.labelKey, tx),
+  }));
 
   return (
     <div className="min-h-screen" dir={isRTL ? "rtl" : "ltr"} style={{ backgroundColor: COLORS.mainBackground }}>
@@ -105,36 +138,54 @@ export default function SupplierDetailsPage() {
       </div>
 
       {/* Mobile layout */}
-      <div className="md:hidden">
-        <div className="sticky top-0 z-50 bg-primary-500/95 backdrop-blur-2xl backdrop-saturate-150 border-b border-white/10 shadow-soft">
-          <div className="flex items-center px-4 py-3">
-            <button
-              type="button"
-              onClick={() => router.back()}
-              className="flex items-center justify-center w-11 h-11 me-3 text-white hover:bg-white/10 rounded-full transition-colors duration-200 ease-spring"
-              aria-label={tx("supplierDetails.back", "Go Back", "رجوع")}
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={backIconPath} />
-              </svg>
-            </button>
-            <h1 className="text-white text-lg font-semibold truncate">
-              {tx("supplierDetails.pageTitle", "Supplier Profile", "ملف المورد")}
-            </h1>
+      <div className="md:hidden min-h-screen pb-8" style={{ backgroundColor: COLORS.mainBackground }}>
+        <header
+          className="sticky top-0 z-50 relative rounded-b-[28px]"
+          style={SHOP_HEADER_STYLE}
+        >
+          <div className="relative px-4 pt-6 pb-2">
+            <div className="flex items-center gap-3 min-h-11">
+              <button
+                type="button"
+                onClick={() => router.back()}
+                className="flex items-center justify-center w-10 h-10 shrink-0 text-white hover:bg-white/10 rounded-full transition-colors duration-200 ease-spring"
+                aria-label={tx("supplierDetails.back", "Go Back", "رجوع")}
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={backIconPath} />
+                </svg>
+              </button>
+              <h1 className="text-white text-lg font-semibold truncate">
+                {tx("supplierDetails.pageTitle", "Supplier Profile", "ملف المورد")}
+              </h1>
+            </div>
+
+            <SupplierMobileTabs
+              tabs={mobileTabs}
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              ariaLabel={tx("supplierDetails.pageTitle", "Supplier Profile", "ملف المورد")}
+              className="mt-1"
+            />
           </div>
-        </div>
+        </header>
 
-        <div className="bg-white px-4 pt-5 pb-4">
-          <SupplierHeader supplier={supplier} supplierName={supplierName} tx={tx} variant="mobile" />
-        </div>
+        <div className="px-4 pt-4 space-y-3">
+          {activeTab === "about" ? (
+            <MobileSupplierProfileCard supplier={supplier} supplierName={supplierName} tx={tx} />
+          ) : null}
 
-        <SupplierTabsSection
-          supplier={supplier}
-          originalDeals={originalDeals}
-          coldDeals={coldDeals}
-          voucherDeals={voucherDeals}
-          variant="mobile"
-        />
+          <SupplierTabsSection
+            supplier={supplier}
+            originalDeals={originalDeals}
+            coldDeals={coldDeals}
+            voucherDeals={voucherDeals}
+            variant="mobile"
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            hideMobileNav
+          />
+        </div>
       </div>
 
       {/* Desktop layout */}
@@ -164,6 +215,50 @@ export default function SupplierDetailsPage() {
 
       <div className="hidden md:block">
         <SiteFooter />
+      </div>
+    </div>
+  );
+}
+
+function MobileSupplierProfileCard({
+  supplier,
+  supplierName,
+  tx,
+}: {
+  supplier: NonNullable<ReturnType<typeof useSupplierDetail>["supplier"]>;
+  supplierName: string;
+  tx: (key: string, en: string, ar: string) => string;
+}) {
+  return (
+    <div className="flex items-center gap-3 rounded-2xl bg-white p-4 shadow-[0_2px_16px_rgba(0,0,0,0.04)]">
+      <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl border border-gray-100 bg-white">
+        {supplier.logoUrl ? (
+          <Image
+            src={supplier.logoUrl}
+            alt={supplierName}
+            fill
+            sizes="56px"
+            className="object-contain p-1"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-primary-50 text-primary-500 font-bold text-sm">
+            {supplierName.slice(0, 2).toUpperCase()}
+          </div>
+        )}
+      </div>
+
+      <div className="min-w-0 flex-1">
+        <h2 className="text-base font-bold text-primary-500 truncate">{supplierName}</h2>
+        {supplier.founded ? (
+          <p className="mt-1 flex items-center gap-1.5 text-xs font-normal text-[#808080]">
+            <svg className="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span>
+              {tx("supplierDetails.founded", "Founded", "تأسست عام")}: {supplier.founded}
+            </span>
+          </p>
+        ) : null}
       </div>
     </div>
   );

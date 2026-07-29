@@ -92,10 +92,14 @@ export default function StorePage() {
             initialCategoryId={categoryId}
             onRegisterMobileFilter={handleRegisterMobileFilter}
             search={searchQuery}
+            showMobileBottomNav={false}
+            showAdviceSection
           />
         </main>
 
-        <SiteFooter />
+        <div className="hidden md:block">
+          <SiteFooter />
+        </div>
       </div>
     </>
   );

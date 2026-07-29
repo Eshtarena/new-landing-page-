@@ -10,7 +10,8 @@ interface ImageCarouselProps {
   autoScrollInterval?: number;
   showDots?: boolean;
   showArrows?: boolean;
-  aspectRatio?: 'square' | 'video' | 'wide';
+  showCounter?: boolean;
+  aspectRatio?: 'square' | 'video' | 'wide' | 'card' | 'dealMobile';
   currentIndex?: number;
   onIndexChange?: (index: number) => void;
   overlayControls?: boolean;
@@ -26,6 +27,7 @@ export default function ImageCarousel({
   autoScrollInterval = 3000,
   showDots = true,
   showArrows = false,
+  showCounter = true,
   aspectRatio = 'video',
   currentIndex: controlledIndex,
   onIndexChange,
@@ -48,7 +50,9 @@ export default function ImageCarousel({
   const aspectRatioClasses = {
     square: 'aspect-square',
     video: 'aspect-video',
-    wide: 'aspect-[21/9]'
+    wide: 'aspect-[21/9]',
+    card: 'aspect-[4/3]',
+    dealMobile: 'aspect-[4/3]',
   };
 
   useEffect(() => {
@@ -102,13 +106,20 @@ export default function ImageCarousel({
   const roundedClass = overlayControls ? 'rounded-none' : 'rounded-lg';
   const containerClasses = hasFixedHeight
     ? `relative w-full h-full ${roundedClass} overflow-hidden bg-gray-100`
-    : `relative ${aspectRatioClasses[aspectRatio]} ${roundedClass} overflow-hidden bg-gray-100`;
+    : `relative w-full ${aspectRatioClasses[aspectRatio]} ${roundedClass} overflow-hidden bg-gray-100`;
 
-  const overlayButtonClass =
-    'flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 text-gray-800 shadow-sm backdrop-blur-sm transition-colors hover:bg-white';
+  const overlayButtonClass = overlayControls
+    ? "flex h-10 w-10 items-center justify-center rounded-xl bg-black/30 text-white backdrop-blur-sm transition-colors hover:bg-black/40"
+    : "flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 text-gray-800 shadow-sm backdrop-blur-sm transition-colors hover:bg-white";
+
+  const heroBackButtonClass =
+    "flex h-10 w-10 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm transition-colors hover:bg-black/40";
+
+  const heroCounterClass =
+    "absolute bottom-12 start-3 z-10 rounded-full bg-black/30 px-2.5 py-1 text-xs font-medium text-white backdrop-blur-sm";
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative w-full ${className}`}>
       <div className={`${containerClasses} touch-pan-y select-none`} {...swipeHandlers}>
         <Image
           src={images[currentIndex].src}
@@ -128,7 +139,7 @@ export default function ImageCarousel({
                   e.stopPropagation();
                   onBack();
                 }}
-                className={`absolute start-3 top-3 z-10 ${overlayButtonClass}`}
+                className={`absolute start-3 top-3 z-10 ${heroBackButtonClass}`}
                 aria-label="Go back"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -137,7 +148,7 @@ export default function ImageCarousel({
               </button>
             ) : null}
 
-            <div className="absolute bottom-3 start-3 z-10 rounded-full bg-white/80 px-2.5 py-1 text-xs font-semibold text-gray-800 shadow-sm backdrop-blur-sm">
+            <div className={heroCounterClass}>
               {currentIndex + 1}/{images.length}
             </div>
 
@@ -148,7 +159,7 @@ export default function ImageCarousel({
                   e.stopPropagation();
                   onExpand();
                 }}
-                className={`absolute bottom-3 end-3 z-10 ${overlayButtonClass}`}
+                className={`absolute bottom-12 end-3 z-10 ${overlayButtonClass}`}
                 aria-label="Expand image"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -220,7 +231,7 @@ export default function ImageCarousel({
       )}
 
       {/* Image Counter */}
-      {images.length > 1 && !overlayControls && (
+      {images.length > 1 && !overlayControls && showCounter && (
         <div className="absolute top-3 end-3 rounded-full bg-black/55 px-2.5 py-1 text-xs font-medium text-white backdrop-blur-sm">
           {currentIndex + 1} / {images.length}
         </div>

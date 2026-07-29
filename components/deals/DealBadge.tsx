@@ -19,7 +19,7 @@ function VoucherIcon() {
 function ShoppingBagIcon() {
   return (
     <svg className="w-3 h-3 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M7 4V2C7 1.45 7.45 1 8 1h8c.55 0 1 .45 1 1v2h4c.55 0 1 .45 1 1s-.45 1-1 1h-1v13c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V6H3c-.55 0-1-.45-1-1s.45-1 1-1h4zm2 0h6V2.5H9V4zM6 6v13h12V6H6z" />
+      <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58s1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z" />
     </svg>
   );
 }
@@ -41,9 +41,9 @@ export default function DealBadge({
   const theme = DEAL_THEMES[dealType];
 
   const sizeClasses = {
-    sm: "px-2.5 py-1 text-[10px] gap-1",
-    md: "px-3 py-1 text-xs gap-1.5",
-    lg: "px-4 py-1.5 text-sm gap-2",
+    sm: "px-2.5 py-[5px] text-[10px] gap-1.5 font-semibold",
+    md: "px-3 py-1 text-xs gap-1.5 font-semibold",
+    lg: "px-4 py-1.5 text-sm gap-2 font-semibold",
   };
 
   const getBadgeText = (type: DealType): string => {
@@ -64,7 +64,7 @@ export default function DealBadge({
   return (
     <div
       className={`
-        inline-flex items-center font-semibold rounded-full
+        inline-flex items-center rounded-full
         ${sizeClasses[size]}
         ${isActive ? "" : "opacity-50"}
         ${className}

@@ -65,6 +65,7 @@ export default function CountryHomePage({ countryCode }: Props) {
             onRegisterMobileFilter={handleRegisterMobileFilter}
             search={searchQuery}
             showMobileBottomNav={false}
+            showAdviceSection
           />
         </main>
         <SiteFooter />

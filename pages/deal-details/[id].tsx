@@ -183,36 +183,38 @@ export default function DealDetailsPage() {
       </div>
 
       {/* Mobile layout — matches native app UI */}
-      <div className="md:hidden">
+      <div className="md:hidden pb-24">
         <DealGallery images={deal.images} variant="hero" />
 
-        <div className="bg-white px-4 pt-4 pb-3">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0 flex-1">
-              <h1 className="text-lg font-bold text-primary-500 leading-tight">{deal.title}</h1>
-              {deal.productName ? (
-                <p className="mt-1 text-sm text-gray-500">{deal.productName}</p>
-              ) : null}
-              <div className="mt-3">
-                <DealBadge dealType={deal.dealType} size="sm" isActive={deal.isActive} />
+        <div className="relative z-10 -mt-8 rounded-t-[28px] bg-white overflow-hidden">
+          <div className="px-4 pt-5 pb-4">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0 flex-1">
+                <h1 className="text-lg font-bold text-primary-500 leading-tight">{deal.title}</h1>
+                {deal.productName ? (
+                  <p className="mt-1 text-sm font-normal text-[#808080]">{deal.productName}</p>
+                ) : null}
+                <div className="mt-3">
+                  <DealBadge dealType={deal.dealType} size="sm" isActive={deal.isActive} />
+                </div>
               </div>
+              <CountdownTimer
+                timer={deal.timer}
+                textColor="text-[#2B64E3]"
+                className="shrink-0"
+                locale={locale}
+                labels={{
+                  days: tx("dealDetails.timer.day", "Day", "يوم"),
+                  hours: tx("dealDetails.timer.hours", "Hrs", "ساعة"),
+                  minutes: tx("dealDetails.timer.minutes", "Mins", "دقيقة"),
+                  seconds: tx("dealDetails.timer.seconds", "Secs", "ثانية"),
+                }}
+              />
             </div>
-            <CountdownTimer
-              timer={deal.timer}
-              textColor="text-blue-600"
-              className="shrink-0"
-              locale={locale}
-              labels={{
-                days: tx("dealDetails.timer.day", "Day", "يوم"),
-                hours: tx("dealDetails.timer.hours", "Hrs", "ساعة"),
-                minutes: tx("dealDetails.timer.minutes", "Mins", "دقيقة"),
-                seconds: tx("dealDetails.timer.seconds", "Secs", "ثانية"),
-              }}
-            />
           </div>
-        </div>
 
-        <DealTabsSection deal={deal} variant="mobile" />
+          <DealTabsSection deal={deal} variant="mobile" />
+        </div>
       </div>
 
       {/* Desktop layout */}
@@ -239,8 +241,8 @@ export default function DealDetailsPage() {
       </main>
 
       {/* Mobile sticky action bar */}
-      <div className="md:hidden fixed bottom-0 inset-x-0 z-[60] bg-white border-t border-gray-200 px-4 py-3 shadow-[0_-4px_24px_rgba(0,0,0,0.08)]">
-        <div className="flex items-center gap-3">
+      <div className="md:hidden fixed bottom-0 inset-x-0 z-[60] px-4 pb-4 pt-2">
+        <div className="flex items-center gap-3 rounded-[28px] bg-white px-4 py-3 shadow-[0_-4px_24px_rgba(0,0,0,0.08)]">
           <button
             type="button"
             onClick={handleShareDeal}

@@ -3,6 +3,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next/pages";
 import DealCard from "../deals/DealCard";
+import SupplierMobileAbout from "./SupplierMobileAbout";
+import SupplierMobileTabs from "./SupplierMobileTabs";
+import SupplierMobileBranchCard from "./SupplierMobileBranchCard";
 import type { Deal } from "../../types/deals";
 import type { Supplier, SupplierBranch, SupplierCityCoverage } from "../../types/supplier";
 import { handleDealClick } from "../../utils/navigation";
@@ -13,6 +16,9 @@ interface SupplierTabsSectionProps {
   coldDeals: Deal[];
   voucherDeals: Deal[];
   variant?: "default" | "mobile";
+  activeTab?: string;
+  onTabChange?: (tabId: string) => void;
+  hideMobileNav?: boolean;
 }
 
 interface TabConfig {
@@ -28,6 +34,9 @@ export default function SupplierTabsSection({
   coldDeals,
   voucherDeals,
   variant = "default",
+  activeTab: controlledTab,
+  onTabChange,
+  hideMobileNav = false,
 }: SupplierTabsSectionProps) {
   const { t, i18n } = useTranslation("common");
   const router = useRouter();
@@ -35,7 +44,15 @@ export default function SupplierTabsSection({
   const resolvedLang = queryLang || i18n.language || router.locale || "en";
   const isRTL = resolvedLang === "ar";
   const tx = (key: string, en: string, ar: string) => t(key, { defaultValue: isRTL ? ar : en });
-  const [activeTab, setActiveTab] = useState("about");
+  const [internalTab, setInternalTab] = useState("about");
+  const activeTab = controlledTab ?? internalTab;
+
+  const setActiveTab = (tabId: string) => {
+    onTabChange?.(tabId);
+    if (controlledTab === undefined) {
+      setInternalTab(tabId);
+    }
+  };
 
   const desktopTabs: TabConfig[] = [
     { id: "about", label: tx("supplierDetails.tabs.about", "About", "نبذة") },
@@ -48,15 +65,31 @@ export default function SupplierTabsSection({
     { id: "vouchers", label: tx("supplierDetails.tabs.vouchers", "Vouchers", "الكوبونات") },
   ];
 
-  const mobileTabs = desktopTabs;
+  const mobileTabs: TabConfig[] = [
+    { id: "about", label: tx("supplierDetails.tabs.about", "About", "نبذة") },
+    { id: "branches", label: tx("supplierDetails.tabs.branches", "Branches", "الفروع") },
+    {
+      id: "productDeals",
+      label: tx("supplierDetails.tabs.originalDeals", "Original deals", "العروض الأصلية"),
+    },
+    { id: "coldDeals", label: tx("supplierDetails.tabs.coldDealsShort", "Cold deals", "العروض الباردة") },
+    { id: "vouchers", label: tx("supplierDetails.tabs.vouchers", "Vouchers", "الكوبونات") },
+  ];
+
   const tabs = variant === "mobile" ? mobileTabs : desktopTabs;
 
-  const renderTabContent = () => {
+  const renderTabContent = (mobileLayout = false) => {
     switch (activeTab) {
       case "about":
-        return <AboutTab supplier={supplier} tx={tx} isRTL={isRTL} />;
+        return mobileLayout ? (
+          <SupplierMobileAbout supplier={supplier} tx={tx} isRTL={isRTL} />
+        ) : (
+          <AboutTab supplier={supplier} tx={tx} isRTL={isRTL} />
+        );
       case "branches":
-        return <BranchesTab branches={supplier.branches || []} tx={tx} isRTL={isRTL} />;
+        return (
+          <BranchesTab branches={supplier.branches || []} tx={tx} isRTL={isRTL} mobileLayout={mobileLayout} />
+        );
       case "productDeals":
         return (
           <DealsTab
@@ -94,40 +127,27 @@ export default function SupplierTabsSection({
           />
         );
       default:
-        return <AboutTab supplier={supplier} tx={tx} isRTL={isRTL} />;
+        return mobileLayout ? (
+          <SupplierMobileAbout supplier={supplier} tx={tx} isRTL={isRTL} />
+        ) : (
+          <AboutTab supplier={supplier} tx={tx} isRTL={isRTL} />
+        );
     }
   };
 
   if (variant === "mobile") {
     return (
       <div>
-        <nav
-          className="flex overflow-x-auto border-b border-gray-200 bg-[#F0F0F5]"
-          role="tablist"
-          aria-label={tx("supplierDetails.pageTitle", "Supplier Profile", "ملف المورد")}
-        >
-          {tabs.map((tab) => {
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                onClick={() => setActiveTab(tab.id)}
-                className={`shrink-0 px-4 py-3.5 text-sm font-medium transition-colors min-h-11 whitespace-nowrap ${
-                  isActive
-                    ? "text-primary-500 border-b-2 border-primary-500"
-                    : "text-gray-400 border-b-2 border-transparent"
-                }`}
-              >
-                {tab.label}
-              </button>
-            );
-          })}
-        </nav>
+        {!hideMobileNav ? (
+          <SupplierMobileTabs
+            tabs={tabs}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            ariaLabel={tx("supplierDetails.pageTitle", "Supplier Profile", "ملف المورد")}
+          />
+        ) : null}
 
-        <div className="px-4 py-5 pb-10">{renderTabContent()}</div>
+        <div className="pb-10">{renderTabContent(true)}</div>
       </div>
     );
   }
@@ -331,14 +351,16 @@ function BranchesTab({
   branches,
   tx,
   isRTL,
+  mobileLayout = false,
 }: {
   branches: SupplierBranch[];
   tx: TxFn;
   isRTL: boolean;
+  mobileLayout?: boolean;
 }) {
   if (branches.length === 0) {
     return (
-      <p className="text-gray-500">
+      <p className={`text-sm ${mobileLayout ? "text-[#808080]" : "text-gray-500"}`}>
         {tx(
           "supplierDetails.noBranches",
           "No branches are listed for this supplier yet.",
@@ -349,10 +371,14 @@ function BranchesTab({
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {branches.map((branch) => (
-        <BranchCard key={branch.id} branch={branch} tx={tx} isRTL={isRTL} />
-      ))}
+    <div className={`grid grid-cols-1 ${mobileLayout ? "gap-3" : "md:grid-cols-2 gap-4"}`}>
+      {branches.map((branch) =>
+        mobileLayout ? (
+          <SupplierMobileBranchCard key={branch.id} branch={branch} tx={tx} isRTL={isRTL} />
+        ) : (
+          <BranchCard key={branch.id} branch={branch} tx={tx} isRTL={isRTL} />
+        )
+      )}
     </div>
   );
 }

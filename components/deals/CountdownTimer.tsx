@@ -112,30 +112,34 @@ export default function CountdownTimer({
 
   return (
     <div className={`flex flex-col items-end shrink-0 ${className}`}>
-      <div className="flex items-center">
+      <div className="flex items-center justify-end">
         {segments.map(({ value }, index) => (
           <React.Fragment key={index}>
-            <span className={`text-base font-bold tabular-nums ${textColor}`}>
+            <span
+              className={`inline-flex items-center justify-center min-w-[26px] text-[15px] font-bold tabular-nums leading-none ${textColor}`}
+            >
               {formatNumber(value)}
             </span>
             {index < segments.length - 1 && (
-              <span className={`text-base font-bold mx-0.5 ${textColor}`}>:</span>
+              <span className={`px-1 text-[15px] font-bold leading-none ${textColor}`}>:</span>
             )}
           </React.Fragment>
         ))}
       </div>
-      <div className="flex items-center mt-0.5">
+      <div className="flex items-center justify-end mt-1">
         {segments.map(({ label }, index) => (
           <React.Fragment key={index}>
-            <span className="text-[9px] text-gray-400 w-[26px] text-center">{label}</span>
+            <span className="inline-flex items-center justify-center min-w-[26px] text-[9px] leading-none text-[#808080] text-center font-normal">
+              {label}
+            </span>
             {index < segments.length - 1 && (
-              <span className="text-[9px] text-transparent mx-0.5 w-[4px]">:</span>
+              <span className="px-1 text-[9px] leading-none text-transparent select-none">:</span>
             )}
           </React.Fragment>
         ))}
       </div>
       {showEndTime && (
-        <span className="text-[10px] text-gray-500 mt-1 whitespace-nowrap">
+        <span className="text-[10px] font-normal text-gray-500 mt-1.5 whitespace-nowrap">
           {endTimePrefix} {formattedEndTime}
         </span>
       )}

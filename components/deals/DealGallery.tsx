@@ -43,7 +43,7 @@ export default function DealGallery({
             autoScroll={false}
             showDots={false}
             showArrows={false}
-            aspectRatio="square"
+            aspectRatio="card"
             currentIndex={activeIndex}
             onIndexChange={setActiveIndex}
             overlayControls

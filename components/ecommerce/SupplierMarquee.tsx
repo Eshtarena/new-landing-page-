@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { useSuppliers } from '../../hooks/useSuppliers';
+import ScrollingLabel from './ScrollingLabel';
 
 export default function SupplierMarquee() {
   const { t, i18n } = useTranslation('common');
@@ -10,7 +11,7 @@ export default function SupplierMarquee() {
   const { suppliers, isLoading, error } = useSuppliers();
 
   if (isLoading) {
-    return <div className="py-4 sm:py-6 md:py-8 h-24 animate-pulse bg-gray-100" />;
+    return <div className="py-2 md:py-2 h-24 animate-pulse bg-gray-100" />;
   }
 
   if (error || suppliers.length === 0) {
@@ -18,20 +19,45 @@ export default function SupplierMarquee() {
   }
 
   return (
-    <section className="py-4 sm:py-6 md:py-8 overflow-hidden w-full group">
-      <div className="md:hidden flex items-center justify-between mb-3">
+    <section className="pt-2 pb-0 md:pt-1 md:pb-2 lg:pt-2 lg:pb-2 overflow-hidden w-full group">
+      <div className="md:hidden flex items-baseline justify-between mb-2 gap-3">
         <h2 className="text-lg font-bold tracking-tight text-primary-500">
           {t('store.supplierSection')}
         </h2>
         <Link
-          href="/store"
-          className="text-sm font-semibold text-primary-500 hover:text-primary-500/80 transition-colors"
+          href="/suppliers"
+          className="text-sm font-normal text-primary-500 hover:text-primary-500/80 transition-colors shrink-0"
         >
           {t('store.seeAll')}
         </Link>
       </div>
 
-      <div className="relative overflow-hidden text-left" dir="ltr">
+      <div className="md:hidden overflow-x-auto -mx-4 px-4">
+        <div className="flex gap-x-5 w-max">
+          {suppliers.map((supplier) => (
+            <Link
+              key={supplier.id}
+              href={supplier.link}
+              className="flex flex-col items-center gap-y-1.5 shrink-0 w-[72px]"
+            >
+              <div className="relative w-[72px] h-[72px] rounded-2xl overflow-hidden bg-white">
+                <Image
+                  src={supplier.logoUrl}
+                  alt={isRTL ? supplier.name_ar : supplier.name_en}
+                  fill
+                  style={{ objectFit: 'contain' }}
+                />
+              </div>
+              <ScrollingLabel
+                text={isRTL ? supplier.name_ar : supplier.name_en}
+                className="text-xs font-normal leading-tight text-primary-500"
+              />
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <div className="hidden md:block relative overflow-hidden text-left" dir="ltr">
         <div className="absolute inset-y-0 left-0 w-20 bg-linear-to-r from-white to-transparent z-10 pointer-events-none" />
         <div className="absolute inset-y-0 right-0 w-20 bg-linear-to-l from-white to-transparent z-10 pointer-events-none" />
 
@@ -42,7 +68,7 @@ export default function SupplierMarquee() {
               href={supplier.link}
               className="flex flex-col items-center gap-y-1.5 sm:gap-y-2 shrink-0 group/item w-20 sm:w-24 md:w-28"
             >
-              <div className="relative w-16 h-16 overflow-hidden ring-2 ring-black/[0.06] shadow-soft bg-white transition-all duration-200 ease-spring group-hover/item:ring-primary-500 group-hover/item:shadow-[0_4px_16px_rgba(52,0,64,0.18)] group-hover/item:scale-105">
+              <div className="relative w-16 h-16 overflow-hidden transition-all duration-200 ease-spring group-hover/item:scale-105">
                 <Image
                   src={supplier.logoUrl}
                   alt={isRTL ? supplier.name_ar : supplier.name_en}

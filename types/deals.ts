@@ -36,10 +36,14 @@ export interface VoucherPaymentTerm {
 
 export interface DealDetailContent {
   about?: string;
+  /** Deal-level special specs text from API `specialSpecification`. */
+  specialSpecification?: string;
   terms?: string;
   paymentTerms?: string;
   deliveryTerms?: string[];
   customerPaymentTerms?: DealTermItem[];
+  /** Optional purchasing expert advice when provided by the API. */
+  purchasingExpertAdvice?: string;
 }
 
 export interface BaseDeal {
@@ -63,6 +67,10 @@ export interface BaseDeal {
   /** Backend supplier id, when present — links the DealSupplierSection to a supplier profile. */
   supplierId?: string;
   productName?: string;
+  /** Product factory name from API `product.factory_en/ar`. */
+  productFactory?: string;
+  /** Product country of origin from API `product.country_en/ar`. */
+  productMadeIn?: string;
   detailContent?: DealDetailContent;
 }
 

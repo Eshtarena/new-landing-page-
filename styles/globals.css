@@ -73,6 +73,15 @@
       transform: translate3d(50%, 0, 0);
     }
   }
+
+  @keyframes marquee-text {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
 }
 
 /* 
@@ -207,10 +216,23 @@ html[dir="rtl"] .font-light {
     padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
   }
 
+  .scrolling-label-track {
+    animation: marquee-text 8s linear infinite;
+  }
+
   @media (min-width: 1024px) {
     .mobile-bottom-nav-padding {
       padding-bottom: 0;
     }
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }
 

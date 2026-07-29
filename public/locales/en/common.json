@@ -17,7 +17,30 @@
     "categoriesSection": "Categories",
     "seeAll": "See all",
     "seeMore": "See More",
-    "popularDeals": "Popular deals"
+    "suppliersPageTitle": "Suppliers",
+    "categoriesPageTitle": "Categories",
+    "suppliersEmpty": "No suppliers available.",
+    "categoriesEmpty": "No categories available.",
+    "popularDeals": "Popular deals",
+    "allDeals": "All deals",
+    "popularDealsSubtitle": "Showing {{shown}} of {{total}} deals"
+  },
+  "filters": {
+    "title": "Filter",
+    "all": "All",
+    "type": "Type",
+    "coldDeals": "Cold deals",
+    "originalDeals": "Original deals",
+    "vouchers": "Vouchers",
+    "categories": "Categories",
+    "locations": "Locations",
+    "chooseCategories": "Choose Categories",
+    "chooseCity": "Choose City",
+    "from": "From",
+    "to": "To",
+    "clearAll": "Clear All",
+    "apply": "Apply",
+    "back": "Back"
   },
   "about": {
     "mainTitleLine1": "Enjoy the power of",

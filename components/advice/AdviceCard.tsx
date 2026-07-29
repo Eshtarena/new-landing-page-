@@ -7,6 +7,7 @@ interface AdviceCardProps {
   categoryLabel: string;
   readTimeLabel: string;
   cardTitle?: string;
+  className?: string;
 }
 
 function HeartIcon() {
@@ -60,6 +61,7 @@ export default function AdviceCard({
   article,
   isArabic,
   cardTitle = "Purchasing expert advice",
+  className = "",
 }: AdviceCardProps) {
   const adviceText = isArabic ? article.excerpt_ar : article.excerpt_en;
   const author = isArabic ? article.author_ar : article.author_en;
@@ -72,7 +74,7 @@ export default function AdviceCard({
 
   return (
     <article
-      className="bg-primary-500 rounded-3xl shadow-soft-lg overflow-hidden p-5 sm:p-6 text-white transition-transform duration-300 ease-spring hover:-translate-y-0.5"
+      className={`bg-primary-500 rounded-3xl shadow-soft-lg overflow-hidden p-5 sm:p-6 text-white transition-transform duration-300 ease-spring hover:-translate-y-0.5 ${className}`}
       dir={isArabic ? "rtl" : "ltr"}
     >
       <p className="text-sm font-medium text-white/90 mb-4">{cardTitle}</p>

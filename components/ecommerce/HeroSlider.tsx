@@ -152,12 +152,12 @@ export default function HeroSlider() {
 
   if (isLoading) {
     return (
-      <div className="relative w-full aspect-banner rounded-2xl sm:rounded-3xl md:rounded-4xl overflow-hidden my-3 sm:my-4 md:my-6 shadow-soft-lg bg-gray-200 animate-pulse" />
+      <div className="relative w-full aspect-banner rounded-2xl sm:rounded-3xl md:rounded-4xl overflow-hidden my-3 sm:my-4 md:mt-3 md:mb-2 lg:mt-4 lg:mb-3 shadow-soft-lg bg-gray-200 animate-pulse" />
     );
   }
 
   return (
-    <div className="relative my-3 sm:my-4 md:my-6">
+    <div className="relative my-3 sm:my-4 md:mt-3 md:mb-2 lg:mt-4 lg:mb-3">
       <div
         className="relative w-full aspect-banner rounded-2xl sm:rounded-3xl md:rounded-4xl overflow-hidden shadow-soft-lg bg-primary-500 touch-pan-y select-none"
         {...handlers}
@@ -218,7 +218,7 @@ export default function HeroSlider() {
       {/* Slide indicators — below banner on mobile so they don't cover artwork */}
       {slides.length > 1 && (
         <div
-          className="flex justify-center gap-2 mt-3 md:mt-0 md:absolute md:inset-x-0 md:bottom-8 md:z-20"
+          className="flex justify-center gap-1 mt-2 md:mt-0 md:absolute md:inset-x-0 md:bottom-8 md:z-20"
           role="tablist"
           aria-label="Banner slides"
         >
@@ -230,10 +230,10 @@ export default function HeroSlider() {
               aria-label={`Go to slide ${index + 1}`}
               aria-current={index === activeIndex ? 'true' : undefined}
               role="tab"
-              className={`h-1.5 rounded-full transition-all duration-300 ease-out cursor-pointer min-w-3 min-h-3 ${
+              className={`w-2 h-2 rounded-full transition-colors duration-300 ease-out cursor-pointer ${
                 index === activeIndex
-                  ? 'w-6 bg-primary-500 md:bg-white'
-                  : 'w-1.5 bg-primary-500/25 hover:bg-primary-500/40 md:bg-white/50 md:hover:bg-white/70'
+                  ? 'bg-primary-500 md:bg-white'
+                  : 'bg-primary-500/25 hover:bg-primary-500/40 md:bg-white/50 md:hover:bg-white/70'
               }`}
             />
           ))}

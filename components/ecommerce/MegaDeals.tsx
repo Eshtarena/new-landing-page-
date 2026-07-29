@@ -5,6 +5,7 @@ import DealCard from "../deals/DealCard";
 import { Deal } from "../../types/deals";
 import { handleDealClick } from "../../utils/navigation";
 import FilterComponent, { FilterState } from "./FilterComponent";
+import ShopAdviceSection from "./ShopAdviceSection";
 import MobileBottomNav from "./MobileBottomNav";
 import { useHomeDeals } from "../../hooks/useHomeDeals";
 import { useCategories } from "../../hooks/useCategories";
@@ -17,6 +18,8 @@ interface MegaDealsProps {
   search?: string;
   /** Set to false to hide the fixed mobile bottom nav (e.g. on the dedicated shop page, where the top navbar is the sole navigation). */
   showMobileBottomNav?: boolean;
+  /** When true, renders advice cards below the deals grid (shop / home). */
+  showAdviceSection?: boolean;
 }
 
 const INITIAL_FILTERS: FilterState = {
@@ -33,6 +36,7 @@ export default function MegaDeals({
   initialCategoryId,
   search,
   showMobileBottomNav = true,
+  showAdviceSection = false,
 }: MegaDealsProps) {
   const { t, i18n } = useTranslation("common");
   const isRTL = i18n.language === "ar";
@@ -99,31 +103,39 @@ export default function MegaDeals({
 
   const defaultTitle = t("navbar.deals");
   const mobileDefaultTitle = t("store.popularDeals", { defaultValue: defaultTitle });
+  const desktopDefaultTitle = t("store.allDeals", { defaultValue: "All deals" });
+  const popularDealsSubtitle = t("store.popularDealsSubtitle", {
+    shown: filteredCount,
+    total: totalDeals,
+  });
   const sectionTitle = trimmedSearch
     ? t("store.searchResults", { query: trimmedSearch })
     : categoryParam && categoryTitle
       ? categoryTitle
-      : defaultTitle;
-  const mobileSectionTitle = trimmedSearch
+      : mobileDefaultTitle;
+  const desktopSectionTitle = trimmedSearch
     ? t("store.searchResults", { query: trimmedSearch })
     : categoryParam && categoryTitle
       ? categoryTitle
-      : mobileDefaultTitle;
+      : desktopDefaultTitle;
+  const mobileSectionTitle = sectionTitle;
+  const showPopularDealsSubtitle =
+    !trimmedSearch && !categoryParam;
   const filterKey = categoryParam || "all";
 
   return (
     <div
       ref={dealsSectionRef}
       id="deals"
-      className={`bg-white min-h-0 lg:min-h-screen lg:py-8 scroll-mt-24 ${
-        showMobileBottomNav ? "mobile-bottom-nav-padding" : "pb-10 lg:pb-0"
+      className={`bg-white min-h-0 scroll-mt-24 lg:pt-3 lg:pb-8 ${
+        showMobileBottomNav ? "mobile-bottom-nav-padding" : "pb-10 lg:pb-8"
       }`}
       dir={isRTL ? "rtl" : "ltr"}
     >
-      <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8 pt-3 sm:pt-4 lg:pt-0">
-        <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
+      <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8 pt-2 sm:pt-4 lg:pt-0">
+        <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[20rem_minmax(0,1fr)] lg:gap-x-6 lg:gap-y-6 lg:items-start">
           {/* Filter Sidebar — desktop */}
-          <div className="hidden lg:block w-80 shrink-0">
+          <div className="hidden lg:block w-80 shrink-0 lg:col-start-1 lg:row-start-1">
             <FilterComponent
               key={filterKey}
               onFilterChange={setFilters}
@@ -133,29 +145,30 @@ export default function MegaDeals({
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 lg:col-start-2 lg:row-start-1">
             {/* Mobile header */}
-            <div className="lg:hidden mb-4">
+            <div className="lg:hidden mb-3">
               <h2 className="text-lg sm:text-xl font-bold tracking-tight text-primary-500 truncate">
                 {mobileSectionTitle}
               </h2>
-              <p className="text-xs sm:text-sm text-gray-600">
-                {isRTL
-                  ? `عرض ${filteredCount} من ${totalDeals} عرض`
-                  : `Showing ${filteredCount} of ${totalDeals} deals`}
-              </p>
             </div>
 
             {/* Desktop header */}
-            <div className="hidden lg:block mb-6">
+            <div className="hidden lg:block mb-4">
               <h2 className="text-2xl font-bold tracking-tight text-primary-500">
-                {sectionTitle}
+                {desktopSectionTitle}
               </h2>
-              <p className="mt-1 text-sm text-gray-600">
-                {isRTL
-                  ? `عرض ${filteredCount} من ${totalDeals} عرض`
-                  : `Showing ${filteredCount} of ${totalDeals} deals`}
-              </p>
+              {showPopularDealsSubtitle ? (
+                <p className="mt-1.5 text-sm font-normal text-gray-600">
+                  {popularDealsSubtitle}
+                </p>
+              ) : (
+                <p className="mt-1.5 text-sm font-normal text-gray-600">
+                  {isRTL
+                    ? `عرض ${filteredCount} من ${totalDeals} عرض`
+                    : `Showing ${filteredCount} of ${totalDeals} deals`}
+                </p>
+              )}
             </div>
 
             {isLoading ? (
@@ -217,7 +230,7 @@ export default function MegaDeals({
             )}
 
             {!isLoading && !error && filteredDeals.length > 0 && (
-              <div className="hidden lg:block mt-8 text-center">
+              <div className="hidden lg:block mt-4 text-center">
                 <button className="inline-flex items-center justify-center min-h-12 px-8 py-3 bg-primary-500 text-white font-semibold rounded-full hover:bg-primary-500/90 transition-colors duration-200 ease-spring">
                   {t("navbar.shopNow")}
                   <svg
@@ -231,7 +244,14 @@ export default function MegaDeals({
                 </button>
               </div>
             )}
+
           </div>
+
+          {showAdviceSection ? (
+            <div className="lg:col-span-2 lg:col-start-1 lg:row-start-2">
+              <ShopAdviceSection />
+            </div>
+          ) : null}
         </div>
       </div>
 

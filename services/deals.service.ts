@@ -162,6 +162,8 @@ function normalizeDeliveryTerms(terms: unknown[] | undefined, locale: Locale): s
 
 function buildDetailContent(params: {
   about?: { content_en?: string; content_ar?: string };
+  specialSpecification?: string;
+  purchasingExpertAdvice?: string;
   terms?: LocalizedValue;
   paymentTerms?: LocalizedValue;
   deliveryTerms?: unknown[];
@@ -171,9 +173,13 @@ function buildDetailContent(params: {
   const about = pickAboutContent(params.about, params.locale);
   const deliveryTerms = normalizeDeliveryTerms(params.deliveryTerms, params.locale);
   const customerPaymentTerms = mapCustomerPaymentTerms(params.customerPaymentTerms, params.locale);
+  const specialSpecification = params.specialSpecification?.trim() || undefined;
+  const purchasingExpertAdvice = params.purchasingExpertAdvice?.trim() || undefined;
 
   const detailContent: DealDetailContent = {
     about,
+    specialSpecification,
+    purchasingExpertAdvice,
     terms: localizedTextOrUndefined(params.terms, params.locale),
     paymentTerms: localizedTextOrUndefined(params.paymentTerms, params.locale),
     deliveryTerms: deliveryTerms.length ? deliveryTerms : undefined,
@@ -182,6 +188,8 @@ function buildDetailContent(params: {
 
   const hasContent = Boolean(
     detailContent.about ||
+      detailContent.specialSpecification ||
+      detailContent.purchasingExpertAdvice ||
       detailContent.terms ||
       detailContent.paymentTerms ||
       detailContent.deliveryTerms?.length ||
@@ -389,6 +397,10 @@ interface RawProduct {
   name_ar?: string;
   description_en?: string;
   description_ar?: string;
+  factory_en?: string;
+  factory_ar?: string;
+  country_en?: string;
+  country_ar?: string;
 }
 
 interface RawDealDetail {
@@ -405,6 +417,7 @@ interface RawDealDetail {
   sold?: number;
   supplier?: RawSupplier;
   cities?: RawCity[];
+  specialSpecification?: string;
   about?: { content_en?: string; content_ar?: string };
   deliveryTerms?: unknown[];
   paymentTerms?: LocalizedValue;
@@ -496,13 +509,18 @@ function mapDealDetailToDeal(
   ) || undefined;
 
   const productName = pickLocale(raw.product.name_en, raw.product.name_ar, locale) || undefined;
-  const about = pickAboutContent(raw.about, locale);
+  const productFactory =
+    pickLocale(raw.product.factory_en, raw.product.factory_ar, locale) || undefined;
+  const productMadeIn =
+    pickLocale(raw.product.country_en, raw.product.country_ar, locale) || undefined;
 
   const base = {
     id: raw._id,
     title,
-    description: about || description,
+    description,
     productName,
+    productFactory,
+    productMadeIn,
     images: toImages(raw.product.pic, title, "product"),
     timer: defaultTimer(raw.endDate),
     location: citiesLocation(Boolean(raw.allKsa), raw.cities, locale),
@@ -517,6 +535,7 @@ function mapDealDetailToDeal(
     marketPrice: raw.product.marketPrice ?? raw.dealPrice,
     detailContent: buildDetailContent({
       about: raw.about,
+      specialSpecification: raw.specialSpecification,
       paymentTerms: raw.paymentTerms,
       deliveryTerms: raw.deliveryTerms,
       customerPaymentTerms: raw.customerPaymentTerms,

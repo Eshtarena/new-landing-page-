@@ -1,5 +1,5 @@
 import type { ColdDetailsApiResponse, OriginalDetailsApiResponse, DealDetailsApiDeal } from "../types/api/dealDetails";
-import type { ColdDeal, OriginalDeal, DealTimer } from "../types/deals";
+import type { ColdDeal, OriginalDeal, DealTimer, DealDetailContent } from "../types/deals";
 import { API_BASE_URL, BACKEND_PUBLIC_BASE, getGuestAuthHeaders } from "./config";
 import type { Lang } from "./voucherApi";
 
@@ -34,6 +34,7 @@ function parseEndDateToTimer(endDateStr: string | undefined): DealTimer {
 
 function extractDealFromColdResponse(data: ColdDetailsApiResponse): DealDetailsApiDeal | null {
   const d = data as Record<string, unknown>;
+  if (d.deal && typeof d.deal === "object") return d.deal as DealDetailsApiDeal;
   if (d.cold && typeof d.cold === "object") return d.cold as DealDetailsApiDeal;
   if (d.coldDeal && typeof d.coldDeal === "object") return d.coldDeal as DealDetailsApiDeal;
   if (d._id && d.title_en) return d as unknown as DealDetailsApiDeal;
@@ -42,10 +43,60 @@ function extractDealFromColdResponse(data: ColdDetailsApiResponse): DealDetailsA
 
 function extractDealFromOriginalResponse(data: OriginalDetailsApiResponse): DealDetailsApiDeal | null {
   const d = data as Record<string, unknown>;
+  if (d.deal && typeof d.deal === "object") return d.deal as DealDetailsApiDeal;
   if (d.original && typeof d.original === "object") return d.original as DealDetailsApiDeal;
   if (d.originalDeal && typeof d.originalDeal === "object") return d.originalDeal as DealDetailsApiDeal;
   if (d._id && d.title_en) return d as unknown as DealDetailsApiDeal;
   return null;
+}
+
+function mapDealDetailContent(v: DealDetailsApiDeal, lang: Lang): DealDetailContent | undefined {
+  const isEn = lang === "en";
+  const about = v.about
+    ? (isEn ? v.about.content_en : v.about.content_ar) || v.about.content_en || v.about.content_ar
+    : undefined;
+  const specialSpecification =
+    typeof v.specialSpecification === "string" ? v.specialSpecification.trim() : undefined;
+
+  const detailContent: DealDetailContent = {
+    about: about?.trim() || undefined,
+    specialSpecification: specialSpecification || undefined,
+  };
+
+  return detailContent.about || detailContent.specialSpecification ? detailContent : undefined;
+}
+
+function mapProductField(
+  v: DealDetailsApiDeal,
+  lang: Lang,
+  enKey: "factory_en" | "country_en" | "description_en" | "name_en",
+  arKey: "factory_ar" | "country_ar" | "description_ar" | "name_ar"
+): string | undefined {
+  const isEn = lang === "en";
+  const product = v.product;
+  if (!product) return undefined;
+  return (
+    (isEn ? product[enKey] : product[arKey]) ||
+    product[enKey] ||
+    product[arKey] ||
+    undefined
+  );
+}
+
+function mapProductDescription(v: DealDetailsApiDeal, lang: Lang): string | undefined {
+  return mapProductField(v, lang, "description_en", "description_ar");
+}
+
+function mapProductName(v: DealDetailsApiDeal, lang: Lang): string | undefined {
+  return mapProductField(v, lang, "name_en", "name_ar");
+}
+
+function mapProductFactory(v: DealDetailsApiDeal, lang: Lang): string | undefined {
+  return mapProductField(v, lang, "factory_en", "factory_ar");
+}
+
+function mapProductMadeIn(v: DealDetailsApiDeal, lang: Lang): string | undefined {
+  return mapProductField(v, lang, "country_en", "country_ar");
 }
 
 /** Build deal images array: support single pic or multiple pics/images from API */
@@ -55,7 +106,8 @@ function mapDealImages(
   baseUrl: string
 ): { src: string; alt: string }[] {
   const alt = (lang === "en" ? v.title_en : v.title_ar) || v.title_en || v.title_ar || "Deal";
-  const multi = (v.pics ?? v.images) as string[] | undefined;
+  const productPics = v.product?.pic;
+  const multi = (productPics ?? v.pics ?? v.images) as string[] | undefined;
   if (multi?.length) {
     return multi.map((filename) => ({
       src: `${baseUrl}/${filename}`,
@@ -84,7 +136,7 @@ function mapCommonDealFields(
   return {
     id: v._id,
     title: (isEn ? v.title_en : v.title_ar) || (v.title_en || v.title_ar) || "",
-    description: v.about ? (isEn ? v.about.content_en : v.about.content_ar) : undefined,
+    description: mapProductDescription(v, lang),
     images: mapDealImages(v, lang, DEAL_IMAGE_BASE),
     timer: parseEndDateToTimer(v.endDate),
     location: { text: locationText },
@@ -136,6 +188,10 @@ export function mapColdApiToDeal(data: ColdDetailsApiResponse, lang: Lang): Cold
     ...common,
     dealType: "cold",
     marketPrice,
+    productName: mapProductName(v, lang),
+    productFactory: mapProductFactory(v, lang),
+    productMadeIn: mapProductMadeIn(v, lang),
+    detailContent: mapDealDetailContent(v, lang),
   };
 }
 
@@ -148,5 +204,9 @@ export function mapOriginalApiToDeal(data: OriginalDetailsApiResponse, lang: Lan
     ...common,
     dealType: "original",
     marketPrice,
+    productName: mapProductName(v, lang),
+    productFactory: mapProductFactory(v, lang),
+    productMadeIn: mapProductMadeIn(v, lang),
+    detailContent: mapDealDetailContent(v, lang),
   };
 }

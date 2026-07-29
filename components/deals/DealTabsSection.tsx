@@ -87,7 +87,7 @@ export default function DealTabsSection({ deal, variant = "default" }: DealTabsS
     return (
       <div>
         <nav
-          className="flex border-b border-gray-200 bg-[#F0F0F5]"
+          className="flex border-b border-gray-200 bg-white"
           role="tablist"
           aria-label={tx("dealDetails.pageTitle", "Deal Details", "تفاصيل العرض")}
         >
@@ -100,10 +100,10 @@ export default function DealTabsSection({ deal, variant = "default" }: DealTabsS
                 role="tab"
                 aria-selected={isActive}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 py-3.5 text-sm font-medium transition-colors min-h-11 ${
+                className={`flex-1 py-3.5 text-sm transition-colors min-h-11 ${
                   isActive
-                    ? "text-primary-500 border-b-2 border-primary-500"
-                    : "text-gray-400 border-b-2 border-transparent"
+                    ? "font-medium text-primary-500 border-b-2 border-primary-500"
+                    : "font-normal text-[#808080] border-b-2 border-transparent"
                 }`}
               >
                 {tab.label}
@@ -156,16 +156,34 @@ const SectionTitle = ({ title }: { title: string }) => (
   <h2 className="text-lg font-semibold tracking-tight text-gray-900">{title}</h2>
 );
 
+const MobileInfoCard = ({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+}) => (
+  <div className="flex min-w-0 flex-1 items-center gap-2.5 rounded-2xl bg-[#F5F5F7] px-3 py-3">
+    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-500 text-white">
+      {icon}
+    </div>
+    <div className="min-w-0">
+      <p className="text-[10px] font-normal text-[#808080] leading-tight">{label}</p>
+      <p className="text-sm font-bold text-primary-500 truncate leading-tight">{value}</p>
+    </div>
+  </div>
+);
+
 const MobileSupplierCard = ({
   deal,
-  tx,
 }: {
   deal: Deal;
-  tx: (key: string, en: string, ar: string) => string;
 }) => {
-  const content = (
+  const cardInner = (
     <>
-      <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-gray-100 bg-white">
+      <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-2xl border border-gray-100 bg-white">
         {deal.supplierLogo ? (
           <Image
             src={deal.supplierLogo}
@@ -180,33 +198,15 @@ const MobileSupplierCard = ({
           </div>
         )}
       </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold text-primary-500 truncate">{deal.supplier}</p>
-        {deal.supplierId ? (
-          <p className="text-xs text-gray-500">
-            {tx("dealDetails.supplier.viewProfile", "View Profile", "عرض الملف")}
-          </p>
-        ) : null}
-      </div>
-      {deal.supplierId ? (
-        <svg
-          className="h-4 w-4 shrink-0 text-gray-400 rtl:rotate-180"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
-      ) : null}
+      <p className="min-w-0 flex-1 text-sm font-bold text-primary-500 truncate">{deal.supplier}</p>
     </>
   );
 
   const className =
-    "flex items-center gap-3 rounded-2xl border border-gray-200 bg-white px-4 py-3";
+    "flex items-center gap-3 rounded-2xl border border-gray-100 bg-white px-4 py-3.5";
 
   if (!deal.supplierId) {
-    return <div className={className}>{content}</div>;
+    return <div className={className}>{cardInner}</div>;
   }
 
   return (
@@ -214,7 +214,7 @@ const MobileSupplierCard = ({
       href={`/supplier-details/${deal.supplierId}`}
       className={`${className} transition-colors hover:bg-gray-50 active:bg-gray-100`}
     >
-      {content}
+      {cardInner}
     </Link>
   );
 };
@@ -229,67 +229,59 @@ const MobileDealTab = ({
   locale: string;
 }) => {
   const content = deal.detailContent;
-  const accordionItems: DealAccordionItem[] = [
-    {
+  const specialSpecs = content?.specialSpecification?.trim() || "";
+  const specialSpecsPreview = specialSpecs.split("\n")[0]?.trim() || "";
+  const originalDealAbout = content?.about?.trim() || "";
+  const expertAdvice = content?.purchasingExpertAdvice?.trim() || "";
+
+  const accordionItems: DealAccordionItem[] = [];
+
+  if (specialSpecs) {
+    accordionItems.push({
       id: "special-specs",
       title: tx(
         "dealDetails.accordions.specialSpecs",
         "Special specifications",
         "مواصفات خاصة"
       ),
-      content:
-        deal.description ||
-        content?.about ||
-        tx(
-          "dealDetails.accordions.noSpecialSpecs",
-          "No special specifications available for this deal.",
-          "لا توجد مواصفات خاصة متاحة لهذا العرض."
-        ),
-    },
-    {
+      subtitle: specialSpecsPreview || undefined,
+      content: specialSpecs,
+    });
+  }
+
+  if (originalDealAbout) {
+    accordionItems.push({
       id: "original-deal",
       title: tx(
         "dealDetails.accordions.originalDeal",
         "What is Original deal?",
         "ما هو العرض الأصلي؟"
       ),
-      content:
-        content?.terms ||
-        tx(
-          "dealDetails.accordions.originalDealFallback",
-          "Original deals are group-buy offers on authentic products. Join with other buyers to unlock the deal price and save together.",
-          "العروض الأصلية هي عروض شراء جماعي على منتجات أصلية. انضم مع مشترين آخرين للحصول على سعر العرض والتوفير معًا."
-        ),
-    },
-    {
+      content: originalDealAbout,
+    });
+  }
+
+  if (expertAdvice) {
+    accordionItems.push({
       id: "expert-advice",
       title: tx(
         "dealDetails.accordions.expertAdvice",
         "Purchasing expert advice",
         "نصائح خبير المشتريات"
       ),
-      content:
-        content?.about ||
-        content?.customerPaymentTerms?.[0]?.content ||
-        tx(
-          "dealDetails.accordions.expertAdviceFallback",
-          "Review the deal details, compare market price with deal price, and join before quantities run out to secure your savings.",
-          "راجع تفاصيل العرض، وقارن السعر في السوق بسعر العرض، وانضم قبل نفاد الكمية لتأمين توفيرك."
-        ),
-    },
-  ].filter((item) => item.content);
+      content: expertAdvice,
+    });
+  }
 
   return (
     <div className="space-y-4">
-      {deal.supplier ? (
-        <MobileSupplierCard deal={deal} tx={tx} />
-      ) : null}
+      {deal.supplier ? <MobileSupplierCard deal={deal} /> : null}
 
       <PricingDisplay
         deal={deal}
         showSavings={true}
         layout="horizontal"
-        className="bg-white border-gray-200"
+        className="border-gray-200"
         locale={locale}
         labels={{
           voucherValue: tx("deals.voucherValue", "Voucher value", "قيمة الكوبون"),
@@ -303,7 +295,7 @@ const MobileDealTab = ({
         quantity={deal.quantity}
         dealType={deal.dealType}
         showLabels={true}
-        height="lg"
+        height="xl"
         locale={locale}
         labels={{
           progress: tx("dealDetails.stats.progress", "Progress", "التقدم"),
@@ -311,9 +303,10 @@ const MobileDealTab = ({
           sold: tx("dealDetails.sold", "Sold", "تم البيع"),
           available: tx("dealDetails.available", "Available", "المتاح"),
         }}
+        className="[&>div:first-child>span:first-child]:font-normal [&>div:first-child>span:first-child]:text-[#808080] [&>div:last-child]:font-normal [&>div:last-child]:text-[#808080]"
       />
 
-      <DealAccordion items={accordionItems} defaultOpenIds={["special-specs", "original-deal"]} />
+      <DealAccordion items={accordionItems} />
     </div>
   );
 };
@@ -321,41 +314,55 @@ const MobileDealTab = ({
 const MobileProductTab = ({
   deal,
   tx,
-  locale,
 }: {
   deal: Deal;
   tx: (key: string, en: string, ar: string) => string;
   locale: string;
 }) => {
-  const aboutText = deal.detailContent?.about || deal.description;
+  const productDescription = deal.description?.trim() || "";
+  const factoryName =
+    deal.productFactory?.trim() ||
+    tx("dealDetails.product.factoryFallback", "Not specified", "غير محدد");
+  const madeIn =
+    deal.productMadeIn?.trim() ||
+    tx("dealDetails.product.madeInFallback", "Not specified", "غير محدد");
 
   return (
     <div className="space-y-4">
-      {deal.productName ? (
-        <div className="rounded-2xl border border-gray-200 bg-white px-4 py-3">
-          <p className="text-xs text-gray-500 mb-1">
-            {tx("dealDetails.details.product", "Product", "المنتج")}
-          </p>
-          <p className="text-sm font-semibold text-primary-500">{deal.productName}</p>
-        </div>
-      ) : null}
+      {productDescription ? (
+        <p className="text-sm font-normal leading-relaxed text-[#808080] whitespace-pre-line">
+          {productDescription}
+        </p>
+      ) : (
+        <p className="text-sm text-[#808080]">
+          {tx(
+            "dealDetails.noDescription",
+            "No description is available for this deal yet.",
+            "لا يوجد وصف متاح لهذا العرض حتى الآن."
+          )}
+        </p>
+      )}
 
-      <div className="space-y-3">
-        <SectionTitle title={tx("dealDetails.aboutTitle", "About This Deal", "نبذة عن العرض")} />
-        {aboutText ? (
-          <p className="text-sm leading-relaxed text-gray-500 whitespace-pre-line">{aboutText}</p>
-        ) : (
-          <p className="text-sm text-gray-500">
-            {tx(
-              "dealDetails.noDescription",
-              "No description is available for this deal yet.",
-              "لا يوجد وصف متاح لهذا العرض حتى الآن."
-            )}
-          </p>
-        )}
+      <div className="flex gap-3">
+        <MobileInfoCard
+          icon={
+            <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3zm0 2.84L18 12h-2v6h-2v-6H8v6H6v-6H4l8-6.16z" />
+            </svg>
+          }
+          label={tx("dealDetails.product.factoryName", "Factory name", "اسم المصنع")}
+          value={factoryName}
+        />
+        <MobileInfoCard
+          icon={
+            <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6h-5.6z" />
+            </svg>
+          }
+          label={tx("dealDetails.product.madeIn", "Made in", "صنع في")}
+          value={madeIn}
+        />
       </div>
-
-      <DetailsTab deal={deal} tx={tx} locale={locale} />
     </div>
   );
 };
@@ -419,30 +426,26 @@ const MobilePaymentTab = ({
   const textAlign = isRTL ? "text-right" : "text-left";
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-base font-semibold text-primary-500">
-        {tx("dealDetails.terms.payment", "Payment Terms", "شروط الدفع")}
-      </h2>
-
+    <div className="space-y-5">
       {content?.paymentTerms ? (
-        <p className={`text-sm leading-relaxed text-gray-500 whitespace-pre-line ${textAlign}`}>
+        <p className={`text-sm leading-relaxed text-[#808080] whitespace-pre-line ${textAlign}`}>
           {content.paymentTerms}
         </p>
       ) : null}
 
       {content?.customerPaymentTerms?.map((term, index) => (
-        <div key={`payment-${index}`} className="space-y-1">
+        <div key={`payment-${index}`} className="space-y-1.5">
           {term.title ? (
-            <h3 className="text-sm font-semibold text-primary-500">{term.title}</h3>
+            <h3 className="text-sm font-normal text-[#808080]">{term.title}</h3>
           ) : null}
-          <p className={`text-sm leading-relaxed text-gray-500 whitespace-pre-line ${textAlign}`}>
+          <p className={`text-sm leading-relaxed text-[#808080] whitespace-pre-line ${textAlign}`}>
             {term.content}
           </p>
         </div>
       ))}
 
       {!content?.paymentTerms && !content?.customerPaymentTerms?.length ? (
-        <p className={`text-sm leading-relaxed text-gray-500 ${textAlign}`}>
+        <p className={`text-sm leading-relaxed text-[#808080] ${textAlign}`}>
           {tx(
             "dealDetails.payment.default",
             "Payment must be completed within 24 hours of joining the deal to secure your spot.",

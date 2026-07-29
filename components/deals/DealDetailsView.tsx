@@ -4,8 +4,13 @@ import { useTranslation } from "next-i18next/pages";
 import { Deal, DealType } from "../../types/deals";
 import DealInfoSection from "./DealInfoSection";
 import DealTabsSection from "./DealTabsSection";
+import DealGallery from "./DealGallery";
+import DealBadge from "./DealBadge";
+import CountdownTimer from "./CountdownTimer";
+import DownloadAppModal from "./DownloadAppModal";
 import { COLORS } from "../../utils/colors";
 import MainNavbar from "../ecommerce/MainNavbar";
+import { useJoinDeal } from "../../hooks/useJoinDeal";
 import { getLatestCountryCode } from "../../utils/countryPreference";
 import { isValidCountry } from "../../utils/routes";
 import { fetchVoucherDetails, mapVoucherApiToDeal, type Lang } from "../../services/voucherApi";
@@ -177,6 +182,28 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
 
   const isRtl = lang === "ar";
   const labels = DEAL_DETAILS_LABELS[lang];
+  const locale = isRtl ? "ar-SA" : "en-US";
+  const { handleJoinDeal, showDesktopModal, closeDesktopModal } = useJoinDeal();
+
+  const handleShareDeal = async () => {
+    if (typeof window === "undefined" || !deal) return;
+
+    const shareData = {
+      title: deal.title || labels.pageTitle,
+      text: deal.productName || deal.title,
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(window.location.href);
+      }
+    } catch {
+      // User cancelled share or clipboard unavailable — no-op.
+    }
+  };
 
   if (isLoading) {
     return (
@@ -259,36 +286,73 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
       <div className="hidden md:block">
         <MainNavbar countryCode={countryCode} lang={lang} />
       </div>
-      <div className="md:hidden bg-[#340040] shadow-md">
-        <div className={`flex items-center px-4 py-4 ${isRtl ? "flex-row-reverse" : ""}`}>
-          <button
-            onClick={() => router.push(`/${countryCode}${lang === "ar" ? "?lang=ar" : ""}`)}
-            className={`flex items-center justify-center w-10 h-10 text-white hover:bg-white/10 rounded-full transition-colors ${isRtl ? "ml-3" : "mr-3"}`}
-            aria-label={labels.goBack}
-            >
-              <svg
-                className={`w-6 h-6 ${isRtl ? "rotate-180" : ""}`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-          </button>
-          <h1 className="text-white text-lg font-semibold">{labels.pageTitle}</h1>
+
+      {/* Mobile layout */}
+      <div className="md:hidden pb-24">
+        <DealGallery images={deal.images} variant="hero" />
+
+        <div className="relative z-10 -mt-8 rounded-t-[28px] bg-white overflow-hidden">
+          <div className="px-4 pt-5 pb-4">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0 flex-1">
+                <h1 className="text-lg font-bold text-primary-500 leading-tight">{deal.title}</h1>
+                {deal.productName ? (
+                  <p className="mt-1 text-sm font-normal text-[#808080]">{deal.productName}</p>
+                ) : null}
+                <div className="mt-3">
+                  <DealBadge dealType={deal.dealType} size="sm" isActive={deal.isActive} />
+                </div>
+              </div>
+              <CountdownTimer
+                timer={deal.timer}
+                textColor="text-[#2B64E3]"
+                className="shrink-0"
+                locale={locale}
+                labels={{
+                  days: t("dealDetails.timer.day", { defaultValue: isRtl ? "يوم" : "Day" }),
+                  hours: t("dealDetails.timer.hours", { defaultValue: isRtl ? "ساعة" : "Hrs" }),
+                  minutes: t("dealDetails.timer.minutes", { defaultValue: isRtl ? "دقيقة" : "Mins" }),
+                  seconds: t("dealDetails.timer.seconds", { defaultValue: isRtl ? "ثانية" : "Secs" }),
+                }}
+              />
+            </div>
+          </div>
+
+          <DealTabsSection deal={deal} variant="mobile" />
         </div>
       </div>
-      <div className="container mx-auto px-4 py-6 md:py-8">
+
+      {/* Desktop layout */}
+      <div className="hidden md:block container mx-auto px-4 py-6 md:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           <DealInfoSection deal={deal} storeLinks={storeLinks} />
           <DealTabsSection deal={deal} />
         </div>
       </div>
+
+      <div className="md:hidden fixed bottom-0 inset-x-0 z-[60] px-4 pb-4 pt-2">
+        <div className="flex items-center gap-3 rounded-[28px] bg-white px-4 py-3 shadow-[0_-4px_24px_rgba(0,0,0,0.08)]">
+          <button
+            type="button"
+            onClick={handleShareDeal}
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary-500 text-white transition-colors hover:bg-primary-500/90"
+            aria-label={t("dealDetails.share", { defaultValue: isRtl ? "مشاركة العرض" : "Share deal" })}
+          >
+            <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            onClick={handleJoinDeal}
+            className="flex-1 min-h-12 rounded-full bg-primary-500 px-6 text-base font-semibold text-white transition-colors hover:bg-primary-500/90"
+          >
+            {t("dealDetails.joinDeal", { defaultValue: isRtl ? "انضم للعرض" : "Join deal" })}
+          </button>
+        </div>
+      </div>
+
+      <DownloadAppModal isOpen={showDesktopModal} onClose={closeDesktopModal} />
     </div>
   );
 }

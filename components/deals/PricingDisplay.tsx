@@ -1,6 +1,5 @@
 import React from "react";
 import { Deal, DEAL_THEMES } from "../../types/deals";
-import { COLORS } from "../../utils/colors";
 
 interface PricingDisplayProps {
   deal: Deal;
@@ -28,29 +27,35 @@ const SaudiRiyalIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
+interface PriceItemProps {
+  label: string;
+  value: string;
+  accentColor?: string;
+  isSave?: boolean;
+  labelColor?: string;
+  valueSize?: string;
+}
+
 const PriceItem = ({
   label,
   value,
   accentColor,
   isSave = false,
-}: {
-  label: string;
-  value: string;
-  accentColor?: string;
-  isSave?: boolean;
-}) => {
-  const color = isSave ? accentColor : COLORS.darkViolet;
+  labelColor = "#9CA3AF",
+  valueSize = "text-sm",
+}: PriceItemProps) => {
+  const color = isSave ? accentColor : "#340040";
 
   return (
-    <div className="flex flex-col items-center justify-center flex-1 py-2 px-1 min-w-0">
+    <div className="flex flex-col items-center justify-center flex-1 py-2.5 px-1 min-w-0">
       <span
-        className="text-[10px] mb-1 text-center"
-        style={{ color: isSave ? accentColor : "#9CA3AF" }}
+        className="text-[10px] mb-1 text-center font-normal leading-tight"
+        style={{ color: isSave ? accentColor : labelColor }}
       >
         {label}
       </span>
       <div className="flex items-center gap-0.5" style={{ color }}>
-        <span className={`text-sm font-bold tabular-nums leading-none ${isSave ? "" : ""}`}>
+        <span className={`${valueSize} font-bold tabular-nums leading-none`}>
           {value}
         </span>
         <SaudiRiyalIcon className="w-2.5 h-2.5 shrink-0" />

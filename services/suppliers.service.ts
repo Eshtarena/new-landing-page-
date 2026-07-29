@@ -85,6 +85,7 @@ interface RawSupplierBranch {
   lng?: string;
   openAt?: string;
   closeAt?: string;
+  employees?: number;
   area?: RawCityRef;
   districts?: RawDistrict[];
 }
@@ -166,6 +167,7 @@ function mapBranches(branches: RawSupplierBranch[] | undefined, locale: Locale):
     lng: branch.lng,
     openAt: branch.openAt,
     closeAt: branch.closeAt,
+    employees: branch.employees,
     city: pickLocale(branch.area?.city_en, branch.area?.city_ar, locale) || undefined,
     districts: (branch.districts || [])
       .map((district) => pickLocale(district.district_en, district.district_ar, locale))

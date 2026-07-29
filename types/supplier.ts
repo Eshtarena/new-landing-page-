@@ -10,6 +10,8 @@ export interface SupplierBranch {
   closeAt?: string;
   city?: string;
   districts: string[];
+  /** Populated when the API provides branch headcount. */
+  employees?: number;
 }
 
 export interface SupplierCityCoverage {
