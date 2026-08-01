@@ -195,7 +195,11 @@ export default function HeroSlider() {
                 sizes={item.mobileImage ? '1600px' : '(max-width: 768px) 100vw, 1600px'}
               />
               <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/60 via-black/0 to-black/0" />
-              <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6 md:p-12 z-10">
+              <div
+                className={`absolute inset-x-0 bottom-0 p-4 sm:p-6 md:p-12 z-10 flex ${
+                  isRTL ? 'justify-end text-right' : 'justify-start text-left'
+                }`}
+              >
                 {item.link && item.link !== '#' ? (
                   <Link href={item.link} className="block max-w-xl">
                     <h2 className="text-lg sm:text-2xl md:text-5xl font-bold tracking-tight text-white leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]">

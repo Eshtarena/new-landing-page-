@@ -371,72 +371,11 @@ function BranchesTab({
   }
 
   return (
-    <div className={`grid grid-cols-1 ${mobileLayout ? "gap-3" : "md:grid-cols-2 gap-4"}`}>
-      {branches.map((branch) =>
-        mobileLayout ? (
-          <SupplierMobileBranchCard key={branch.id} branch={branch} tx={tx} isRTL={isRTL} />
-        ) : (
-          <BranchCard key={branch.id} branch={branch} tx={tx} isRTL={isRTL} />
-        )
-      )}
+    <div className={`grid grid-cols-1 gap-3 ${mobileLayout ? "" : "md:grid-cols-2 md:gap-4"}`}>
+      {branches.map((branch) => (
+        <SupplierMobileBranchCard key={branch.id} branch={branch} tx={tx} isRTL={isRTL} />
+      ))}
     </div>
-  );
-}
-
-function BranchCard({
-  branch,
-  tx,
-  isRTL,
-}: {
-  branch: SupplierBranch;
-  tx: TxFn;
-  isRTL: boolean;
-}) {
-  const hasHours = branch.openAt && branch.closeAt;
-  const hasCoords = branch.lat && branch.lng;
-  const mapUrl = hasCoords ? `https://www.google.com/maps?q=${branch.lat},${branch.lng}` : null;
-
-  return (
-    <article className="rounded-xl border border-gray-100 bg-gray-50/80 p-5 space-y-3">
-      <h3 className={`text-base font-semibold text-gray-900 ${isRTL ? "text-right" : "text-left"}`}>
-        {branch.title}
-      </h3>
-
-      {branch.location ? (
-        <p className={`text-sm text-gray-600 ${isRTL ? "text-right" : "text-left"}`}>
-          {branch.location}
-        </p>
-      ) : null}
-
-      {branch.city ? (
-        <p className={`text-xs text-gray-500 ${isRTL ? "text-right" : "text-left"}`}>
-          {tx("supplierDetails.branchCity", "City", "المدينة")}: {branch.city}
-        </p>
-      ) : null}
-
-      {branch.districts.length > 0 ? (
-        <p className={`text-xs text-gray-500 ${isRTL ? "text-right" : "text-left"}`}>
-          {tx("supplierDetails.districts", "Districts", "الأحياء")}: {branch.districts.join(", ")}
-        </p>
-      ) : null}
-
-      {hasHours ? (
-        <p className={`text-xs text-gray-500 ${isRTL ? "text-right" : "text-left"}`} dir="ltr">
-          {tx("supplierDetails.hours", "Hours", "ساعات العمل")}: {branch.openAt} – {branch.closeAt}
-        </p>
-      ) : null}
-
-      {mapUrl ? (
-        <Link
-          href={mapUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex text-sm font-medium text-primary-500 hover:text-primary-500/80"
-        >
-          {tx("supplierDetails.viewOnMap", "View on map", "عرض على الخريطة")}
-        </Link>
-      ) : null}
-    </article>
   );
 }
 

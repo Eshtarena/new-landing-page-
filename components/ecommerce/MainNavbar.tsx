@@ -2,13 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import Logo from "../Logo";
 import LanguageSwitcher from "../landingpage/LanguageSwitcher";
-import { DASHBOARD_LOGIN_URL } from "../../utils/routes";
 import { SHOP_HEADER_STYLE } from "../../utils/shopHeaderStyle";
-
-const goToDashboardLogin = (event: React.MouseEvent<HTMLAnchorElement>) => {
-  event.preventDefault();
-  window.location.assign(DASHBOARD_LOGIN_URL);
-};
 
 interface MainNavbarProps {
   countryCode?: string;
@@ -65,14 +59,6 @@ function FilterIcon({ className = "w-5 h-5" }: { className?: string }) {
         strokeLinecap="round"
       />
       <circle cx="14" cy="16" r="2" fill="currentColor" />
-    </svg>
-  );
-}
-
-function NotificationBellIcon({ className = "w-5 h-5" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
     </svg>
   );
 }
@@ -159,20 +145,6 @@ export default function MainNavbar({
   const searchAriaLabel = t("store.searchAriaLabel");
   const scanAriaLabel = t("store.scanAriaLabel");
 
-  const accountLink = (
-    <a
-      href={DASHBOARD_LOGIN_URL}
-      onClick={goToDashboardLogin}
-      className="inline-flex items-center gap-2 min-h-10 px-3 rounded-full text-white/90 hover:text-white hover:bg-white/10 transition-colors duration-200 ease-spring"
-      aria-label="Account"
-    >
-      <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-      </svg>
-      <span className="hidden lg:inline text-sm font-medium">Account</span>
-    </a>
-  );
-
   const mobileFilterButton = onMobileFilterOpen ? (
     <button
       onClick={onMobileFilterOpen}
@@ -191,19 +163,8 @@ export default function MainNavbar({
       <div className="relative w-full max-w-[1600px] mx-auto px-4 md:px-8">
         {/* Mobile layout */}
         <div className="flex flex-col gap-6 pt-6 pb-7 md:hidden">
-          <div className="relative flex items-center justify-center min-h-[44px]">
-            <div className="flex flex-col items-center justify-center">
-              <Logo {...MOBILE_LOGO_PROPS} href="/" />
-            </div>
-            <div className="absolute inset-e-0 flex items-center shrink-0">
-              <button
-                type="button"
-                className="inline-flex items-center justify-center w-9 h-9 text-white hover:text-white/90 transition-colors"
-                aria-label="Notifications"
-              >
-                <NotificationBellIcon className="w-5 h-5" />
-              </button>
-            </div>
+          <div className="flex items-center justify-center min-h-[44px]">
+            <Logo {...MOBILE_LOGO_PROPS} href="/" />
           </div>
           <div className="flex items-center gap-2.5">
             <MobileSearchField
@@ -235,7 +196,6 @@ export default function MainNavbar({
           </div>
 
           <div className="flex items-center justify-end gap-1.5 shrink-0">
-            {accountLink}
             <LanguageSwitcher />
           </div>
         </div>

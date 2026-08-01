@@ -49,17 +49,12 @@ export default function AdvicePage({ articles }: AdvicePageProps) {
 export const getServerSideProps: GetServerSideProps<AdvicePageProps> = async ({
   locale = "en",
 }) => {
-  try {
-    const { articles } = await AdviceService.getArticles();
+  const { articles } = await AdviceService.getArticles();
 
-    return {
-      props: {
-        ...(await serverSideTranslations(locale, ["common"])),
-        articles,
-      },
-    };
-  } catch (error) {
-    console.error("Error fetching advice articles:", error);
-    return { notFound: true };
-  }
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+      articles,
+    },
+  };
 };

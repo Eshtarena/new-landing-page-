@@ -131,10 +131,6 @@ export default function FilterComponent({
   }, [isMobile, categoryDropdownOpen, locationDropdownOpen]);
 
   useEffect(() => {
-    setFilters(mergeFilters(initialFilters));
-  }, [initialFilters]);
-
-  useEffect(() => {
     if (isMobile && isOpen) {
       document.body.style.overflow = "hidden";
     } else {

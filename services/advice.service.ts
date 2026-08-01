@@ -150,16 +150,14 @@ export class AdviceService {
         .filter((item): item is RawHomeAdviceItem => Boolean(item))
         .map(mapHomeAdviceToArticle);
 
-      if (!articles.length) {
-        throw createApiError("No advice articles returned");
+      if (articles.length) {
+        return { message: "success", articles };
       }
-
-      return { message: "success", articles };
     } catch (error) {
-      // Graceful fallback: never let a backend hiccup 404 the whole Advice page.
       console.error("Error fetching live advice articles, falling back to local content:", error);
-      return { message: "success", articles: AdviceService.filterMockArticles(params) };
     }
+
+    return { message: "success", articles: AdviceService.filterMockArticles(params) };
   }
 
   /**

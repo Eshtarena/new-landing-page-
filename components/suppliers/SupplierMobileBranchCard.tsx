@@ -4,8 +4,16 @@ import type { SupplierBranch } from "../../types/supplier";
 
 type TxFn = (key: string, en: string, ar: string) => string;
 
-function buildMapImageUrl(lat: string, lng: string): string {
-  return `https://staticmap.openstreetmap.de/staticmap.php?center=${lat},${lng}&zoom=15&size=640x280&markers=${lat},${lng},red`;
+function parseCoord(value?: string): number | null {
+  if (!value) return null;
+  const parsed = Number.parseFloat(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function buildMapEmbedUrl(lat: number, lng: number): string {
+  const delta = 0.012;
+  const bbox = [lng - delta, lat - delta, lng + delta, lat + delta].join(",");
+  return `https://www.openstreetmap.org/export/embed.html?bbox=${encodeURIComponent(bbox)}&layer=mapnik&marker=${lat}%2C${lng}`;
 }
 
 function MapPinIcon() {
@@ -44,22 +52,17 @@ function BranchMapPreview({
   title: string;
   mapUrl: string | null;
 }) {
-  const hasCoords = Boolean(lat && lng);
+  const parsedLat = parseCoord(lat);
+  const parsedLng = parseCoord(lng);
+  const hasCoords = parsedLat != null && parsedLng != null;
   const content = hasCoords ? (
-    <>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={buildMapImageUrl(lat!, lng!)}
-        alt=""
-        className="h-full w-full object-cover"
-        loading="lazy"
-      />
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <svg className="h-8 w-8 text-[#E9335F] drop-shadow-md" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z" />
-        </svg>
-      </div>
-    </>
+    <iframe
+      src={buildMapEmbedUrl(parsedLat, parsedLng)}
+      title={`${title} map`}
+      className="pointer-events-none h-full w-full border-0"
+      loading="lazy"
+      referrerPolicy="no-referrer-when-downgrade"
+    />
   ) : (
     <div className="flex h-full w-full items-center justify-center bg-[#ECECF0]">
       <MapPinIcon />
@@ -88,9 +91,11 @@ export default function SupplierMobileBranchCard({
   tx: TxFn;
   isRTL: boolean;
 }) {
+  const parsedLat = parseCoord(branch.lat);
+  const parsedLng = parseCoord(branch.lng);
   const hasHours = branch.openAt && branch.closeAt;
-  const hasCoords = branch.lat && branch.lng;
-  const mapUrl = hasCoords ? `https://www.google.com/maps?q=${branch.lat},${branch.lng}` : null;
+  const hasCoords = parsedLat != null && parsedLng != null;
+  const mapUrl = hasCoords ? `https://www.google.com/maps?q=${parsedLat},${parsedLng}` : null;
   const textAlign = isRTL ? "text-right" : "text-left";
   const locationLine =
     branch.location ||

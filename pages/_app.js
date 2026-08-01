@@ -1,9 +1,11 @@
 import { appWithTranslation } from 'next-i18next/pages';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { GoogleTagManager } from '@next/third-parties/google';
 import { Inter, Cairo } from 'next/font/google';
 import ScrollRestoration from '../components/ScrollRestoration';
 import LocaleDirectionSync from '../components/LocaleDirectionSync';
+import ErrorBoundary from '../components/ErrorBoundary';
 import '../styles/globals.css';
 
 // Variable fonts: all weights (light -> extrabold) come from a single file.
@@ -20,6 +22,8 @@ const cairo = Cairo({
 });
 
 function MyApp({ Component, pageProps }) {
+  const router = useRouter();
+
   return (
     <>
       <Head>
@@ -36,7 +40,9 @@ function MyApp({ Component, pageProps }) {
       <GoogleTagManager gtmId="GTM-K83JQDPF" />
       <LocaleDirectionSync />
       <ScrollRestoration />
-      <Component {...pageProps} />
+      <ErrorBoundary router={router}>
+        <Component {...pageProps} />
+      </ErrorBoundary>
     </>
   );
 }
