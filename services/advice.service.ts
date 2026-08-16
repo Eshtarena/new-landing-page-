@@ -6,7 +6,6 @@ import {
   createApiError,
   resolvePublicAsset,
 } from "./config";
-import { MOCK_ADVICE_ARTICLES } from "../data/mockAdvice";
 import type {
   AdviceArticle,
   AdviceListParams,
@@ -150,14 +149,11 @@ export class AdviceService {
         .filter((item): item is RawHomeAdviceItem => Boolean(item))
         .map(mapHomeAdviceToArticle);
 
-      if (articles.length) {
-        return { message: "success", articles };
-      }
+      return { message: "success", articles };
     } catch (error) {
-      console.error("Error fetching live advice articles, falling back to local content:", error);
+      console.error("Error fetching advice articles:", error);
+      return { message: "success", articles: [] };
     }
-
-    return { message: "success", articles: AdviceService.filterMockArticles(params) };
   }
 
   /**
@@ -171,31 +167,9 @@ export class AdviceService {
       const data = await handleApiResponse<RawAdviceDetailResponse>(response);
       return mapAdviceDetailToArticle(slug, data.advice);
     } catch (error) {
-      const mockArticle = MOCK_ADVICE_ARTICLES.find((item) => item.slug === slug);
-      if (mockArticle) return mockArticle;
       throw createApiError(
         error instanceof Error ? error.message : "Failed to fetch advice article"
       );
     }
-  }
-
-  private static filterMockArticles(params: AdviceListParams): AdviceArticle[] {
-    let articles = [...MOCK_ADVICE_ARTICLES];
-
-    if (params.category && params.category !== "all") {
-      articles = articles.filter((article) => article.category === params.category);
-    }
-
-    articles.sort(
-      (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-    );
-
-    if (params.limit) {
-      const page = params.page ?? 1;
-      const start = (page - 1) * params.limit;
-      articles = articles.slice(start, start + params.limit);
-    }
-
-    return articles;
   }
 }

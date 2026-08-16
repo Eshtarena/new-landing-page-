@@ -10,6 +10,7 @@ import InputField from '../../../components/auth/InputField';
 import Button from '../../../components/auth/Button';
 import { LoginFormData, FormErrors } from '../../../types/auth';
 import { validateEmail, validateRequired } from '../../../utils/validation';
+import { beginLocaleSwitch } from '../../../utils/localeSwitch';
 import { 
   validateRouteParams, 
   getCountryDisplayName, 
@@ -92,10 +93,7 @@ export default function LoginPage({ lang, countryCode }: LoginPageProps) {
       return;
     }
 
-    if (typeof window !== 'undefined') {
-      (window as typeof window & { __preserveScrollOnNextRoute?: boolean }).__preserveScrollOnNextRoute =
-        true;
-    }
+    beginLocaleSwitch();
 
     router.push(buildLoginRoute(countryCode, newLang), undefined, { scroll: false });
   };

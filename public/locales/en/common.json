@@ -429,6 +429,7 @@
     "cardTitle": "Purchasing expert advice",
     "readTime": "{{minutes}} min read",
     "emptyState": "No articles found in this category. Check back soon for new tips.",
+    "noArticles": "No advice available yet. Check back soon for new tips.",
     "categories": {
       "all": "All",
       "savings": "Savings",

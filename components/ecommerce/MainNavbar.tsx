@@ -19,9 +19,9 @@ const MOBILE_LOGO_PROPS = {
 } as const;
 
 const DESKTOP_LOGO_PROPS = {
-  width: 100,
-  height: 32,
-  className: "w-[88px] sm:w-[100px] h-auto",
+  width: 96,
+  height: 30,
+  className: "w-[76px] lg:w-[84px] xl:w-[96px] h-auto",
 } as const;
 
 const HEADER_STYLE = SHOP_HEADER_STYLE;
@@ -112,9 +112,9 @@ function DesktopSearchField({
   ariaLabel: string;
 }) {
   return (
-    <div className="relative flex-1 min-w-0">
-      <div className="pointer-events-none absolute inset-y-0 inset-s-0 flex items-center ps-3.5 sm:ps-4">
-        <SearchIcon className="w-4 h-4 sm:w-[18px] sm:h-[18px] text-gray-400" />
+    <div className="relative w-full min-w-0">
+      <div className="pointer-events-none absolute inset-y-0 inset-s-0 flex items-center ps-4">
+        <SearchIcon className="w-4 h-4 text-gray-400" />
       </div>
       <input
         type="search"
@@ -122,7 +122,7 @@ function DesktopSearchField({
         onChange={(e) => onSearchChange(e.target.value)}
         placeholder={placeholder}
         aria-label={ariaLabel}
-        className="w-full min-h-10 sm:min-h-11 ps-9 sm:ps-11 pe-3 sm:pe-4 py-2 text-sm sm:text-[15px] text-gray-900 placeholder:text-gray-400 bg-white border border-black/10 rounded-full focus:outline-none focus:ring-2 focus:ring-white/60 focus:border-transparent transition-all duration-200 ease-spring shadow-sm"
+        className="w-full h-10 ps-10 pe-4 text-sm text-gray-900 placeholder:text-gray-400 bg-white/95 border border-white/20 rounded-full focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white transition-all duration-200 ease-spring"
       />
     </div>
   );
@@ -157,10 +157,10 @@ export default function MainNavbar({
 
   return (
     <nav
-      className="sticky top-0 z-50 relative rounded-b-[28px] md:rounded-none"
+      className="sticky top-0 z-50 rounded-b-[28px] md:rounded-none md:shadow-[0_1px_0_rgba(255,255,255,0.08)]"
       style={HEADER_STYLE}
     >
-      <div className="relative w-full max-w-[1600px] mx-auto px-4 md:px-8">
+      <div className="relative w-full max-w-[1600px] mx-auto px-4 md:px-10 lg:px-12">
         {/* Mobile layout */}
         <div className="flex flex-col gap-6 pt-6 pb-7 md:hidden">
           <div className="flex items-center justify-center min-h-[44px]">
@@ -178,14 +178,14 @@ export default function MainNavbar({
           </div>
         </div>
 
-        {/* Desktop layout */}
-        <div className="hidden md:grid md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-center md:gap-6 lg:gap-8 h-16">
+        {/* Desktop layout — logo | centered search | language */}
+        <div className="hidden md:grid md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-center md:gap-x-6 lg:gap-x-8 h-20">
           <div className="shrink-0">
             <Logo {...DESKTOP_LOGO_PROPS} href="/" />
           </div>
 
-          <div className="flex justify-center min-w-0 px-2 lg:px-6">
-            <div className="w-full max-w-xl">
+          <div className="flex justify-center min-w-0 px-2 lg:px-8">
+            <div className="w-full max-w-md lg:max-w-lg xl:max-w-xl">
               <DesktopSearchField
                 searchQuery={searchQuery}
                 onSearchChange={handleSearchChange}
@@ -195,8 +195,8 @@ export default function MainNavbar({
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-1.5 shrink-0">
-            <LanguageSwitcher />
+          <div className="flex items-center justify-end shrink-0">
+            <LanguageSwitcher variant="segmented" />
           </div>
         </div>
       </div>

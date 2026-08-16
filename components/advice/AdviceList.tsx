@@ -53,7 +53,9 @@ export default function AdviceList({ articles }: AdviceListProps) {
         </div>
       ) : (
         <div className="mt-10 text-center py-12 px-4 bg-white rounded-2xl border border-black/5">
-          <p className="text-gray-600">{t("advice.emptyState")}</p>
+          <p className="text-gray-600">
+            {articles.length === 0 ? t("advice.noArticles") : t("advice.emptyState")}
+          </p>
         </div>
       )}
     </div>

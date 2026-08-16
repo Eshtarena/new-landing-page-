@@ -42,6 +42,12 @@ export default function ScrollRestoration() {
       }
 
       scrollPositions.set(getPathKey(router.asPath), window.scrollY);
+
+      // Locale switches fade the page instead of flashing a white overlay.
+      if (window.__preserveScrollOnNextRoute) {
+        return;
+      }
+
       setIsNavigating(true);
     };
 

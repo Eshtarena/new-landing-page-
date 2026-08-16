@@ -8,8 +8,6 @@ export default function ShopAdviceSection() {
   const isRTL = i18n.language === "ar";
   const { articles, isLoading } = useAdviceArticles(10);
 
-  if (!isLoading && articles.length === 0) return null;
-
   return (
     <section
       className="w-full pt-6 pb-2 lg:pt-2 lg:pb-12"
@@ -21,6 +19,10 @@ export default function ShopAdviceSection() {
           {Array.from({ length: 2 }).map((_, index) => (
             <div key={index} className="w-full h-52 rounded-3xl bg-gray-100 animate-pulse lg:h-48" />
           ))}
+        </div>
+      ) : articles.length === 0 ? (
+        <div className="text-center py-12 px-4 bg-white rounded-2xl border border-black/5">
+          <p className="text-gray-600">{t("advice.noArticles")}</p>
         </div>
       ) : (
         <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-6">

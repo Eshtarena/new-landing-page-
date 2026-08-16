@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { beginLocaleSwitch } from "../utils/localeSwitch";
 
 type Locale = "en" | "ar";
 
@@ -11,10 +12,7 @@ export default function LanguageSwitcher() {
       return;
     }
 
-    if (typeof window !== "undefined") {
-      (window as typeof window & { __preserveScrollOnNextRoute?: boolean }).__preserveScrollOnNextRoute =
-        true;
-    }
+    beginLocaleSwitch();
 
     await router.push({ pathname, query }, asPath, { locale, scroll: false });
   };

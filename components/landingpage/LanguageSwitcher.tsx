@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+import { beginLocaleSwitch } from '../../utils/localeSwitch';
 
 function GlobeIcon({ className = 'w-4 h-4' }: { className?: string }) {
   return (
@@ -15,7 +16,7 @@ function GlobeIcon({ className = 'w-4 h-4' }: { className?: string }) {
 }
 
 interface LanguageSwitcherProps {
-  variant?: 'default' | 'compact';
+  variant?: 'default' | 'compact' | 'segmented';
 }
 
 export default function LanguageSwitcher({ variant = 'default' }: LanguageSwitcherProps) {
@@ -27,13 +28,52 @@ export default function LanguageSwitcher({ variant = 'default' }: LanguageSwitch
       return;
     }
 
-    if (typeof window !== "undefined") {
-      (window as typeof window & { __preserveScrollOnNextRoute?: boolean }).__preserveScrollOnNextRoute =
-        true;
-    }
+    beginLocaleSwitch();
 
     await router.push({ pathname, query }, asPath, { locale, scroll: false });
   };
+
+  if (variant === 'segmented') {
+    const isArabic = router.locale === 'ar';
+
+    return (
+      <div
+        className="relative inline-grid grid-cols-2 items-center gap-1 rounded-full border border-white/15 p-1"
+        role="group"
+        aria-label="Language"
+        dir="ltr"
+      >
+        <span
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-y-1 start-1 w-[calc(50%-0.25rem)] rounded-full bg-white/20 transition-transform duration-200 ease-spring motion-reduce:transition-none ${
+            isArabic ? 'translate-x-[calc(100%+0.25rem)]' : 'translate-x-0'
+          }`}
+        />
+        <button
+          type="button"
+          onClick={() => switchLanguage('en')}
+          className={`relative z-10 min-w-[2.75rem] px-3 py-1.5 text-sm font-medium rounded-full transition-colors duration-200 ease-spring ${
+            router.locale === 'en'
+              ? 'text-white'
+              : 'text-white/65 hover:text-white'
+          }`}
+        >
+          EN
+        </button>
+        <button
+          type="button"
+          onClick={() => switchLanguage('ar')}
+          className={`relative z-10 min-w-[2.75rem] px-3 py-1.5 text-sm font-medium rounded-full transition-colors duration-200 ease-spring ${
+            router.locale === 'ar'
+              ? 'text-white'
+              : 'text-white/65 hover:text-white'
+          }`}
+        >
+          عربي
+        </button>
+      </div>
+    );
+  }
 
   if (variant === 'compact') {
     const isArabic = router.locale === 'ar';

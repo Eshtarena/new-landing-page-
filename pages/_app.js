@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { GoogleTagManager } from '@next/third-parties/google';
 import { Inter, Cairo } from 'next/font/google';
 import ScrollRestoration from '../components/ScrollRestoration';
+import LocaleTransition from '../components/LocaleTransition';
 import LocaleDirectionSync from '../components/LocaleDirectionSync';
 import ErrorBoundary from '../components/ErrorBoundary';
 import '../styles/globals.css';
@@ -41,7 +42,9 @@ function MyApp({ Component, pageProps }) {
       <LocaleDirectionSync />
       <ScrollRestoration />
       <ErrorBoundary router={router}>
-        <Component {...pageProps} />
+        <LocaleTransition>
+          <Component {...pageProps} />
+        </LocaleTransition>
       </ErrorBoundary>
     </>
   );
