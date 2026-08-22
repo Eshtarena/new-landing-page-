@@ -1,11 +1,16 @@
 import Image from "next/image";
 import { useTranslation } from "next-i18next/pages";
+import OverlappingDealImages from "./landingpage/OverlappingDealImages";
 
 interface DealCardProps {
   title: string;
   description?: string | null;
   points?: string[];
-  imageSrc: string;
+  imageSrc?: string;
+  overlappingImages?: {
+    back: string;
+    front: string;
+  };
   imageAlt: string;
   imageIsPhone?: boolean; // special case for phone image with different dimensions
   isReversed?: boolean; // if true, image appears on the right (left in RTL)
@@ -17,6 +22,7 @@ export default function DealCard({
   description,
   points,
   imageSrc,
+  overlappingImages,
   imageAlt,
   imageIsPhone,
   isReversed = false,
@@ -65,12 +71,14 @@ export default function DealCard({
   );
 
   const imageSection = (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center py-4 sm:py-6">
       <div
         className={`relative isolate ${
-          imageIsPhone
-            ? "w-[220px] h-[360px] sm:w-[280px] sm:h-[440px] md:w-[350px] md:h-[550px]"
-            : "w-full max-w-lg sm:max-w-xl md:max-w-2xl"
+          overlappingImages
+            ? "w-full max-w-[420px] sm:max-w-[480px]"
+            : imageIsPhone
+              ? "w-[220px] h-[360px] sm:w-[280px] sm:h-[440px] md:w-[350px] md:h-[550px]"
+              : "w-full max-w-lg sm:max-w-xl md:max-w-2xl"
         }`}
       >
         {/* Decorative glow behind the visual */}
@@ -78,17 +86,28 @@ export default function DealCard({
           aria-hidden="true"
           className="absolute w-[115%] h-[115%] left-[-7.5%] top-[-7.5%] bg-linear-to-tr from-primary-500/20 via-purple-500/15 to-transparent blur-3xl rounded-full -z-10"
         />
-        <Image
-          src={imageSrc}
-          alt={imageAlt}
-          {...(imageIsPhone
-            ? { fill: true, className: "object-contain drop-shadow-2xl" }
-            : {
-                width: 800,
-                height: 600,
-                className: "w-full h-auto rounded-2xl object-cover drop-shadow-xl",
-              })}
-        />
+        {overlappingImages ? (
+          <OverlappingDealImages
+            backSrc={overlappingImages.back}
+            frontSrc={overlappingImages.front}
+            alt={imageAlt}
+            isRTL={isRTL}
+          />
+        ) : (
+          imageSrc && (
+            <Image
+              src={imageSrc}
+              alt={imageAlt}
+              {...(imageIsPhone
+                ? { fill: true, className: "object-contain drop-shadow-2xl" }
+                : {
+                    width: 800,
+                    height: 600,
+                    className: "w-full h-auto rounded-2xl object-cover drop-shadow-xl",
+                  })}
+            />
+          )
+        )}
       </div>
     </div>
   );
@@ -100,7 +119,11 @@ export default function DealCard({
   }`;
 
   const content = (
-    <div className="py-8 md:py-10">
+    <div
+      className={
+        overlappingImages ? "py-10 md:py-14 lg:py-16" : "py-8 md:py-10"
+      }
+    >
       <div className="container-width">
         <div
           className={`grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-16 items-center ${

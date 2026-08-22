@@ -19,6 +19,7 @@ export const API_ENDPOINTS = {
   TERMS: "/v1/terms-and-conditions",
   PRIVACY_POLICY: "/v1/privacy-policy",
   CONTACT_US: "/v1/contact-us",
+  SUPPLIER_REQUEST: "/v1/supplierrequest",
   SOCIAL_LINKS: "/v1/about/links",
   ADVICE: "/v1/advice",
   PUBLIC_ADS: "/v1/public/ads",

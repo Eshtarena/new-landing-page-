@@ -26,18 +26,25 @@ export const SLIDER_IMAGES = {
 };
 export const LANDING_IMAGES = {
   en: {
-    coldDeal: "/landing_page/english/cold_deal.webp",
-    originalDeal: "/landing_page/english/original_deal.webp",
     voucherDeal: "/landing_page/english/voucher_deal.webp",
-    voucherDeal2: "/landing_page/english/voucher_deal2.webp",
-    yourNeedsEasily: "/landing_page/english/your_needs_easily.webp",
   },
   ar: {
-    coldDeal: "/landing_page/arabic/cold_deal.webp",
-    originalDeal: "/landing_page/arabic/original_deal.webp",
     voucherDeal: "/landing_page/arabic/voucher_deal.webp",
-    voucherDeal2: "/landing_page/arabic/voucher_deal2.webp",
-    yourNeedsEasily: "/landing_page/arabic/your_needs_easily.webp",
+  },
+};
+
+export const OVERLAPPING_DEAL_IMAGES = {
+  original: {
+    back: "/product-deal-1.png",
+    front: "/product-deal-2.png",
+  },
+  cold: {
+    back: "/cold-deal-1.png",
+    front: "/cold-deal-2.png",
+  },
+  voucher: {
+    back: "/vouchers-1.png",
+    front: "/vouchers-2.png",
   },
 };
 
@@ -45,10 +52,7 @@ export const DEALS_DATA = [
   {
     id: "original",
     translationKey: "deals.productDeal",
-    imageSrc: {
-      ar: LANDING_IMAGES.ar.originalDeal,
-      en: LANDING_IMAGES.en.originalDeal,
-    },
+    overlappingImages: OVERLAPPING_DEAL_IMAGES.original,
     imageAlt: "Product Deal",
     hasBgColor: true,
     isReversed: false,
@@ -56,10 +60,7 @@ export const DEALS_DATA = [
   {
     id: "voucher",
     translationKey: "deals.voucherDeal",
-    imageSrc: {
-      ar: LANDING_IMAGES.ar.voucherDeal2,
-      en: LANDING_IMAGES.en.voucherDeal2,
-    },
+    overlappingImages: OVERLAPPING_DEAL_IMAGES.voucher,
     imageAlt: "Voucher Deal",
     hasBgColor: false,
     isReversed: false,
@@ -79,10 +80,7 @@ export const DEALS_DATA = [
   {
     id: "cold",
     translationKey: "deals.coldDeal",
-    imageSrc: {
-      ar: LANDING_IMAGES.ar.coldDeal,
-      en: LANDING_IMAGES.en.coldDeal,
-    },
+    overlappingImages: OVERLAPPING_DEAL_IMAGES.cold,
     imageAlt: "Cold Deal",
     hasBgColor: true,
     isReversed: false,

@@ -1,13 +1,11 @@
 import { useTranslation } from "next-i18next/pages";
+import { STORES_IMAGES_LINKS } from "../../utils/consts";
+import TriplePhoneShowcase from "./TriplePhoneShowcase";
 import Image from "next/image";
-import { LANDING_IMAGES, STORES_IMAGES_LINKS } from "../../utils/consts";
 
 export default function AboutSection({socialData} ) {
   const { t, i18n } = useTranslation("common");
   const isRTL = i18n.language === "ar";
-  const yourNeedsImage = isRTL
-    ? LANDING_IMAGES.ar.yourNeedsEasily
-    : LANDING_IMAGES.en.yourNeedsEasily;
 
   return (
     <div
@@ -51,22 +49,14 @@ export default function AboutSection({socialData} ) {
         </div>
 
         {/* Image Section */}
-        <div className="flex justify-center">
-          <div className="relative isolate w-full max-w-[500px] mx-auto">
+        <div className="flex justify-center py-4 sm:py-6">
+          <div className="relative isolate w-full max-w-[620px] mx-auto">
             {/* Decorative glow behind the mockups */}
             <div
               aria-hidden="true"
               className="absolute w-[120%] h-[120%] left-[-10%] top-[-10%] bg-linear-to-tr from-primary-500/30 via-purple-500/20 to-transparent blur-3xl rounded-full -z-10"
             />
-            <div className="relative aspect-3/4 motion-safe:animate-float">
-              <Image
-                src={yourNeedsImage}
-                alt="Sharena App Screenshots"
-                fill
-                className="object-contain drop-shadow-2xl"
-                priority
-              />
-            </div>
+            <TriplePhoneShowcase isRTL={isRTL} />
           </div>
         </div>
       </div>

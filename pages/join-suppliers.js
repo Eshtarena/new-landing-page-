@@ -3,7 +3,7 @@ import { serverSideTranslations } from "next-i18next/pages/serverSideTranslation
 import Navbar from "../components/landingpage/Navbar";
 import Footer from "../components/landingpage/Footer";
 import { useState, useEffect } from "react";
-import { SocialService } from "../services";
+import { SocialService, SupplierRequestService } from "../services";
 import { useForm, useWatch } from "react-hook-form";
 import { object, string } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -83,7 +83,7 @@ export default function JoinSuppliers() {
     setErrorMessage("");
 
     try {
-      const response = await submitSupplierRequest(data);
+      const response = await SupplierRequestService.submit(data);
       
       // Check for success response
       if (response.message === "success") {

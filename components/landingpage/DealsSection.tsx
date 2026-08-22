@@ -70,7 +70,10 @@ export default function DealsSection() {
               title={title}
               description={description}
               points={points}
-              imageSrc={getImageSrc(deal.imageSrc)}
+              imageSrc={
+                deal.imageSrc ? getImageSrc(deal.imageSrc) : undefined
+              }
+              overlappingImages={deal.overlappingImages}
               imageAlt={deal.imageAlt}
               imageIsPhone={deal.imageIsPhone}
               isReversed={index % 2 === 1}

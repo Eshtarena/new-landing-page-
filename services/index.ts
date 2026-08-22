@@ -6,3 +6,4 @@ export * from "./advice.service";
 export * from "./banners.service";
 export * from "./categories.service";
 export * from "./deals.service";
+export * from "./supplierRequest.service";
