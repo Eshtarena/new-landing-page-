@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next/pages";
 import { Deal } from "../../types/deals";
 import DealAccordion, { DealAccordionItem } from "./DealAccordion";
+import DealAdviceSection from "./DealAdviceSection";
 import PricingDisplay from "./PricingDisplay";
 import ProgressBar from "./ProgressBar";
 
@@ -62,7 +63,15 @@ export default function DealTabsSection({ deal, variant = "default" }: DealTabsS
   const renderDesktopTabContent = () => {
     switch (activeTab) {
       case "description":
-        return <DescriptionTab deal={deal} tx={tx} />;
+        return (
+          <DescriptionTab
+            deal={deal}
+            tx={tx}
+            isRTL={isRTL}
+            readTimeLabel={t("advice.readTime", { minutes: deal.advice?.readTimeMinutes ?? 1 })}
+            adviceCardTitle={t("advice.cardTitle")}
+          />
+        );
       case "details":
         return <DetailsTab deal={deal} tx={tx} locale={locale} />;
       case "terms":
@@ -70,14 +79,31 @@ export default function DealTabsSection({ deal, variant = "default" }: DealTabsS
       case "branches":
         return <BranchesTab deal={deal} tx={tx} isRTL={isRTL} />;
       default:
-        return <DescriptionTab deal={deal} tx={tx} />;
+        return (
+          <DescriptionTab
+            deal={deal}
+            tx={tx}
+            isRTL={isRTL}
+            readTimeLabel={t("advice.readTime", { minutes: deal.advice?.readTimeMinutes ?? 1 })}
+            adviceCardTitle={t("advice.cardTitle")}
+          />
+        );
     }
   };
 
   const renderMobileTabContent = () => {
     switch (activeTab) {
       case "deal":
-        return <MobileDealTab deal={deal} tx={tx} locale={locale} />;
+        return (
+          <MobileDealTab
+            deal={deal}
+            tx={tx}
+            locale={locale}
+            isRTL={isRTL}
+            readTimeLabel={t("advice.readTime", { minutes: deal.advice?.readTimeMinutes ?? 1 })}
+            adviceCardTitle={t("advice.cardTitle")}
+          />
+        );
       case "product":
         return <MobileProductTab deal={deal} tx={tx} locale={locale} />;
       case "delivery":
@@ -85,7 +111,16 @@ export default function DealTabsSection({ deal, variant = "default" }: DealTabsS
       case "payment":
         return <MobilePaymentTab deal={deal} tx={tx} isRTL={isRTL} />;
       default:
-        return <MobileDealTab deal={deal} tx={tx} locale={locale} />;
+        return (
+          <MobileDealTab
+            deal={deal}
+            tx={tx}
+            locale={locale}
+            isRTL={isRTL}
+            readTimeLabel={t("advice.readTime", { minutes: deal.advice?.readTimeMinutes ?? 1 })}
+            adviceCardTitle={t("advice.cardTitle")}
+          />
+        );
     }
   };
 
@@ -229,10 +264,16 @@ const MobileDealTab = ({
   deal,
   tx,
   locale,
+  isRTL,
+  readTimeLabel,
+  adviceCardTitle,
 }: {
   deal: Deal;
   tx: (key: string, en: string, ar: string) => string;
   locale: string;
+  isRTL: boolean;
+  readTimeLabel: string;
+  adviceCardTitle: string;
 }) => {
   const content = deal.detailContent;
   const specialSpecs = content?.specialSpecification?.trim() || "";
@@ -267,7 +308,7 @@ const MobileDealTab = ({
     });
   }
 
-  if (expertAdvice) {
+  if (expertAdvice && !deal.advice) {
     accordionItems.push({
       id: "expert-advice",
       title: tx(
@@ -282,6 +323,15 @@ const MobileDealTab = ({
   return (
     <div className="space-y-4">
       {deal.supplier ? <MobileSupplierCard deal={deal} /> : null}
+
+      {deal.advice ? (
+        <DealAdviceSection
+          advice={deal.advice}
+          isArabic={isRTL}
+          cardTitle={adviceCardTitle}
+          readTimeLabel={readTimeLabel}
+        />
+      ) : null}
 
       <PricingDisplay
         deal={deal}
@@ -466,14 +516,29 @@ const MobilePaymentTab = ({
 const DescriptionTab = ({
   deal,
   tx,
+  isRTL,
+  readTimeLabel,
+  adviceCardTitle,
 }: {
   deal: Deal;
   tx: (key: string, en: string, ar: string) => string;
+  isRTL: boolean;
+  readTimeLabel: string;
+  adviceCardTitle: string;
 }) => {
   const aboutText = deal.detailContent?.about || deal.description;
 
   return (
     <div className="max-w-3xl space-y-5">
+      {deal.advice ? (
+        <DealAdviceSection
+          advice={deal.advice}
+          isArabic={isRTL}
+          cardTitle={adviceCardTitle}
+          readTimeLabel={readTimeLabel}
+        />
+      ) : null}
+
       <SectionTitle title={tx("dealDetails.aboutTitle", "About This Deal", "نبذة عن العرض")} />
       {aboutText ? (
         <p className="text-[15px] leading-7 text-gray-600 whitespace-pre-line">{aboutText}</p>

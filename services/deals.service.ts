@@ -10,7 +10,9 @@ import type {
   DealDetailContent,
   DealTermItem,
 } from "../types/deals";
+import { mapHomeAdviceToArticle } from "./advice.service";
 import { dealCoverageLocationText, mapDealCityCoverage } from "../utils/dealCoverage";
+import type { AdviceArticle } from "../types/advice";
 
 export type Locale = "en" | "ar";
 
@@ -388,6 +390,7 @@ interface RawVoucherDetail {
   cities?: RawCity[];
   about?: { content_en?: string; content_ar?: string };
   customerPaymentTerms?: RawCustomerPaymentTerm[];
+  advice?: RawDealAdvice;
 }
 
 interface RawVoucherDetailResponse {
@@ -427,16 +430,51 @@ interface RawDealDetail {
   deliveryTerms?: unknown[];
   paymentTerms?: LocalizedValue;
   customerPaymentTerms?: RawCustomerPaymentTerm[];
+  advice?: RawDealAdvice;
 }
 
 interface RawDealDetailResponse {
   deal: RawDealDetail;
 }
 
+interface RawDealAdvice {
+  _id: string;
+  uuid?: number;
+  title_en?: string;
+  title_ar?: string;
+  advice_en?: string;
+  advice_ar?: string;
+  pic?: string | string[];
+  advisor?: {
+    _id?: string;
+    name_en?: string;
+    name_ar?: string;
+    role?: string;
+    pic?: string;
+  };
+  category?: {
+    _id?: string;
+    name_en?: string;
+    name_ar?: string;
+    categoryImg?: string;
+  };
+  likes?: number;
+  shares?: number;
+  totalLikes?: number;
+  totalShares?: number;
+}
+
 interface RawPublicDealDetailResponse {
   type: string;
   deal?: RawDealDetail;
   voucher?: RawVoucherDetail;
+  advice?: RawDealAdvice;
+}
+
+function attachAdviceToDeal<T extends Deal>(deal: T, rawAdvice?: RawDealAdvice): T {
+  if (!rawAdvice?._id) return deal;
+  const advice: AdviceArticle = mapHomeAdviceToArticle(rawAdvice);
+  return { ...deal, advice };
 }
 
 function supplierName(supplier: RawSupplier | undefined, locale: Locale): string | undefined {
@@ -481,32 +519,35 @@ export function mapVoucherDetailToDeal(
   const description = about || localizedTextOrUndefined(raw.terms, locale);
   const coverage = dealCoverageFields(raw.allKsa, raw.cities, raw.districts, locale);
 
-  return {
-    id: raw._id || fallbackId || "",
-    title,
-    description,
-    images: toImages(raw.pic, title, "voucher"),
-    dealType: "voucher",
-    timer: defaultTimer(raw.endDate),
-    location: coverage.location,
-    allKsa: coverage.allKsa,
-    cities: coverage.cities,
-    quantity: defaultQuantity(raw.quantity, raw.sold),
-    dealPrice: raw.dealPrice,
-    saveAmount: raw.save ?? Math.max(0, (raw.voucherValue ?? 0) - raw.dealPrice),
-    currency: "SAR",
-    isActive: isStatusActive(raw.status),
-    supplier: supplierName(raw.supplier, locale),
-    supplierLogo: supplierLogo(raw.supplier),
-    supplierId: supplierId(raw.supplier),
-    voucherValue: raw.voucherValue,
-    detailContent: buildDetailContent({
-      about: raw.about,
-      deliveryTerms: raw.terms,
-      customerPaymentTerms: raw.customerPaymentTerms,
-      locale,
-    }),
-  };
+  return attachAdviceToDeal(
+    {
+      id: raw._id || fallbackId || "",
+      title,
+      description,
+      images: toImages(raw.pic, title, "voucher"),
+      dealType: "voucher",
+      timer: defaultTimer(raw.endDate),
+      location: coverage.location,
+      allKsa: coverage.allKsa,
+      cities: coverage.cities,
+      quantity: defaultQuantity(raw.quantity, raw.sold),
+      dealPrice: raw.dealPrice,
+      saveAmount: raw.save ?? Math.max(0, (raw.voucherValue ?? 0) - raw.dealPrice),
+      currency: "SAR",
+      isActive: isStatusActive(raw.status),
+      supplier: supplierName(raw.supplier, locale),
+      supplierLogo: supplierLogo(raw.supplier),
+      supplierId: supplierId(raw.supplier),
+      voucherValue: raw.voucherValue,
+      detailContent: buildDetailContent({
+        about: raw.about,
+        deliveryTerms: raw.terms,
+        customerPaymentTerms: raw.customerPaymentTerms,
+        locale,
+      }),
+    },
+    raw.advice
+  );
 }
 
 function mapDealDetailToDeal(
@@ -559,9 +600,12 @@ function mapDealDetailToDeal(
     }),
   };
 
-  return dealType === "original"
-    ? ({ ...base, dealType: "original" } as OriginalDeal)
-    : ({ ...base, dealType: "cold" } as ColdDeal);
+  return attachAdviceToDeal(
+    dealType === "original"
+      ? ({ ...base, dealType: "original" } as OriginalDeal)
+      : ({ ...base, dealType: "cold" } as ColdDeal),
+    raw.advice
+  );
 }
 
 export function mapPublicDealDetailResponse(
@@ -579,14 +623,16 @@ export function mapPublicDealDetailResponse(
     if (!data.voucher) {
       throw new Error("Voucher deal payload is missing");
     }
-    return mapVoucherDetailToDeal(data.voucher, locale, fallbackId);
+    const deal = mapVoucherDetailToDeal(data.voucher, locale, fallbackId);
+    return deal.advice ? deal : attachAdviceToDeal(deal, data.advice);
   }
 
   if (!data.deal) {
     throw new Error("Deal payload is missing");
   }
 
-  return mapDealDetailToDeal(data.deal, locale, dealType);
+  const deal = mapDealDetailToDeal(data.deal, locale, dealType);
+  return deal.advice ? deal : attachAdviceToDeal(deal, data.advice);
 }
 
 export const mapOriginalDetailToDeal = (raw: RawDealDetail, locale: Locale): OriginalDeal =>

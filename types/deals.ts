@@ -1,5 +1,7 @@
 // Deal card types based on the three deal variants shown in the UI
 
+import type { AdviceArticle } from "./advice";
+
 export type DealType = 'voucher' | 'cold' | 'original';
 
 export interface BaseLocation {
@@ -81,6 +83,8 @@ export interface BaseDeal {
   /** Product country of origin from API `product.country_en/ar`. */
   productMadeIn?: string;
   detailContent?: DealDetailContent;
+  /** Linked purchasing expert advice when returned by the deal details API. */
+  advice?: AdviceArticle;
 }
 
 export interface VoucherDeal extends BaseDeal {

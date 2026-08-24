@@ -23,6 +23,9 @@ export interface AdviceArticle {
   advisorTitle_en?: string;
   advisorTitle_ar?: string;
   advisorAvatarUrl?: string;
+  categoryName_en?: string;
+  categoryName_ar?: string;
+  categoryImageUrl?: string;
   likesCount?: number;
   sharesCount?: number;
 }

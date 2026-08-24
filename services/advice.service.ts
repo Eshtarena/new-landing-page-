@@ -19,17 +19,28 @@ interface RawHomeAdviceAdvisor {
   pic?: string;
 }
 
-// Raw shape of an Advice item inside GET /v1/user/home?type=Advice.
-interface RawHomeAdviceItem {
+interface RawAdviceCategory {
+  _id?: string;
+  name_en?: string;
+  name_ar?: string;
+  categoryImg?: string;
+}
+
+// Raw shape of an Advice item inside GET /v1/user/home?type=Advice and deal detail payloads.
+export interface RawHomeAdviceItem {
   _id: string;
+  uuid?: number;
   title_en?: string;
   title_ar?: string;
   advice_en?: string;
   advice_ar?: string;
   pic?: string | string[];
   advisor?: RawHomeAdviceAdvisor;
+  category?: RawAdviceCategory;
   likes?: number;
   shares?: number;
+  totalLikes?: number;
+  totalShares?: number;
 }
 
 interface RawHomeResponse {
@@ -37,17 +48,8 @@ interface RawHomeResponse {
 }
 
 // Raw shape of GET /v1/user/advice/:_id — requires auth, so guests will typically 401 here.
-interface RawAdviceDetail {
-  uuid?: number;
-  pic?: string | string[];
-  title_en: string;
-  title_ar: string;
-  advice_en: string;
-  advice_ar: string;
+interface RawAdviceDetail extends RawHomeAdviceItem {
   startDateTime?: string;
-  advisor?: RawHomeAdviceAdvisor;
-  likes?: number;
-  shares?: number;
 }
 
 interface RawAdviceDetailResponse {
@@ -99,8 +101,12 @@ export function mapHomeAdviceToArticle(raw: RawHomeAdviceItem): AdviceArticle {
     advisorTitle_ar: raw.advisor?.role || undefined,
     advisorAvatarUrl:
       resolvePublicAsset("advisor", raw.advisor?.pic) || undefined,
-    likesCount: raw.likes ?? 0,
-    sharesCount: raw.shares ?? 0,
+    categoryName_en: raw.category?.name_en || undefined,
+    categoryName_ar: raw.category?.name_ar || undefined,
+    categoryImageUrl:
+      resolvePublicAsset("category", raw.category?.categoryImg) || undefined,
+    likesCount: raw.totalLikes ?? raw.likes ?? 0,
+    sharesCount: raw.totalShares ?? raw.shares ?? 0,
   };
 }
 
@@ -128,8 +134,12 @@ export function mapAdviceDetailToArticle(id: string, raw: RawAdviceDetail): Advi
     advisorTitle_ar: raw.advisor?.role || undefined,
     advisorAvatarUrl:
       resolvePublicAsset("advisor", raw.advisor?.pic) || undefined,
-    likesCount: raw.likes ?? 0,
-    sharesCount: raw.shares ?? 0,
+    categoryName_en: raw.category?.name_en || undefined,
+    categoryName_ar: raw.category?.name_ar || undefined,
+    categoryImageUrl:
+      resolvePublicAsset("category", raw.category?.categoryImg) || undefined,
+    likesCount: raw.totalLikes ?? raw.likes ?? 0,
+    sharesCount: raw.totalShares ?? raw.shares ?? 0,
   };
 }
 
