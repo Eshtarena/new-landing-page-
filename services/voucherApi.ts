@@ -1,5 +1,6 @@
 import type { VoucherApiResponse } from "../types/api/voucher";
 import type { VoucherDeal, DealTimer } from "../types/deals";
+import { dealCoverageLocationText, mapDealCityCoverage } from "../utils/dealCoverage";
 import { API_BASE_URL, BACKEND_PUBLIC_BASE, getGuestAuthHeaders } from "./config";
 
 /** Voucher deal image: backend_base_url/public/voucher/image */
@@ -55,7 +56,9 @@ export function mapVoucherApiToDeal(
   const total = v.quantity;
   const sold = v.sold;
   const available = Math.max(0, total - sold);
-  const locationText = v.allKsa ? "All KSA" : (v.districts?.length || v.cities?.length) ? "Selected areas" : "KSA";
+  const allKsa = Boolean(v.allKsa);
+  const cities = mapDealCityCoverage(v.cities, v.districts, lang);
+  const locationText = dealCoverageLocationText(allKsa, cities, lang);
 
   const paymentTerms = (v.customerPaymentTerms || []).map((t) => ({
     title: isEn ? t.title_en : t.title_ar,
@@ -77,6 +80,8 @@ export function mapVoucherApiToDeal(
     dealType: "voucher",
     timer,
     location: { text: locationText },
+    allKsa,
+    cities: cities.length ? cities : undefined,
     quantity: { sold, available },
     dealPrice: v.dealPrice,
     saveAmount: v.save,

@@ -51,7 +51,8 @@ export default function BannersSection() {
       : slides;
 
   useEffect(() => {
-    setSlide(1);
+    // Infinite carousel uses index 1 (clone prefix); a single slide must stay at 0.
+    setSlide(slides.length <= 1 ? 0 : 1);
     setIsTransitioning(false);
   }, [slides.length, lang]);
 
@@ -135,8 +136,10 @@ export default function BannersSection() {
     delta: 10,
   });
 
+  const carouselIndex = slides.length <= 1 ? 0 : slide;
+
   const getSliderStyle = () => ({
-    transform: `translateX(-${slide * 100}%)`,
+    transform: `translateX(-${carouselIndex * 100}%)`,
     transition: isTransitioning
       ? "transform 500ms cubic-bezier(0.32, 0.72, 0, 1)"
       : "none",

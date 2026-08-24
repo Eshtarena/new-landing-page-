@@ -7,6 +7,11 @@ export interface BaseLocation {
   icon?: string;
 }
 
+export interface DealCityCoverage {
+  city: string;
+  districts: string[];
+}
+
 export interface DealTimer {
   days: number;
   hours: number;
@@ -54,6 +59,10 @@ export interface BaseDeal {
   dealType: DealType;
   timer: DealTimer;
   location: BaseLocation;
+  /** When true, the deal is available across all of KSA. */
+  allKsa?: boolean;
+  /** Cities and districts where the deal is available (when not all KSA). */
+  cities?: DealCityCoverage[];
   quantity: DealQuantity;
   dealPrice: number;
   saveAmount: number;

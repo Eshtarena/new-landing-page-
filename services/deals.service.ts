@@ -10,6 +10,7 @@ import type {
   DealDetailContent,
   DealTermItem,
 } from "../types/deals";
+import { dealCoverageLocationText, mapDealCityCoverage } from "../utils/dealCoverage";
 
 export type Locale = "en" | "ar";
 
@@ -362,8 +363,10 @@ interface RawSupplier {
 }
 
 interface RawCity {
-  city_en: string;
-  city_ar: string;
+  city_en?: string;
+  city_ar?: string;
+  city?: RawCity;
+  districts?: { district_en?: string; district_ar?: string }[];
 }
 
 interface RawVoucherDetail {
@@ -381,6 +384,7 @@ interface RawVoucherDetail {
   sold?: number;
   supplier?: RawSupplier;
   terms?: unknown[];
+  districts?: unknown[];
   cities?: RawCity[];
   about?: { content_en?: string; content_ar?: string };
   customerPaymentTerms?: RawCustomerPaymentTerm[];
@@ -416,6 +420,7 @@ interface RawDealDetail {
   quantity?: number;
   sold?: number;
   supplier?: RawSupplier;
+  districts?: unknown[];
   cities?: RawCity[];
   specialSpecification?: string;
   about?: { content_en?: string; content_ar?: string };
@@ -448,14 +453,19 @@ function supplierId(supplier: RawSupplier | undefined): string | undefined {
   return supplier?._id || undefined;
 }
 
-function citiesLocation(
-  allKsa: boolean,
-  cities: RawCity[] | undefined,
+function dealCoverageFields(
+  allKsa: boolean | undefined,
+  cities: unknown[] | undefined,
+  districts: unknown[] | undefined,
   locale: Locale
-): { text: string } {
-  if (allKsa) return { text: ALL_KSA_TEXT[locale] };
-  const names = (cities || []).map((c) => pickLocale(c.city_en, c.city_ar, locale)).filter(Boolean);
-  return { text: names.length ? names.join(", ") : SELECTED_CITIES_TEXT[locale] };
+) {
+  const isAllKsa = Boolean(allKsa);
+  const mappedCities = mapDealCityCoverage(cities, districts, locale);
+  return {
+    allKsa: isAllKsa,
+    cities: mappedCities.length ? mappedCities : undefined,
+    location: { text: dealCoverageLocationText(isAllKsa, mappedCities, locale) },
+  };
 }
 
 export function mapVoucherDetailToDeal(
@@ -469,6 +479,7 @@ export function mapVoucherDetailToDeal(
     "Voucher Deal";
   const about = pickAboutContent(raw.about, locale);
   const description = about || localizedTextOrUndefined(raw.terms, locale);
+  const coverage = dealCoverageFields(raw.allKsa, raw.cities, raw.districts, locale);
 
   return {
     id: raw._id || fallbackId || "",
@@ -477,7 +488,9 @@ export function mapVoucherDetailToDeal(
     images: toImages(raw.pic, title, "voucher"),
     dealType: "voucher",
     timer: defaultTimer(raw.endDate),
-    location: citiesLocation(Boolean(raw.allKsa), raw.cities, locale),
+    location: coverage.location,
+    allKsa: coverage.allKsa,
+    cities: coverage.cities,
     quantity: defaultQuantity(raw.quantity, raw.sold),
     dealPrice: raw.dealPrice,
     saveAmount: raw.save ?? Math.max(0, (raw.voucherValue ?? 0) - raw.dealPrice),
@@ -513,6 +526,7 @@ function mapDealDetailToDeal(
     pickLocale(raw.product.factory_en, raw.product.factory_ar, locale) || undefined;
   const productMadeIn =
     pickLocale(raw.product.country_en, raw.product.country_ar, locale) || undefined;
+  const coverage = dealCoverageFields(raw.allKsa, raw.cities, raw.districts, locale);
 
   const base = {
     id: raw._id,
@@ -523,7 +537,9 @@ function mapDealDetailToDeal(
     productMadeIn,
     images: toImages(raw.product.pic, title, "product"),
     timer: defaultTimer(raw.endDate),
-    location: citiesLocation(Boolean(raw.allKsa), raw.cities, locale),
+    location: coverage.location,
+    allKsa: coverage.allKsa,
+    cities: coverage.cities,
     quantity: defaultQuantity(raw.quantity, raw.sold),
     dealPrice: raw.dealPrice,
     saveAmount: raw.save,

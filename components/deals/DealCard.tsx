@@ -23,7 +23,7 @@ function SupplierLogo({
   const initials = (supplierName || "S").slice(0, 2).toUpperCase();
 
   return (
-    <div className={`relative w-10 h-10 shrink-0 -rotate-6 ${className}`}>
+    <div className={`relative w-10 h-10 shrink-0 ${className}`}>
       <div className="w-full h-full rounded-[16px] overflow-hidden bg-primary-500 flex items-center justify-center">
         {logoUrl ? (
           <Image

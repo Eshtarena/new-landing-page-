@@ -116,7 +116,8 @@
       "deal": "Deal",
       "product": "Product",
       "delivery": "Delivery",
-      "payment": "Payment"
+      "payment": "Payment",
+      "branches": "Branches"
     },
     "timer": {
       "day": "Day",
@@ -126,6 +127,12 @@
       "seconds": "Secs"
     },
     "aboutTitle": "About This Deal",
+    "branches": {
+      "title": "Available Branches",
+      "allKsa": "All KSA",
+      "districts": "Districts",
+      "noBranches": "No branch availability information for this deal yet."
+    },
     "features": {
       "quality": "Premium quality guaranteed",
       "delivery": "Fast delivery within 2-3 business days",

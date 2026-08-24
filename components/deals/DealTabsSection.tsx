@@ -44,6 +44,10 @@ export default function DealTabsSection({ deal, variant = "default" }: DealTabsS
       id: "terms",
       label: tx("dealDetails.tabs.terms", "Terms & Conditions", "الشروط والأحكام"),
     },
+    {
+      id: "branches",
+      label: tx("dealDetails.tabs.branches", "Branches", "الفروع"),
+    },
   ];
 
   const mobileTabs: TabConfig[] = [
@@ -63,6 +67,8 @@ export default function DealTabsSection({ deal, variant = "default" }: DealTabsS
         return <DetailsTab deal={deal} tx={tx} locale={locale} />;
       case "terms":
         return <TermsTab deal={deal} tx={tx} isRTL={isRTL} />;
+      case "branches":
+        return <BranchesTab deal={deal} tx={tx} isRTL={isRTL} />;
       default:
         return <DescriptionTab deal={deal} tx={tx} />;
     }
@@ -630,6 +636,56 @@ const TermsTab = ({
             </div>
           ))}
         </div>
+      )}
+    </div>
+  );
+};
+
+const BranchesTab = ({
+  deal,
+  tx,
+  isRTL,
+}: {
+  deal: Deal;
+  tx: (key: string, en: string, ar: string) => string;
+  isRTL: boolean;
+}) => {
+  const cities = deal.cities || [];
+  const textAlign = isRTL ? "text-right" : "text-left";
+
+  return (
+    <div className="max-w-3xl space-y-5">
+      <SectionTitle title={tx("dealDetails.branches.title", "Available Branches", "الفروع المتاحة")} />
+
+      {deal.allKsa ? (
+        <p className={`text-[15px] leading-7 text-gray-600 ${textAlign}`}>
+          {tx("dealDetails.branches.allKsa", "All KSA", "جميع أنحاء المملكة")}
+        </p>
+      ) : cities.length > 0 ? (
+        <ul className={`space-y-3 ${textAlign}`}>
+          {cities.map((entry) => (
+            <li
+              key={entry.city}
+              className="rounded-xl border border-gray-100 bg-gray-50/80 px-4 py-3.5"
+            >
+              <p className="text-sm font-semibold text-gray-900">{entry.city}</p>
+              {entry.districts.length > 0 ? (
+                <p className="mt-1 text-xs text-gray-500">
+                  {tx("dealDetails.branches.districts", "Districts", "الأحياء")}:{" "}
+                  {entry.districts.join(", ")}
+                </p>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className={`text-gray-500 ${textAlign}`}>
+          {tx(
+            "dealDetails.branches.noBranches",
+            "No branch availability information for this deal yet.",
+            "لا تتوفر معلومات عن الفروع المتاحة لهذا العرض حتى الآن."
+          )}
+        </p>
       )}
     </div>
   );

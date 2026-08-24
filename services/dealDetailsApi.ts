@@ -1,5 +1,6 @@
 import type { ColdDetailsApiResponse, OriginalDetailsApiResponse, DealDetailsApiDeal } from "../types/api/dealDetails";
 import type { ColdDeal, OriginalDeal, DealTimer, DealDetailContent } from "../types/deals";
+import { dealCoverageLocationText, mapDealCityCoverage } from "../utils/dealCoverage";
 import { API_BASE_URL, BACKEND_PUBLIC_BASE, getGuestAuthHeaders } from "./config";
 import type { Lang } from "./voucherApi";
 
@@ -124,14 +125,16 @@ function mapCommonDealFields(
   v: DealDetailsApiDeal,
   lang: Lang,
   dealType: "cold" | "original"
-): Pick<ColdDeal, "id" | "title" | "description" | "images" | "timer" | "location" | "quantity" | "dealPrice" | "saveAmount" | "currency" | "isActive" | "supplier" | "supplierLogo" | "statusLabel"> {
+): Pick<ColdDeal, "id" | "title" | "description" | "images" | "timer" | "location" | "allKsa" | "cities" | "quantity" | "dealPrice" | "saveAmount" | "currency" | "isActive" | "supplier" | "supplierLogo" | "statusLabel"> {
   const isEn = lang === "en";
   const statusLabel = normalizeStatus(v.status);
   const isActive = statusLabel === "On going";
   const total = v.quantity ?? 0;
   const sold = v.sold ?? 0;
   const available = Math.max(0, total - sold);
-  const locationText = v.allKsa ? "All KSA" : (v.districts?.length || v.cities?.length) ? "Selected areas" : "KSA";
+  const allKsa = Boolean(v.allKsa);
+  const cities = mapDealCityCoverage(v.cities, v.districts, lang);
+  const locationText = dealCoverageLocationText(allKsa, cities, lang);
 
   return {
     id: v._id,
@@ -140,6 +143,8 @@ function mapCommonDealFields(
     images: mapDealImages(v, lang, DEAL_IMAGE_BASE),
     timer: parseEndDateToTimer(v.endDate),
     location: { text: locationText },
+    allKsa,
+    cities: cities.length ? cities : undefined,
     quantity: { sold, available },
     dealPrice: v.dealPrice ?? 0,
     saveAmount: v.save ?? 0,
