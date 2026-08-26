@@ -2,7 +2,7 @@ import ContactForm from "../ContactForm";
 import { useTranslation } from "next-i18next/pages";
 import Image from "next/image";
 import { isXPlatformSocialLink } from "../../services/social.service";
-import { STORES_IMAGES_LINKS } from "../../utils/consts";
+import AppStoreBadges from "../AppStoreBadges";
 
 export default function ContactSection({ socialData }) {
   const { t, i18n } = useTranslation("common");
@@ -91,7 +91,7 @@ export default function ContactSection({ socialData }) {
                       {t("contact.info.email.title")}
                     </h3>
                     <a
-                      href="mailto:customerservice@eshtarena.com"
+                      href="mailto:Support@sharena.sa"
                       className="text-gray-600 hover:text-primary-500 transition-colors font-medium break-all"
                     >
                       {t("contact.info.email.address")}
@@ -143,38 +143,10 @@ export default function ContactSection({ socialData }) {
                     <h3 className="text-xs font-bold text-primary-500/50 uppercase tracking-[0.2em]">
                       {t("contact.info.apps.title")}
                     </h3>
-                    <div className="flex flex-row gap-3">
-                      {socialData.apple && (
-                        <a
-                          href={socialData.apple}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-[125px] h-[38px] relative hover:-translate-y-0.5 transition-transform"
-                        >
-                          <Image
-                            src={isRTL ? STORES_IMAGES_LINKS.ar.apple : STORES_IMAGES_LINKS.en.apple}
-                            alt="Download on the App Store"
-                            fill
-                            className="object-contain"
-                          />
-                        </a>
-                      )}
-                      {socialData.google && (
-                        <a
-                          href={socialData.google}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-[125px] h-[38px] relative hover:-translate-y-0.5 transition-transform"
-                        >
-                          <Image
-                            src={isRTL ? STORES_IMAGES_LINKS.ar.google : STORES_IMAGES_LINKS.en.google}
-                            alt="Get it on Google Play"
-                            fill
-                            className="object-contain"
-                          />
-                        </a>
-                      )}
-                    </div>
+                    <AppStoreBadges
+                      containerClassName="flex flex-row gap-3"
+                      badgeClassName="w-[125px] h-[38px] relative hover:-translate-y-0.5 transition-transform"
+                    />
                   </div>
                 </div>
               </div>

@@ -13,7 +13,7 @@ import { useSupplierDetail } from "../../hooks/useSupplierDetail";
 import { COLORS } from "../../utils/colors";
 import { SHOP_HEADER_STYLE } from "../../utils/shopHeaderStyle";
 
-const DEFAULT_COUNTRY = "egy";
+const DEFAULT_COUNTRY = "saudi";
 
 const MOBILE_TABS = [
   { id: "about", labelKey: "about" },

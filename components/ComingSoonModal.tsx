@@ -1,18 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import { useTranslation } from "next-i18next/pages";
-import AppStoreBadges from "../AppStoreBadges";
 
-interface DownloadAppModalProps {
+interface ComingSoonModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function DownloadAppModal({ isOpen, onClose }: DownloadAppModalProps) {
+export default function ComingSoonModal({ isOpen, onClose }: ComingSoonModalProps) {
   const { t, i18n } = useTranslation("common");
   const isRTL = i18n.language === "ar";
   const dialogRef = useRef<HTMLDivElement>(null);
-  const tx = (key: string, en: string, ar: string) =>
-    t(key, { defaultValue: isRTL ? ar : en });
 
   useEffect(() => {
     if (!isOpen) return;
@@ -48,8 +45,8 @@ export default function DownloadAppModal({ isOpen, onClose }: DownloadAppModalPr
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
-        aria-labelledby="download-app-title"
-        className="relative w-full max-w-md rounded-2xl bg-white p-6 sm:p-8 shadow-soft-lg"
+        aria-labelledby="coming-soon-title"
+        className="relative w-full max-w-sm rounded-2xl bg-white p-6 shadow-soft-lg text-center"
         onClick={(event) => event.stopPropagation()}
         dir={isRTL ? "rtl" : "ltr"}
       >
@@ -57,30 +54,36 @@ export default function DownloadAppModal({ isOpen, onClose }: DownloadAppModalPr
           type="button"
           onClick={onClose}
           className="absolute top-4 end-4 flex h-10 w-10 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-gray-100"
-          aria-label={tx("dealDetails.downloadApp.close", "Close", "إغلاق")}
+          aria-label={t("appStore.close")}
         >
           <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
 
-        <div className="text-center">
-          <h2 id="download-app-title" className="text-2xl font-bold tracking-tight text-primary-500">
-            {tx("dealDetails.downloadApp.title", "Get the Sharena App", "حمّل تطبيق اشترينا")}
-          </h2>
-          <p className="mt-2 text-sm leading-relaxed text-gray-600">
-            {tx(
-              "dealDetails.downloadApp.description",
-              "Download the app to join this deal and complete your purchase securely.",
-              "حمّل التطبيق للانضمام لهذا العرض وإتمام عملية الشراء بأمان."
-            )}
-          </p>
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary-500/10">
+          <svg className="h-7 w-7 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
         </div>
 
-        <AppStoreBadges
-          containerClassName="mt-8 flex flex-wrap items-center justify-center gap-4"
-          badgeClassName="w-[160px] h-[48px] relative block rounded-xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary-500/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
-        />
+        <h2 id="coming-soon-title" className="text-xl font-bold tracking-tight text-primary-500">
+          {t("appStore.comingSoonTitle")}
+        </h2>
+        <p className="mt-2 text-gray-600">{t("appStore.comingSoonMessage")}</p>
+
+        <button
+          type="button"
+          onClick={onClose}
+          className="mt-6 w-full rounded-xl bg-primary-500 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-600"
+        >
+          {t("appStore.close")}
+        </button>
       </div>
     </div>
   );

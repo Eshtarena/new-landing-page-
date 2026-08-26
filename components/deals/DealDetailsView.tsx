@@ -8,6 +8,7 @@ import DealGallery from "./DealGallery";
 import DealBadge from "./DealBadge";
 import CountdownTimer from "./CountdownTimer";
 import DownloadAppModal from "./DownloadAppModal";
+import ComingSoonModal from "../ComingSoonModal";
 import { COLORS } from "../../utils/colors";
 import MainNavbar from "../ecommerce/MainNavbar";
 import { useJoinDeal } from "../../hooks/useJoinDeal";
@@ -31,7 +32,7 @@ interface DealDetailsViewProps {
 }
 
 /**
- * Resolve countryCode: from query, then latest selected in storage, then default "egy".
+ * Resolve countryCode: from query, then latest selected in storage, then default "saudi".
  */
 function resolveCountryCode(
   queryCountry: string | string[] | undefined
@@ -45,7 +46,7 @@ function resolveCountryCode(
   if (fromQuery && isValidCountry(fromQuery)) return fromQuery;
   const latest = getLatestCountryCode();
   if (latest) return latest;
-  return "egy";
+  return "saudi";
 }
 
 /**
@@ -71,7 +72,7 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
   const { t, i18n } = useTranslation("common");
   const [deal, setDeal] = useState<Deal | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [countryCode, setCountryCode] = useState<string>("egy");
+  const [countryCode, setCountryCode] = useState<string>("saudi");
   // Initialize lang from URL on client so Arabic shows immediately when ?lang=ar
   const [lang, setLang] = useState<Lang>(() =>
     typeof window !== "undefined" ? getLangFromUrl(undefined) : "en"
@@ -183,7 +184,7 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
   const isRtl = lang === "ar";
   const labels = DEAL_DETAILS_LABELS[lang];
   const locale = isRtl ? "ar-SA" : "en-US";
-  const { handleJoinDeal, showDesktopModal, closeDesktopModal } = useJoinDeal();
+  const { handleJoinDeal, showDesktopModal, closeDesktopModal, showComingSoon, closeComingSoon } = useJoinDeal();
 
   const handleShareDeal = async () => {
     if (typeof window === "undefined" || !deal) return;
@@ -353,6 +354,7 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
       </div>
 
       <DownloadAppModal isOpen={showDesktopModal} onClose={closeDesktopModal} />
+      <ComingSoonModal isOpen={showComingSoon} onClose={closeComingSoon} />
     </div>
   );
 }

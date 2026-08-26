@@ -19,7 +19,6 @@ interface Props {
 }
 
 const countryNames: CountryNames = {
-  egy: "Egypt",
   saudi: "Saudi Arabia",
 };
 
@@ -81,7 +80,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   const { countryCode } = params as { countryCode: string };
 
   // Validate country code
-  const validCountries = ["egy", "saudi"];
+  const validCountries = ["saudi"];
   if (!validCountries.includes(countryCode?.toLowerCase())) {
     return {
       notFound: true,

@@ -1,9 +1,11 @@
 import { getDeviceOS } from "./device";
 
+export const GOOGLE_PLAY_URL =
+  "https://play.google.com/store/apps/details?id=eshtarena.app";
+
 export const APP_STORE_URLS = {
-  apple: "https://apps.apple.com/eg/app/haai/id6475014639",
-  google:
-    "https://play.google.com/store/apps/details?id=haai.manifestodev",
+  apple: "https://apps.apple.com/app/eshtarena",
+  google: GOOGLE_PLAY_URL,
 } as const;
 
 /** Custom URL scheme used to deep-link into the native app before falling back to the store. */

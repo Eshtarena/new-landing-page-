@@ -20,7 +20,6 @@ const countries = [
   { value: "BH", labelEn: "Bahrain", labelAr: "البحرين" },
   { value: "QA", labelEn: "Qatar", labelAr: "قطر" },
   { value: "OM", labelEn: "Oman", labelAr: "عمان" },
-  { value: "EG", labelEn: "Egypt", labelAr: "مصر" },
 ];
 
 // Country code mapping
@@ -32,7 +31,6 @@ const countryToCode = {
   BH: "+973",
   QA: "+974",
   OM: "+968",
-  EG: "+20",
 };
 
 export default function ContactForm() {
@@ -118,7 +116,7 @@ export default function ContactForm() {
     const value = e.target.value;
     const countryCode = selectedCountryValue?.value
       ? countryToCode[selectedCountryValue.value as keyof typeof countryToCode]
-      : "+20";
+      : "+966";
 
     // Only allow digits after country code
     const numberWithoutCode = value

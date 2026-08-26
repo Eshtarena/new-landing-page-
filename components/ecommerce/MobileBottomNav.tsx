@@ -16,7 +16,7 @@ export default function MobileBottomNav({ activeTab = 'home' }: MobileBottomNavP
   const router = useRouter();
   const countryCode = Array.isArray(router.query.countryCode)
     ? router.query.countryCode[0]
-    : router.query.countryCode || 'egy';
+    : router.query.countryCode || 'saudi';
 
   const navItems = [
     { id: 'home', label: 'Home', icon: 'home', href: `/${countryCode}` },

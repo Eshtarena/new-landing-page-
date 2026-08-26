@@ -3,12 +3,12 @@ import { getDeviceOS } from "../utils/device";
 import {
   APP_STORE_URLS,
   openAppStoreUrl,
-  openIOSAppOrStore,
   resolveJoinDealAction,
 } from "../utils/appStore";
 
 export function useJoinDeal() {
   const [showDesktopModal, setShowDesktopModal] = useState(false);
+  const [showComingSoon, setShowComingSoon] = useState(false);
 
   const handleJoinDeal = useCallback(() => {
     const result = resolveJoinDealAction(APP_STORE_URLS);
@@ -19,7 +19,7 @@ export function useJoinDeal() {
     }
 
     if (getDeviceOS() === "ios") {
-      openIOSAppOrStore(APP_STORE_URLS);
+      setShowComingSoon(true);
       return;
     }
 
@@ -30,9 +30,15 @@ export function useJoinDeal() {
     setShowDesktopModal(false);
   }, []);
 
+  const closeComingSoon = useCallback(() => {
+    setShowComingSoon(false);
+  }, []);
+
   return {
     handleJoinDeal,
     showDesktopModal,
     closeDesktopModal,
+    showComingSoon,
+    closeComingSoon,
   };
 }

@@ -10,7 +10,7 @@ import ShopIconGrid, { ShopIconGridSkeleton } from "../../components/ecommerce/S
 import { useCategories } from "../../hooks/useCategories";
 import { COLORS } from "../../utils/colors";
 
-const DEFAULT_COUNTRY = "egy";
+const DEFAULT_COUNTRY = "saudi";
 
 const FALLBACK_CATEGORIES = [
   { id: "1", title: "Donate For Gaza", image: "/dummy_images/palastine.png", link: "/donate" },

@@ -13,6 +13,7 @@ import { COLORS } from "../../utils/colors";
 import MainNavbar from "../../components/ecommerce/MainNavbar";
 import SiteFooter from "../../components/SiteFooter";
 import DownloadAppModal from "../../components/deals/DownloadAppModal";
+import ComingSoonModal from "../../components/ComingSoonModal";
 import { useJoinDeal } from "../../hooks/useJoinDeal";
 import { useDealDetail } from "../../hooks/useDealDetail";
 import type { DealType } from "../../types/deals";
@@ -27,7 +28,7 @@ export default function DealDetailsPage() {
   // Extract countryCode and lang from router if available, or use defaults
   const countryCode = Array.isArray(router.query.countryCode)
     ? router.query.countryCode[0]
-    : router.query.countryCode || "egy";
+    : router.query.countryCode || "saudi";
   const lang =
     (Array.isArray(router.query.lang)
       ? router.query.lang[0]
@@ -54,7 +55,7 @@ export default function DealDetailsPage() {
     dealId,
     isRTL ? "ar" : "en"
   );
-  const { handleJoinDeal, showDesktopModal, closeDesktopModal } = useJoinDeal();
+  const { handleJoinDeal, showDesktopModal, closeDesktopModal, showComingSoon, closeComingSoon } = useJoinDeal();
 
   const handleShareDeal = async () => {
     if (typeof window === "undefined") return;
@@ -264,6 +265,7 @@ export default function DealDetailsPage() {
       </div>
 
       <DownloadAppModal isOpen={showDesktopModal} onClose={closeDesktopModal} />
+      <ComingSoonModal isOpen={showComingSoon} onClose={closeComingSoon} />
 
       <div className="hidden md:block">
         <SiteFooter />

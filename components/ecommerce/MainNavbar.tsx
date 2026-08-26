@@ -129,7 +129,7 @@ function DesktopSearchField({
 }
 
 export default function MainNavbar({
-  countryCode = "egy",
+  countryCode = "saudi",
   lang = "en",
   onMobileFilterOpen,
   searchQuery = "",

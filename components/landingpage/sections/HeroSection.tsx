@@ -1,12 +1,10 @@
 import React from 'react';
 import Image from 'next/image';
 import { useTranslation } from 'next-i18next/pages';
-import { useRouter } from 'next/router';
-import { STORES_IMAGES_LINKS } from '../../../utils/consts';
+import AppStoreBadges from '../../AppStoreBadges';
 
 export default function HeroSection() {
   const { t, i18n } = useTranslation('common');
-  const router = useRouter();
   const isArabic = i18n.language === 'ar';
 
   return (
@@ -30,33 +28,10 @@ export default function HeroSection() {
             <p className="text-xl text-white/80 mb-8">
               {t('hero.description')}
             </p>
-            <div className="flex flex-wrap gap-4 items-center">
-              {/* App Store Button */}
-              <a
-                href="#"
-                className="w-[160px] h-[48px] relative transition-all duration-300 hover:-translate-y-1"
-              >
-                <Image
-                  src={isArabic ? STORES_IMAGES_LINKS.ar.apple : STORES_IMAGES_LINKS.en.apple}
-                  alt="App Store"
-                  fill
-                  className="object-contain"
-                />
-              </a>
-              
-              {/* Google Play Button */}
-              <a
-                href="#"
-                className="w-[160px] h-[48px] relative transition-all duration-300 hover:-translate-y-1"
-              >
-                <Image
-                  src={isArabic ? STORES_IMAGES_LINKS.ar.google : STORES_IMAGES_LINKS.en.google}
-                  alt="Google Play"
-                  fill
-                  className="object-contain"
-                />
-              </a>
-            </div>
+            <AppStoreBadges
+              containerClassName="flex flex-wrap gap-4 items-center"
+              badgeClassName="w-[160px] h-[48px] relative transition-all duration-300 hover:-translate-y-1"
+            />
           </div>
           
           <div className="relative h-[400px] md:h-[600px]">

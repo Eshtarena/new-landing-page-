@@ -73,7 +73,7 @@ export default function DealCard({
   const imageSection = (
     <div className="flex items-center justify-center py-4 sm:py-6">
       <div
-        className={`relative isolate ${
+        className={`relative ${
           overlappingImages
             ? "w-full max-w-[420px] sm:max-w-[480px]"
             : imageIsPhone
@@ -81,11 +81,6 @@ export default function DealCard({
               : "w-full max-w-lg sm:max-w-xl md:max-w-2xl"
         }`}
       >
-        {/* Decorative glow behind the visual */}
-        <div
-          aria-hidden="true"
-          className="absolute w-[115%] h-[115%] left-[-7.5%] top-[-7.5%] bg-linear-to-tr from-primary-500/20 via-purple-500/15 to-transparent blur-3xl rounded-full -z-10"
-        />
         {overlappingImages ? (
           <OverlappingDealImages
             backSrc={overlappingImages.back}
@@ -99,11 +94,11 @@ export default function DealCard({
               src={imageSrc}
               alt={imageAlt}
               {...(imageIsPhone
-                ? { fill: true, className: "object-contain drop-shadow-2xl" }
+                ? { fill: true, className: "object-contain" }
                 : {
-                    width: 800,
-                    height: 600,
-                    className: "w-full h-auto rounded-2xl object-cover drop-shadow-xl",
+                    width: 1000,
+                    height: 893,
+                    className: "w-full h-auto",
                   })}
             />
           )

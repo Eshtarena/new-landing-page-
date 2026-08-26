@@ -276,7 +276,7 @@ export default function BannersSection() {
       {/* Floating CTA: overlaps the hero's bottom edge into the next section */}
       <div className="absolute inset-x-0 -bottom-5 sm:-bottom-7 flex justify-center z-20 px-4">
         <Link
-          href="/egy"
+          href="/saudi"
           className="group inline-flex items-center gap-2 bg-[#340040] text-white font-semibold text-sm sm:text-base md:text-lg px-6 sm:px-10 py-3 sm:py-4 min-h-11 rounded-full shadow-[0_8px_32px_rgba(52,0,64,0.24)] ring-2 sm:ring-4 ring-white hover:-translate-y-0.5 hover:bg-[#4a0059] transition-all duration-300 ease-spring"
         >
           {t("navbar.shopNow")}

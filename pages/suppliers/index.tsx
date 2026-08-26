@@ -10,7 +10,7 @@ import ShopIconGrid, { ShopIconGridSkeleton } from "../../components/ecommerce/S
 import { useSuppliers } from "../../hooks/useSuppliers";
 import { COLORS } from "../../utils/colors";
 
-const DEFAULT_COUNTRY = "egy";
+const DEFAULT_COUNTRY = "saudi";
 
 export default function SuppliersPage() {
   const router = useRouter();

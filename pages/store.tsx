@@ -10,7 +10,7 @@ import MegaDeals from "../components/ecommerce/MegaDeals";
 import SiteFooter from "../components/SiteFooter";
 import { useCategories } from "../hooks/useCategories";
 
-const DEFAULT_COUNTRY = "egy";
+const DEFAULT_COUNTRY = "saudi";
 
 export default function StorePage() {
   const router = useRouter();

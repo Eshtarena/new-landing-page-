@@ -50,6 +50,11 @@
     "discountDescription": "Sharena also offers you additional upfront discounts through group purchasing offers for vouchers from different suppliers without any irrational terms 😊",
     "downloadTitle": "Download the application now and start your saving journey"
   },
+  "appStore": {
+    "comingSoonTitle": "Coming Soon",
+    "comingSoonMessage": "The iOS app is coming soon. Stay tuned!",
+    "close": "Close"
+  },
   "deals": {
     "title": "Deals Types",
     "description": "Discover our variety of deals types that designed to save your money and provide the best value for your purchases",
@@ -242,12 +247,10 @@
     },
     "downloadApp": {
       "title": "Get the Sharena App",
-      "description": "Scan a QR code with your phone to download the app and join this deal.",
+      "description": "Download the app to join this deal and complete your purchase securely.",
       "close": "Close",
       "appStore": "Download on the App Store",
-      "googlePlay": "Get it on Google Play",
-      "appleQrAlt": "App Store QR code",
-      "googleQrAlt": "Google Play QR code"
+      "googlePlay": "Get it on Google Play"
     }
   },
   "supplierDetails": {
@@ -297,14 +300,14 @@
     "info": {
       "location": {
         "title": "Our Location",
-        "address": "Trivium Square, North 90th Street, Fifth Settlement, New Cairo"
+        "address": "King Abdullah Ibn Abdulaziz Saud Branch , Al Raed Dist , Riyadh, Saudi Arabia"
       },
       "phone": {
         "title": "Phone Number"
       },
       "email": {
         "title": "Email Address",
-        "address": "customerservice@eshtarena.com"
+        "address": "Support@sharena.sa"
       },
       "social": {
         "title": "Follow Us",

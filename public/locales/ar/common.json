@@ -50,6 +50,11 @@
     "discountDescription": "كما يقدم لك اشترينا خصومات إضافية مقدمة من خلال عروض الشراء الجماعي للكوبونات من مختلف الموردين دون أي شروط غير منطقية",
     "downloadTitle": "حمل التطبيق الآن وابدأ رحلة التوفير"
   },
+  "appStore": {
+    "comingSoonTitle": "قريباً",
+    "comingSoonMessage": "تطبيق iOS قادم قريباً. ترقبوا!",
+    "close": "إغلاق"
+  },
   "deals": {
     "title": "أنواع العروض",
     "description": "اكتشف مجموعة متنوعة من العروض المصممة لتوفير المال وتقديم أفضل قيمة لمشترياتك",
@@ -242,12 +247,10 @@
     },
     "downloadApp": {
       "title": "حمّل تطبيق اشترينا",
-      "description": "امسح رمز QR بهاتفك لتحميل التطبيق والانضمام لهذا العرض.",
+      "description": "حمّل التطبيق للانضمام لهذا العرض وإتمام عملية الشراء بأمان.",
       "close": "إغلاق",
       "appStore": "تنزيل من App Store",
-      "googlePlay": "احصل عليه من Google Play",
-      "appleQrAlt": "رمز App Store",
-      "googleQrAlt": "رمز Google Play"
+      "googlePlay": "احصل عليه من Google Play"
     }
   },
   "supplierDetails": {
@@ -297,14 +300,14 @@
     "info": {
       "location": {
         "title": "موقعنا",
-        "address": "تريفيوم سكوير، شارع ٩٠ الشمالي، التجمع الخامس، القاهرة الجديدة"
+        "address": "اﻟﻤﻠﻚ ﻋﺒﺪﷲ اﺑﻦ ﻋﺒﺪاﻟﻌﺰﻳﺰ ﺳﻌﻮد اﻟﻔﺮﻋﻲ ، حي الرائد ، الرياض ، المملكة العربية السعودية."
       },
       "phone": {
         "title": "رقم الهاتف"
       },
       "email": {
         "title": "البريد الإلكتروني",
-        "address": "customerservice@eshtarena.com"
+        "address": "Support@sharena.sa"
       },
       "social": {
         "title": "تابعنا",

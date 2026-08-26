@@ -24,35 +24,11 @@ export const SLIDER_IMAGES = {
     "/banners/arabic/yp2d9u5xvgboo91otynf.webp",
   ],
 };
-export const LANDING_IMAGES = {
-  en: {
-    voucherDeal: "/landing_page/english/voucher_deal.webp",
-  },
-  ar: {
-    voucherDeal: "/landing_page/arabic/voucher_deal.webp",
-  },
-};
-
-export const OVERLAPPING_DEAL_IMAGES = {
-  original: {
-    back: "/product-deal-1.png",
-    front: "/product-deal-2.png",
-  },
-  cold: {
-    back: "/cold-deal-1.png",
-    front: "/cold-deal-2.png",
-  },
-  voucher: {
-    back: "/vouchers-1.png",
-    front: "/vouchers-2.png",
-  },
-};
-
 export const DEALS_DATA = [
   {
     id: "original",
     translationKey: "deals.productDeal",
-    overlappingImages: OVERLAPPING_DEAL_IMAGES.original,
+    imageSrc: "/original.svg",
     imageAlt: "Product Deal",
     hasBgColor: true,
     isReversed: false,
@@ -60,7 +36,7 @@ export const DEALS_DATA = [
   {
     id: "voucher",
     translationKey: "deals.voucherDeal",
-    overlappingImages: OVERLAPPING_DEAL_IMAGES.voucher,
+    imageSrc: "/voucher1.svg",
     imageAlt: "Voucher Deal",
     hasBgColor: false,
     isReversed: false,
@@ -68,19 +44,15 @@ export const DEALS_DATA = [
   {
     id: "howToUse",
     translationKey: "deals.vouchers.howToUse",
-    imageSrc: {
-      ar: LANDING_IMAGES.ar.voucherDeal,
-      en: LANDING_IMAGES.en.voucherDeal,
-    },
+    imageSrc: "/voucher2.svg",
     imageAlt: "Voucher App Screen",
-    imageIsPhone: true,
     hasBgColor: false,
     isReversed: false,
   },
   {
     id: "cold",
     translationKey: "deals.coldDeal",
-    overlappingImages: OVERLAPPING_DEAL_IMAGES.cold,
+    imageSrc: "/cold1.svg",
     imageAlt: "Cold Deal",
     hasBgColor: true,
     isReversed: false,

@@ -1,9 +1,8 @@
 import { useTranslation } from "next-i18next/pages";
-import { STORES_IMAGES_LINKS } from "../../utils/consts";
-import TriplePhoneShowcase from "./TriplePhoneShowcase";
 import Image from "next/image";
+import AppStoreBadges from "../AppStoreBadges";
 
-export default function AboutSection({socialData} ) {
+export default function AboutSection() {
   const { t, i18n } = useTranslation("common");
   const isRTL = i18n.language === "ar";
 
@@ -50,13 +49,15 @@ export default function AboutSection({socialData} ) {
 
         {/* Image Section */}
         <div className="flex justify-center py-4 sm:py-6">
-          <div className="relative isolate w-full max-w-[620px] mx-auto">
-            {/* Decorative glow behind the mockups */}
-            <div
-              aria-hidden="true"
-              className="absolute w-[120%] h-[120%] left-[-10%] top-[-10%] bg-linear-to-tr from-primary-500/30 via-purple-500/20 to-transparent blur-3xl rounded-full -z-10"
+          <div className="relative w-full max-w-[620px] mx-auto">
+            <Image
+              src="/alldeals.svg"
+              alt="Group purchasing deals across the app"
+              width={1600}
+              height={1054}
+              className="w-full h-auto"
+              priority
             />
-            <TriplePhoneShowcase isRTL={isRTL} />
           </div>
         </div>
       </div>
@@ -67,34 +68,10 @@ export default function AboutSection({socialData} ) {
           <h3 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-gray-900 mb-4 sm:mb-6">
             {t("about.downloadTitle")}
           </h3>
-          <div className="flex flex-wrap gap-4 items-center justify-center">
-            <a
-              href={socialData.apple}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-[180px] h-[53px] relative rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary-500/20"
-            >
-              <Image
-                src={isRTL ? STORES_IMAGES_LINKS.ar.apple : STORES_IMAGES_LINKS.en.apple}
-                alt="Download on the App Store"
-                fill
-                className="object-contain"
-              />
-            </a>
-            <a
-              href={socialData.google}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-[180px] h-[53px] relative rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary-500/20"
-            >
-              <Image
-                src={isRTL ? STORES_IMAGES_LINKS.ar.google : STORES_IMAGES_LINKS.en.google}
-                alt="Get it on Google Play"
-                fill
-                className="object-contain"
-              />
-            </a>
-          </div>
+          <AppStoreBadges
+            containerClassName="flex flex-wrap gap-4 items-center justify-center"
+            badgeClassName="w-[180px] h-[53px] relative rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary-500/20"
+          />
         </div>
       </div>
     </div>

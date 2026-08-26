@@ -1,14 +1,13 @@
 // Route utilities for country/language-based authentication
 
 // Using the same country codes as the existing system in [countryCode]/index.tsx
-export const VALID_COUNTRIES = ['egy', 'saudi'] as const;
+export const VALID_COUNTRIES = ['saudi'] as const;
 export const VALID_LANGUAGES = ['en', 'ar'] as const;
 
 export type ValidCountry = typeof VALID_COUNTRIES[number];
 export type ValidLanguage = typeof VALID_LANGUAGES[number];
 
 export const COUNTRY_NAMES = {
-  egy: 'Egypt',
   saudi: 'Saudi Arabia'
 } as const;
 

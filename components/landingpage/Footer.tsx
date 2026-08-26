@@ -1,7 +1,7 @@
 import { useTranslation } from "next-i18next/pages";
 import Image from "next/image";
 import Link from "next/link";
-import { STORES_IMAGES_LINKS } from "../../utils/consts";
+import AppStoreBadges from "../AppStoreBadges";
 
 export default function Footer({ socialData }) {
   const { t, i18n } = useTranslation("common");
@@ -76,40 +76,9 @@ export default function Footer({ socialData }) {
             <p className="text-lg font-semibold text-center">
               {t("footer.downloadApp")}
             </p>
-            <div className="flex gap-4 justify-center md:justify-start">
-              {socialData.apple && (
-                <Link
-                  href={socialData.apple}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-[120px] h-[36px] relative"
-                >
-                  <Image
-                    src={isRTL ? STORES_IMAGES_LINKS.ar.apple : STORES_IMAGES_LINKS.en.apple}
-                    alt="Download on App Store"
-                    fill
-                    className="object-contain"
-                  />
-                </Link>
-              )}
-              {socialData.google && (
-                <Link
-                  href={socialData.google}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-[120px] h-[36px] relative"
-                >
-                  <Image
-                    src={isRTL ? STORES_IMAGES_LINKS.ar.google : STORES_IMAGES_LINKS.en.google}
-                    alt="Get it on Google Play"
-                    fill
-                    className="object-contain"
-                  />
-                </Link>
-              )}
-            </div>
+            <AppStoreBadges />
             <p className="text-sm opacity-80 text-center md:text-start">
-              © {new Date().getFullYear()} All rights reserved by Sharena L.T.D IBC.
+              Sharena LTD , Riyadh , Saudi Arabia 2026.
             </p>
           </div>
         </div>

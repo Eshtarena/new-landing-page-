@@ -52,7 +52,7 @@ export default function MegaDealsDemo() {
                 <p className="text-blue-800 font-medium">
                   🚀 This is now integrated into the main ecommerce page at 
                   <span className="font-mono bg-blue-100 px-2 py-1 rounded ml-1">
-                    /egy or /saudi
+                    /saudi
                   </span>
                 </p>
               </div>

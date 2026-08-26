@@ -252,7 +252,7 @@ export default function Navbar() {
               {t("navbar.login")}
             </a>
             <Link
-              href="/egy"
+              href="/saudi"
               className="inline-flex items-center min-h-11 bg-white text-primary-500 text-sm font-semibold px-5 rounded-full shadow-soft hover:bg-white/90 transition-all duration-200 ease-spring"
             >
               {t("navbar.shopNow")}
@@ -357,7 +357,7 @@ export default function Navbar() {
               {t("navbar.login")}
             </a>
             <Link
-              href="/egy"
+              href="/saudi"
               onClick={closeMenu}
               className="flex items-center justify-center min-h-11 mt-2 px-4 py-2.5 rounded-full text-base font-semibold bg-white text-primary-500 hover:bg-white/90 transition-all duration-200 ease-spring"
             >

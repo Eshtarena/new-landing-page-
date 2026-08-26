@@ -9,6 +9,7 @@ import CountdownTimer from "./CountdownTimer";
 import ProgressBar from "./ProgressBar";
 import { useJoinDeal } from "../../hooks/useJoinDeal";
 import DownloadAppModal from "./DownloadAppModal";
+import ComingSoonModal from "../ComingSoonModal";
 
 interface DealInfoSectionProps {
   deal: Deal;
@@ -35,7 +36,7 @@ export default function DealInfoSection({
   const tx = (key: string, en: string, ar: string) =>
     t(key, { defaultValue: isRTL ? ar : en });
 
-  const { handleJoinDeal, showDesktopModal, closeDesktopModal } = useJoinDeal();
+  const { handleJoinDeal, showDesktopModal, closeDesktopModal, showComingSoon, closeComingSoon } = useJoinDeal();
   const theme = DEAL_THEMES[deal.dealType];
   const totalQuantity = deal.quantity.sold + deal.quantity.available;
 
@@ -172,6 +173,7 @@ export default function DealInfoSection({
       </aside>
 
       <DownloadAppModal isOpen={showDesktopModal} onClose={closeDesktopModal} />
+      <ComingSoonModal isOpen={showComingSoon} onClose={closeComingSoon} />
     </>
   );
 }
