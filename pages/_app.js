@@ -1,5 +1,4 @@
 import { appWithTranslation } from 'next-i18next/pages';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { GoogleTagManager } from '@next/third-parties/google';
 import { Inter, Cairo } from 'next/font/google';
@@ -7,6 +6,7 @@ import ScrollRestoration from '../components/ScrollRestoration';
 import LocaleTransition from '../components/LocaleTransition';
 import LocaleDirectionSync from '../components/LocaleDirectionSync';
 import ErrorBoundary from '../components/ErrorBoundary';
+import SiteHead from '../components/SiteHead';
 import '../styles/globals.css';
 
 // Variable fonts: all weights (light -> extrabold) come from a single file.
@@ -27,11 +27,7 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
-      <Head>
-        <title>Sharena</title>
-        <meta name="description" content="The Group Shopping App" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
+      <SiteHead />
       <style jsx global>{`
         html {
           --font-inter: ${inter.style.fontFamily};

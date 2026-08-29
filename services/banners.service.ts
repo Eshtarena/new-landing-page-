@@ -23,10 +23,19 @@ interface AdsResponse {
   ads: RawAd[];
 }
 
+/** Empty / whitespace image fields are treated as missing so UI falls back to desktop art. */
+export function normalizeBannerImageUrl(
+  url: string | null | undefined
+): string | null {
+  const value = url?.trim();
+  return value ? value : null;
+}
+
 /** There is only one image per ad — same URL is used for both locales. */
 export function mapAdToBanner(ad: RawAd, index: number): Banner {
   const imageUrl = resolvePublicAsset("ads", ad.pic);
-  const mobileImageUrl = ad.mobPic ? resolvePublicAsset("ads", ad.mobPic) : null;
+  const mobPic = normalizeBannerImageUrl(ad.mobPic);
+  const mobileImageUrl = mobPic ? resolvePublicAsset("ads", mobPic) : null;
   return {
     id: ad._id,
     imageUrl_en: imageUrl,

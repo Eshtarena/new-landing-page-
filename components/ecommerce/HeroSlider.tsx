@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { useSwipeable } from 'react-swipeable';
 import { useBanners } from '../../hooks/useBanners';
+import { normalizeBannerImageUrl } from '../../services/banners.service';
 
 interface Slide {
   id: string | number;
@@ -39,7 +40,7 @@ export default function HeroSlider() {
     : banners.map((banner) => ({
         id: banner.id,
         image: { en: banner.imageUrl_en, ar: banner.imageUrl_ar },
-        mobileImage: banner.mobileImageUrl,
+        mobileImage: normalizeBannerImageUrl(banner.mobileImageUrl),
         title: (lang === 'ar' ? banner.title_ar : banner.title_en) || t('navbar.shopNow'),
         link: banner.linkUrl
       }));
@@ -181,7 +182,7 @@ export default function HeroSlider() {
                   alt={item.title}
                   fill
                   draggable={false}
-                  className="object-cover w-full h-full pointer-events-none md:hidden"
+                  className="object-cover object-center w-full h-full pointer-events-none md:hidden"
                   priority={index === 1}
                   loading={index === 1 ? 'eager' : 'lazy'}
                   sizes="100vw"
@@ -192,7 +193,11 @@ export default function HeroSlider() {
                 alt={item.title}
                 fill
                 draggable={false}
-                className={`object-cover w-full h-full pointer-events-none ${item.mobileImage ? 'hidden md:block' : ''}`}
+                className={`w-full h-full pointer-events-none ${
+                  item.mobileImage
+                    ? 'hidden md:block object-cover object-center'
+                    : 'object-contain object-center md:object-cover'
+                }`}
                 priority={index === 1}
                 loading={index === 1 ? 'eager' : 'lazy'}
                 sizes={item.mobileImage ? '1600px' : '(max-width: 768px) 100vw, 1600px'}

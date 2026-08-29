@@ -5,6 +5,7 @@ import { useTranslation } from "next-i18next/pages";
 import { SLIDER_IMAGES } from "../../utils/consts";
 import { useSwipeable } from "react-swipeable";
 import { useBanners } from "../../hooks/useBanners";
+import { normalizeBannerImageUrl } from "../../services/banners.service";
 
 interface Slide {
   id: string | number;
@@ -14,8 +15,14 @@ interface Slide {
   alt: string;
 }
 
-/** Square on mobile (800×800 mobPic), 2:1 banner ratio on md+ — desktop unchanged. */
-const BANNER_ASPECT = "aspect-square md:aspect-banner";
+/**
+ * Desktop banners are 2:1 (`aspect-banner`). Square is only used on mobile when
+ * dedicated 800×800 `mobPic` art exists. Until then the desktop ratio is kept
+ * so fallback desktop images are not cropped.
+ */
+function getBannerAspectClass(hasMobileArt: boolean) {
+  return hasMobileArt ? "aspect-square md:aspect-banner" : "aspect-banner";
+}
 
 export default function BannersSection() {
   const { t, i18n } = useTranslation("common");
@@ -39,7 +46,7 @@ export default function BannersSection() {
     : banners.map((banner) => ({
         id: banner.id,
         desktopSrc: lang === "ar" ? banner.imageUrl_ar : banner.imageUrl_en,
-        mobileSrc: banner.mobileImageUrl,
+        mobileSrc: normalizeBannerImageUrl(banner.mobileImageUrl),
         alt:
           (lang === "ar" ? banner.title_ar : banner.title_en) ||
           t("navbar.shopNow"),
@@ -153,6 +160,9 @@ export default function BannersSection() {
         ? 0
         : slide - 1;
 
+  const hasMobileArt = slides.some((item) => item.mobileSrc !== null);
+  const bannerAspectClass = getBannerAspectClass(hasMobileArt);
+
   if (isLoading) {
     return (
       <section
@@ -162,7 +172,7 @@ export default function BannersSection() {
         }`}
       >
         <div
-          className={`w-full max-w-full mx-auto relative overflow-hidden rounded-b-3xl md:rounded-b-[3rem] ${BANNER_ASPECT} shadow-soft-lg bg-gray-200 animate-pulse`}
+          className={`w-full max-w-full mx-auto relative overflow-hidden rounded-b-3xl md:rounded-b-[3rem] ${getBannerAspectClass(false)} shadow-soft-lg bg-gray-200 animate-pulse`}
         />
       </section>
     );
@@ -175,7 +185,7 @@ export default function BannersSection() {
         className="w-full bg-gray-200 text-center relative rounded-b-[2.5rem] md:rounded-b-[3rem] overflow-hidden pt-16 md:pt-20"
       >
         <div
-          className={`w-full ${BANNER_ASPECT} flex items-center justify-center`}
+          className={`w-full ${getBannerAspectClass(false)} flex items-center justify-center`}
         >
           <div className="text-gray-600 text-xl px-4">
             Banner images will appear here once uploaded
@@ -194,7 +204,7 @@ export default function BannersSection() {
     >
       <div className="relative">
         <div
-          className={`w-full max-w-full mx-auto relative overflow-hidden rounded-b-3xl md:rounded-b-[3rem] ${BANNER_ASPECT} shadow-soft-lg bg-[#340040] touch-pan-y select-none`}
+          className={`w-full max-w-full mx-auto relative overflow-hidden rounded-b-3xl md:rounded-b-[3rem] ${bannerAspectClass} shadow-soft-lg bg-[#340040] touch-pan-y select-none`}
           {...handlers}
         >
           <div
@@ -214,7 +224,7 @@ export default function BannersSection() {
                     alt={item.alt}
                     fill
                     draggable={false}
-                    className="object-cover w-full h-full pointer-events-none md:hidden"
+                    className="object-cover object-center w-full h-full pointer-events-none md:hidden"
                     priority={idx === 1}
                     loading={idx === 1 ? "eager" : "lazy"}
                     sizes="100vw"
@@ -226,7 +236,11 @@ export default function BannersSection() {
                   alt={item.alt}
                   fill
                   draggable={false}
-                  className={`object-cover w-full h-full pointer-events-none ${item.mobileSrc ? "hidden md:block" : ""}`}
+                  className={`w-full h-full pointer-events-none ${
+                    item.mobileSrc
+                      ? "hidden md:block object-cover object-center"
+                      : "object-contain object-center md:object-cover"
+                  }`}
                   priority={idx === 1}
                   loading={idx === 1 ? "eager" : "lazy"}
                   sizes={

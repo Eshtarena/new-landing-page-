@@ -7,6 +7,8 @@ export default class MyDocument extends Document {
     return (
       <Html lang={currentLocale} dir={currentLocale === "ar" ? "rtl" : "ltr"}>
         <Head>
+          {/* Explicit UTF-8 so Arabic diacritics (حركات) render correctly */}
+          <meta charSet="utf-8" />
           {/* Tab Icon (Favicon) - This icon appears in browser tab and bookmarks */}
           <link rel="icon" type="image/png" href="/logo%20best.png" />
           <link rel="apple-touch-icon" href="/logo%20best.png" />
