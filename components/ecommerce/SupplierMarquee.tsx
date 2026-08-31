@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { useDesktopMarqueeOverflow } from '../../hooks/useDesktopMarqueeOverflow';
 import { useSuppliers } from '../../hooks/useSuppliers';
+import DesktopMarqueeSectionLabel from './DesktopMarqueeSectionLabel';
 import ScrollingLabel from './ScrollingLabel';
 
 export default function SupplierMarquee() {
@@ -64,6 +65,11 @@ export default function SupplierMarquee() {
           ))}
         </div>
       </div>
+
+      <DesktopMarqueeSectionLabel
+        label={t('store.suppliersPageTitle', { defaultValue: 'Suppliers' })}
+        uppercase={!isRTL}
+      />
 
       <div
         ref={desktopContainerRef}

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { useCategories } from '../../hooks/useCategories';
 import { useDesktopMarqueeOverflow } from '../../hooks/useDesktopMarqueeOverflow';
+import DesktopMarqueeSectionLabel from './DesktopMarqueeSectionLabel';
 import ScrollingLabel from './ScrollingLabel';
 
 interface Shortcut {
@@ -90,6 +91,11 @@ export default function CategoryShortcuts() {
           ))}
         </div>
       </div>
+
+      <DesktopMarqueeSectionLabel
+        label={t('store.categoriesPageTitle', { defaultValue: 'Categories' })}
+        uppercase={!isRTL}
+      />
 
       <div
         ref={desktopContainerRef}
