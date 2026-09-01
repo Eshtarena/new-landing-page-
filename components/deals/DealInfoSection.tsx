@@ -10,6 +10,7 @@ import ProgressBar from "./ProgressBar";
 import { useJoinDeal } from "../../hooks/useJoinDeal";
 import DownloadAppModal from "./DownloadAppModal";
 import ComingSoonModal from "../ComingSoonModal";
+import { resolvePageLang } from "../../utils/resolvePageLang";
 
 interface DealInfoSectionProps {
   deal: Deal;
@@ -27,10 +28,7 @@ export default function DealInfoSection({
 }: DealInfoSectionProps) {
   const { t, i18n } = useTranslation("common");
   const router = useRouter();
-  const queryLang = Array.isArray(router.query.lang)
-    ? router.query.lang[0]
-    : router.query.lang;
-  const resolvedLang = queryLang || i18n.language || router.locale || "en";
+  const resolvedLang = resolvePageLang(router, i18n.language);
   const isRTL = resolvedLang === "ar";
   const locale = isRTL ? "ar-SA" : "en-US";
   const tx = (key: string, en: string, ar: string) =>
@@ -121,7 +119,7 @@ export default function DealInfoSection({
 
           <CountdownTimer
             timer={deal.timer}
-            textColor="text-primary-500"
+            textColor="text-[#2B64E3]"
             className="min-w-max"
             locale={locale}
             labels={{

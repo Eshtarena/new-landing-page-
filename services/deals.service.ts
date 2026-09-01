@@ -125,6 +125,48 @@ function localizedTextOrUndefined(value: LocalizedValue, locale: Locale): string
   return text || undefined;
 }
 
+function collectVariantTitles(value: unknown): string[] {
+  if (value == null || value === "") return [];
+  if (typeof value === "string" || typeof value === "number") {
+    const text = String(value).trim();
+    return text && text !== "[object Object]" ? [text] : [];
+  }
+  if (Array.isArray(value)) {
+    return value.flatMap(collectVariantTitles);
+  }
+  if (typeof value === "object") {
+    const record = value as Record<string, unknown>;
+    const title =
+      record.title ??
+      record.name_en ??
+      record.name ??
+      record.color ??
+      record.size ??
+      record.value;
+    return collectVariantTitles(title);
+  }
+  return [];
+}
+
+function formatVariantValue(value: unknown): string | undefined {
+  const titles = [...new Set(collectVariantTitles(value))];
+  return titles.length ? titles.join(", ") : undefined;
+}
+
+function extractDealSizes(raw: { size?: unknown; color?: unknown }): string | undefined {
+  const fromSize = formatVariantValue(raw.size);
+  if (fromSize) return fromSize;
+  if (!Array.isArray(raw.color)) return undefined;
+  const nested = raw.color.flatMap((item) => {
+    if (item && typeof item === "object" && "size" in item) {
+      return collectVariantTitles((item as { size?: unknown }).size);
+    }
+    return [];
+  });
+  const unique = [...new Set(nested)];
+  return unique.length ? unique.join(", ") : undefined;
+}
+
 function mapCustomerPaymentTerms(
   terms: RawCustomerPaymentTerm[] | undefined,
   locale: Locale
@@ -385,7 +427,7 @@ interface RawVoucherDetail {
   quantity?: number;
   sold?: number;
   supplier?: RawSupplier;
-  terms?: unknown[];
+  terms?: LocalizedValue;
   districts?: unknown[];
   cities?: RawCity[];
   about?: { content_en?: string; content_ar?: string };
@@ -426,6 +468,8 @@ interface RawDealDetail {
   districts?: unknown[];
   cities?: RawCity[];
   specialSpecification?: string;
+  color?: unknown;
+  size?: unknown;
   about?: { content_en?: string; content_ar?: string };
   deliveryTerms?: unknown[];
   paymentTerms?: LocalizedValue;
@@ -541,7 +585,7 @@ export function mapVoucherDetailToDeal(
       voucherValue: raw.voucherValue,
       detailContent: buildDetailContent({
         about: raw.about,
-        deliveryTerms: raw.terms,
+        terms: raw.terms,
         customerPaymentTerms: raw.customerPaymentTerms,
         locale,
       }),
@@ -576,6 +620,8 @@ function mapDealDetailToDeal(
     productName,
     productFactory,
     productMadeIn,
+    productSize: extractDealSizes(raw),
+    productColor: formatVariantValue(raw.color),
     images: toImages(raw.product.pic, title, "product"),
     timer: defaultTimer(raw.endDate),
     location: coverage.location,

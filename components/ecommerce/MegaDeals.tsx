@@ -248,7 +248,7 @@ export default function MegaDeals({
           </div>
 
           {showAdviceSection ? (
-            <div className="lg:col-span-2 lg:col-start-1 lg:row-start-2">
+            <div className="lg:col-start-2 lg:row-start-2">
               <ShopAdviceSection />
             </div>
           ) : null}

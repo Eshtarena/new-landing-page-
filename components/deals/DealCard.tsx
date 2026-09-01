@@ -2,39 +2,36 @@ import React from "react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import ImageCarousel from "./ImageCarousel";
-import CountdownTimer from "./CountdownTimer";
+import CountdownTimer, { getDealEndTimeLabel } from "./CountdownTimer";
 import ProgressBar from "./ProgressBar";
 import DealBadge from "./DealBadge";
 import PricingDisplay from "./PricingDisplay";
-import { DealCardProps } from "../../types/deals";
+import { Deal, DealCardProps } from "../../types/deals";
 
-const MOBILE_TEXT_PRIMARY = "#340040";
-const MOBILE_TIMER_BLUE = "#2B64E3";
+const TEXT_PRIMARY = "#340040";
 
 function SupplierLogo({
   logoUrl,
   supplierName,
-  className = "",
 }: {
   logoUrl?: string;
   supplierName?: string;
-  className?: string;
 }) {
   const initials = (supplierName || "S").slice(0, 2).toUpperCase();
 
   return (
-    <div className={`relative w-10 h-10 shrink-0 ${className}`}>
-      <div className="w-full h-full rounded-[16px] overflow-hidden bg-primary-500 flex items-center justify-center">
+    <div className="relative h-12 w-12 shrink-0">
+      <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-[#1a1a2e]">
         {logoUrl ? (
           <Image
             src={logoUrl}
             alt={supplierName || "Supplier"}
-            width={40}
-            height={40}
-            className="w-full h-full object-cover"
+            width={48}
+            height={48}
+            className="h-full w-full object-cover"
           />
         ) : (
-          <span className="text-[9px] font-bold text-white leading-none text-center px-0.5">
+          <span className="px-0.5 text-center text-[10px] font-bold leading-none text-white">
             {initials}
           </span>
         )}
@@ -43,17 +40,11 @@ function SupplierLogo({
   );
 }
 
-function LocationRow({
-  text,
-  className = "",
-}: {
-  text: string;
-  className?: string;
-}) {
+function LocationRow({ text }: { text: string }) {
   return (
-    <div className={`flex items-center gap-1 text-[10px] text-[#808080] ${className}`}>
+    <div className="flex min-w-0 items-center gap-1.5 text-[11px] leading-none text-[#808080]">
       <svg
-        className="w-3 h-3 shrink-0 text-[#808080]"
+        className="h-3 w-3 shrink-0 text-[#808080]"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -77,6 +68,104 @@ function LocationRow({
   );
 }
 
+function DealCardBody({
+  deal,
+  locale,
+  showEndTime,
+  countdownLabels,
+  pricingLabels,
+  progressLabels,
+  endTimePrefix,
+}: {
+  deal: Deal;
+  locale: string;
+  showEndTime: boolean;
+  countdownLabels: {
+    days: string;
+    hours: string;
+    minutes: string;
+    seconds: string;
+  };
+  pricingLabels: {
+    voucherValue: string;
+    marketPrice: string;
+    dealPrice: string;
+    save: string;
+  };
+  progressLabels: {
+    progress: string;
+    total: string;
+    sold: string;
+    available: string;
+  };
+  endTimePrefix: string;
+}) {
+  const subtitle = deal.productName ?? "";
+
+  return (
+    <div className="space-y-3.5">
+      <DealBadge dealType={deal.dealType} size="sm" isActive={deal.isActive} />
+
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          {deal.supplier ? (
+            <p className="truncate text-[13px] font-normal leading-snug text-[#808080]">
+              {deal.supplier}
+            </p>
+          ) : (
+            <p className="h-[18px]" aria-hidden="true" />
+          )}
+          <h2
+            className="mt-0.5 truncate text-lg font-bold leading-tight"
+            style={{ color: TEXT_PRIMARY }}
+          >
+            {deal.title}
+          </h2>
+          <p
+            className="mt-0.5 h-4 truncate text-xs font-normal leading-tight text-[#808080]"
+            aria-hidden={!subtitle}
+          >
+            {subtitle || "\u00A0"}
+          </p>
+        </div>
+        <SupplierLogo logoUrl={deal.supplierLogo} supplierName={deal.supplier} />
+      </div>
+
+      <div>
+        <div className="flex items-center justify-between gap-3">
+          <LocationRow text={deal.location.text} />
+          <CountdownTimer
+            timer={deal.timer}
+            textColor="text-[#2B64E3]"
+            showEndTime={false}
+            locale={locale}
+            labels={countdownLabels}
+          />
+        </div>
+        {showEndTime ? (
+          <div className="mt-1.5 flex justify-end">
+            <span className="whitespace-nowrap text-[10px] font-normal text-gray-500">
+              {getDealEndTimeLabel(deal.timer, locale, endTimePrefix)}
+            </span>
+          </div>
+        ) : null}
+      </div>
+
+      <PricingDisplay deal={deal} locale={locale} labels={pricingLabels} />
+
+      <ProgressBar
+        quantity={deal.quantity}
+        dealType={deal.dealType}
+        showLabels
+        showThumb
+        height="xl"
+        locale={locale}
+        labels={progressLabels}
+      />
+    </div>
+  );
+}
+
 export default function DealCard({
   deal,
   className = "",
@@ -86,11 +175,8 @@ export default function DealCard({
   const isRTL = i18n.language === "ar";
   const locale = isRTL ? "ar-SA" : "en-US";
 
-  const tertiaryLine =
-    deal.dealType === "voucher" ? deal.description : deal.productName;
-
   const countdownLabels = {
-    days: t("dealDetails.timer.days", { defaultValue: isRTL ? "يوم" : "Day" }),
+    days: t("dealDetails.timer.days", { defaultValue: isRTL ? "Day" : "Day" }),
     hours: t("dealDetails.timer.hours", { defaultValue: isRTL ? "ساعة" : "Hrs" }),
     minutes: t("dealDetails.timer.minutes", { defaultValue: isRTL ? "دقيقة" : "Mins" }),
     seconds: t("dealDetails.timer.seconds", { defaultValue: isRTL ? "ثانية" : "Secs" }),
@@ -119,141 +205,46 @@ export default function DealCard({
     showArrows: false as const,
   };
 
+  const bodyProps = {
+    deal,
+    locale,
+    countdownLabels,
+    pricingLabels,
+    progressLabels,
+    endTimePrefix,
+  };
+
   return (
     <div
-      className={`bg-white overflow-hidden transition-all duration-300 ease-spring cursor-pointer max-w-md mx-auto w-full rounded-3xl shadow-[0_4px_24px_rgba(0,0,0,0.06)] md:rounded-2xl md:shadow-soft md:border md:border-black/5 hover:shadow-soft-lg ${className}`}
+      className={`mx-auto w-full max-w-md cursor-pointer overflow-hidden rounded-3xl bg-white shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all duration-300 ease-spring hover:shadow-soft-lg md:rounded-2xl md:border md:border-black/5 md:shadow-soft ${className}`}
       onClick={() => onCardClick?.(deal)}
     >
-      {/* Mobile image */}
       <div className="px-4 pt-4 pb-0 md:hidden">
         <ImageCarousel
           {...carouselProps}
           aspectRatio="dealMobile"
-          showDots={false}
+          showDots
           showCounter={false}
           className="rounded-2xl"
         />
       </div>
 
-      {/* Desktop image */}
-      <div className="hidden md:block p-3 pb-0">
+      <div className="hidden p-3 pb-0 md:block">
         <ImageCarousel
           {...carouselProps}
           aspectRatio="video"
-          showDots={deal.images.length > 1}
+          showDots
           showCounter
           className="rounded-xl"
         />
       </div>
 
       <div className="p-4 md:p-3.5">
-        {/* Mobile layout — matches native app */}
-        <div className="md:hidden space-y-3.5">
-          <div className="flex gap-3 items-start">
-            <SupplierLogo logoUrl={deal.supplierLogo} supplierName={deal.supplier} />
-            <div className="flex-1 min-w-0">
-              <p
-                className="text-[13px] font-normal leading-snug truncate"
-                style={{ color: MOBILE_TEXT_PRIMARY }}
-              >
-                {deal.title}
-              </p>
-              {deal.supplier && (
-                <h2
-                  className="text-lg font-bold leading-tight truncate mt-0.5"
-                  style={{ color: MOBILE_TEXT_PRIMARY }}
-                >
-                  {deal.supplier}
-                </h2>
-              )}
-              {(deal.productName || tertiaryLine) && (
-                <p className="text-xs font-normal leading-tight truncate text-[#808080] mt-0.5">
-                  {deal.productName || tertiaryLine}
-                </p>
-              )}
-            </div>
-          </div>
-
-          <div className="flex justify-between items-center gap-3">
-            <div className="flex flex-col gap-1.5 min-w-0">
-              <DealBadge
-                dealType={deal.dealType}
-                size="sm"
-                isActive={deal.isActive}
-              />
-              <LocationRow text={deal.location.text} />
-            </div>
-            <CountdownTimer
-              timer={deal.timer}
-              textColor="text-[#2B64E3]"
-              locale={locale}
-              labels={countdownLabels}
-            />
-          </div>
-
-          <PricingDisplay deal={deal} locale={locale} labels={pricingLabels} />
-
-          <ProgressBar
-            quantity={deal.quantity}
-            dealType={deal.dealType}
-            showLabels
-            height="xl"
-            locale={locale}
-            labels={progressLabels}
-            className="[&>div:first-child>span:first-child]:font-normal [&>div:first-child>span:first-child]:text-[#808080] [&>div:last-child]:text-[#808080] [&>div:last-child]:font-normal"
-          />
+        <div className="md:hidden">
+          <DealCardBody {...bodyProps} showEndTime={false} />
         </div>
-
-        {/* Desktop layout */}
-        <div className="hidden md:block space-y-3">
-          <div className="flex gap-2.5 items-start">
-            <SupplierLogo logoUrl={deal.supplierLogo} supplierName={deal.supplier} />
-            <div className="flex-1 min-w-0 pt-0.5">
-              <p className="text-xs font-bold tracking-tight truncate text-primary-500">
-                {deal.title}
-              </p>
-              {deal.supplier && (
-                <h2 className="text-base font-bold tracking-tight truncate text-primary-500 mt-0.5">
-                  {deal.supplier}
-                </h2>
-              )}
-              {(deal.productName || tertiaryLine) && (
-                <p className="text-[11px] leading-tight truncate text-gray-400 mt-0.5">
-                  {deal.productName || tertiaryLine}
-                </p>
-              )}
-            </div>
-          </div>
-
-          <div className="flex justify-between items-start gap-2">
-            <div className="flex flex-col gap-1.5 min-w-0">
-              <DealBadge
-                dealType={deal.dealType}
-                size="sm"
-                isActive={deal.isActive}
-              />
-              <LocationRow text={deal.location.text} />
-            </div>
-            <CountdownTimer
-              timer={deal.timer}
-              textColor="text-[#4361EE]"
-              showEndTime
-              endTimePrefix={endTimePrefix}
-              locale={locale}
-              labels={countdownLabels}
-            />
-          </div>
-
-          <PricingDisplay deal={deal} locale={locale} labels={pricingLabels} />
-
-          <ProgressBar
-            quantity={deal.quantity}
-            dealType={deal.dealType}
-            showLabels
-            height="xl"
-            locale={locale}
-            labels={progressLabels}
-          />
+        <div className="hidden md:block">
+          <DealCardBody {...bodyProps} showEndTime />
         </div>
       </div>
     </div>

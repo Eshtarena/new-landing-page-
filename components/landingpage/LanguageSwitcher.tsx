@@ -30,7 +30,12 @@ export default function LanguageSwitcher({ variant = 'default' }: LanguageSwitch
 
     beginLocaleSwitch();
 
-    await router.push({ pathname, query }, asPath, { locale, scroll: false });
+    // Drop stale ?lang= so router.locale remains the single source of truth.
+    const { lang: _lang, ...queryWithoutLang } = query;
+    await router.push({ pathname, query: queryWithoutLang }, asPath, {
+      locale,
+      scroll: false,
+    });
   };
 
   if (variant === 'segmented') {

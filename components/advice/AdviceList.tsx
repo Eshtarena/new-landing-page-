@@ -39,7 +39,7 @@ export default function AdviceList({ articles }: AdviceListProps) {
       />
 
       {filteredArticles.length > 0 ? (
-        <div className="mt-6 sm:mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <div className="mt-6 grid max-w-4xl grid-cols-1 gap-4 sm:mt-8 sm:grid-cols-2 sm:gap-5">
           {filteredArticles.map((article) => (
             <AdviceCard
               key={article.id}

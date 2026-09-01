@@ -6,6 +6,7 @@ interface ProgressBarProps {
   dealType: DealType;
   className?: string;
   showLabels?: boolean;
+  showThumb?: boolean;
   height?: "sm" | "md" | "lg" | "xl";
   labels?: {
     progress?: string;
@@ -16,11 +17,19 @@ interface ProgressBarProps {
   locale?: string;
 }
 
+const HEIGHT_PX: Record<NonNullable<ProgressBarProps["height"]>, number> = {
+  sm: 8,
+  md: 10,
+  lg: 12,
+  xl: 16,
+};
+
 export default function ProgressBar({
   quantity,
   dealType,
   className = "",
   showLabels = true,
+  showThumb = false,
   height = "md",
   labels = {
     progress: "Progress",
@@ -33,6 +42,7 @@ export default function ProgressBar({
   const total = quantity.sold + quantity.available;
   const progressPercentage = total > 0 ? (quantity.sold / total) * 100 : 0;
   const theme = DEAL_THEMES[dealType];
+  const barHeightPx = HEIGHT_PX[height];
 
   const heightClasses = {
     sm: "h-2",
@@ -41,11 +51,13 @@ export default function ProgressBar({
     xl: "h-4",
   };
 
+  const hasFill = progressPercentage > 0;
+
   return (
     <div className={`w-full ${className}`}>
       {showLabels && (
-        <div className="flex justify-between items-center text-xs text-primary-500 mb-1.5">
-          <span>{labels.progress}</span>
+        <div className="flex justify-between items-center text-xs text-[#340040] mb-1.5">
+          <span className="font-normal">{labels.progress}</span>
           <span className="font-bold">
             {labels.total} {total.toLocaleString(locale)}
           </span>
@@ -53,24 +65,27 @@ export default function ProgressBar({
       )}
 
       <div
-        className={`rounded-full overflow-hidden ${heightClasses[height]}`}
+        className={`relative rounded-full overflow-hidden ${heightClasses[height]}`}
         style={{ backgroundColor: theme.secondary }}
       >
-        <div
-          className="h-full rounded-full transition-all duration-300 ease-in-out"
-          style={{
-            width: `${Math.min(progressPercentage, 100)}%`,
-            backgroundColor: theme.progressBar,
-          }}
-        />
+        {hasFill ? (
+          <div
+            className="h-full rounded-full transition-all duration-300 ease-in-out"
+            style={{
+              width: `${Math.min(progressPercentage, 100)}%`,
+              minWidth: showThumb ? barHeightPx : undefined,
+              backgroundColor: theme.progressBar,
+            }}
+          />
+        ) : null}
       </div>
 
       {showLabels && (
-        <div className="flex justify-between text-xs text-primary-500 mt-1.5">
-          <span>
+        <div className="flex justify-between text-xs text-[#340040] mt-1.5">
+          <span className="font-normal">
             {labels.sold} {quantity.sold.toLocaleString(locale)}
           </span>
-          <span>
+          <span className="font-normal">
             {labels.available} {quantity.available.toLocaleString(locale)}
           </span>
         </div>

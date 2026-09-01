@@ -100,6 +100,48 @@ function mapProductMadeIn(v: DealDetailsApiDeal, lang: Lang): string | undefined
   return mapProductField(v, lang, "country_en", "country_ar");
 }
 
+function collectVariantTitles(value: unknown): string[] {
+  if (value == null || value === "") return [];
+  if (typeof value === "string" || typeof value === "number") {
+    const text = String(value).trim();
+    return text && text !== "[object Object]" ? [text] : [];
+  }
+  if (Array.isArray(value)) {
+    return value.flatMap(collectVariantTitles);
+  }
+  if (typeof value === "object") {
+    const record = value as Record<string, unknown>;
+    const title =
+      record.title ??
+      record.name_en ??
+      record.name ??
+      record.color ??
+      record.size ??
+      record.value;
+    return collectVariantTitles(title);
+  }
+  return [];
+}
+
+function formatVariantValue(value: unknown): string | undefined {
+  const titles = [...new Set(collectVariantTitles(value))];
+  return titles.length ? titles.join(", ") : undefined;
+}
+
+function extractDealSizes(raw: { size?: unknown; color?: unknown }): string | undefined {
+  const fromSize = formatVariantValue(raw.size);
+  if (fromSize) return fromSize;
+  if (!Array.isArray(raw.color)) return undefined;
+  const nested = raw.color.flatMap((item) => {
+    if (item && typeof item === "object" && "size" in item) {
+      return collectVariantTitles((item as { size?: unknown }).size);
+    }
+    return [];
+  });
+  const unique = [...new Set(nested)];
+  return unique.length ? unique.join(", ") : undefined;
+}
+
 /** Build deal images array: support single pic or multiple pics/images from API */
 function mapDealImages(
   v: DealDetailsApiDeal,
@@ -196,6 +238,8 @@ export function mapColdApiToDeal(data: ColdDetailsApiResponse, lang: Lang): Cold
     productName: mapProductName(v, lang),
     productFactory: mapProductFactory(v, lang),
     productMadeIn: mapProductMadeIn(v, lang),
+    productSize: extractDealSizes(v),
+    productColor: formatVariantValue(v.color),
     detailContent: mapDealDetailContent(v, lang),
   };
 }
@@ -212,6 +256,8 @@ export function mapOriginalApiToDeal(data: OriginalDetailsApiResponse, lang: Lan
     productName: mapProductName(v, lang),
     productFactory: mapProductFactory(v, lang),
     productMadeIn: mapProductMadeIn(v, lang),
+    productSize: extractDealSizes(v),
+    productColor: formatVariantValue(v.color),
     detailContent: mapDealDetailContent(v, lang),
   };
 }

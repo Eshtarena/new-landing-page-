@@ -28,7 +28,7 @@ export const DEALS_DATA = [
   {
     id: "original",
     translationKey: "deals.productDeal",
-    imageSrc: "/original.svg",
+    imageSrc: "/new-product.png",
     imageAlt: "Product Deal",
     hasBgColor: true,
     isReversed: false,
@@ -36,7 +36,7 @@ export const DEALS_DATA = [
   {
     id: "voucher",
     translationKey: "deals.voucherDeal",
-    imageSrc: "/voucher1.svg",
+    imageSrc: "/new-voucher.png",
     imageAlt: "Voucher Deal",
     hasBgColor: false,
     isReversed: false,
@@ -44,15 +44,16 @@ export const DEALS_DATA = [
   {
     id: "howToUse",
     translationKey: "deals.vouchers.howToUse",
-    imageSrc: "/voucher2.svg",
+    imageSrc: "/new-voucher-details.png",
     imageAlt: "Voucher App Screen",
+    imageIsPhone: true,
     hasBgColor: false,
     isReversed: false,
   },
   {
     id: "cold",
     translationKey: "deals.coldDeal",
-    imageSrc: "/cold1.svg",
+    imageSrc: "/new-cold.png",
     imageAlt: "Cold Deal",
     hasBgColor: true,
     isReversed: false,

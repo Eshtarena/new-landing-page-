@@ -1,8 +1,10 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next/pages";
 import { Deal } from "../../types/deals";
+import { resolvePageLang } from "../../utils/resolvePageLang";
 
 interface DealSupplierSectionProps {
   deal: Deal;
@@ -11,7 +13,8 @@ interface DealSupplierSectionProps {
 
 export default function DealSupplierSection({ deal, className = "" }: DealSupplierSectionProps) {
   const { t, i18n } = useTranslation("common");
-  const isRTL = i18n.language === "ar";
+  const router = useRouter();
+  const isRTL = resolvePageLang(router, i18n.language) === "ar";
   const tx = (key: string, en: string, ar: string) => t(key, { defaultValue: isRTL ? ar : en });
 
   if (!deal.supplier) return null;

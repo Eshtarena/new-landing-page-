@@ -1,4 +1,4 @@
-# Eshtarena Landing Page — Codebase Audit
+# Sharena Landing Page — Codebase Audit
 
 **Audit date:** 2026-07-07
 **Scope:** Read-only investigation. No code, dependencies, or config were modified.
@@ -13,7 +13,7 @@ as suffering from a mix of **MUI v4, MUI v5, SASS, and plain CSS**, requiring mi
 Tailwind + shadcn/ui.
 
 **This is confirmed to be the correct/intended project** — "Moshtarena" was simply a naming
-slip; the actual product/repo name is **Eshtarena**. However, the styling-chaos description
+slip; the actual product/repo name is **Sharena**. However, the styling-chaos description
 itself still does not match this codebase's actual state. Verified exhaustively before writing
 this report:
 

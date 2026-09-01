@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next/pages";
-import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import DealInfoSection from "../../components/deals/DealInfoSection";
 import DealTabsSection from "../../components/deals/DealTabsSection";
 import DealGallery from "../../components/deals/DealGallery";
 import DealSupplierSection from "../../components/deals/DealSupplierSection";
 import DealBadge from "../../components/deals/DealBadge";
 import CountdownTimer from "../../components/deals/CountdownTimer";
+import DealAdviceSection from "../../components/deals/DealAdviceSection";
 import { COLORS } from "../../utils/colors";
 import MainNavbar from "../../components/ecommerce/MainNavbar";
 import SiteFooter from "../../components/SiteFooter";
@@ -17,6 +17,8 @@ import ComingSoonModal from "../../components/ComingSoonModal";
 import { useJoinDeal } from "../../hooks/useJoinDeal";
 import { useDealDetail } from "../../hooks/useDealDetail";
 import type { DealType } from "../../types/deals";
+import { resolvePageLang } from "../../utils/resolvePageLang";
+import { getDealPageServerSideProps } from "../../utils/dealPageServerSideProps";
 
 const VALID_DEAL_TYPES: DealType[] = ["voucher", "original", "cold"];
 
@@ -29,12 +31,7 @@ export default function DealDetailsPage() {
   const countryCode = Array.isArray(router.query.countryCode)
     ? router.query.countryCode[0]
     : router.query.countryCode || "saudi";
-  const lang =
-    (Array.isArray(router.query.lang)
-      ? router.query.lang[0]
-      : router.query.lang) ||
-    router.locale ||
-    "en";
+  const lang = resolvePageLang(router, i18n.language);
   const isRTL = lang === "ar";
   const locale = isRTL ? "ar-SA" : "en-US";
   const tx = (key: string, en: string, ar: string) =>
@@ -215,6 +212,19 @@ export default function DealDetailsPage() {
           </div>
 
           <DealTabsSection deal={deal} variant="mobile" />
+
+          {deal.advice ? (
+            <div className="px-4 pb-6">
+              <div className="grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
+                <DealAdviceSection
+                  advice={deal.advice}
+                  isArabic={isRTL}
+                  cardTitle={t("advice.cardTitle")}
+                  readTimeLabel={t("advice.readTime", { minutes: deal.advice.readTimeMinutes ?? 1 })}
+                />
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
 
@@ -239,6 +249,17 @@ export default function DealDetailsPage() {
         <DealSupplierSection deal={deal} className="mb-10" />
 
         <DealTabsSection deal={deal} />
+
+        {deal.advice ? (
+          <div className="mt-8 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
+            <DealAdviceSection
+              advice={deal.advice}
+              isArabic={isRTL}
+              cardTitle={t("advice.cardTitle")}
+              readTimeLabel={t("advice.readTime", { minutes: deal.advice.readTimeMinutes ?? 1 })}
+            />
+          </div>
+        ) : null}
       </main>
 
       {/* Mobile sticky action bar */}
@@ -274,17 +295,5 @@ export default function DealDetailsPage() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({
-  locale,
-  query,
-}) => {
-  const queryLang = Array.isArray(query.lang) ? query.lang[0] : query.lang;
-  const translationLocale =
-    queryLang === "ar" || queryLang === "en" ? queryLang : locale ?? "en";
-
-  return {
-    props: {
-      ...(await serverSideTranslations(translationLocale, ["common"])),
-    },
-  };
-};
+export const getServerSideProps: GetServerSideProps = async (context) =>
+  getDealPageServerSideProps(context);

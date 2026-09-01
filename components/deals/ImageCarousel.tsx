@@ -208,27 +208,32 @@ export default function ImageCarousel({
         )}
       </div>
 
-      {/* Dots Indicator */}
-      {showDots && images.length > 1 && (
-        <div className="flex justify-center mt-2 space-x-1">
-          {images.map((_, index) => (
-            <button
-              key={index}
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                goToSlide(index);
-              }}
-              className={`w-2 h-2 rounded-full transition-all ${
-                index === currentIndex
-                  ? 'bg-gray-800'
-                  : 'bg-gray-400 hover:bg-gray-600'
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
+      {/* Dots Indicator — always reserve space when showDots is enabled */}
+      {showDots ? (
+        <div
+          className="mt-2 flex min-h-2 justify-center space-x-1"
+          aria-hidden={images.length <= 1}
+        >
+          {images.length > 1
+            ? images.map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goToSlide(index);
+                  }}
+                  className={`h-2 w-2 rounded-full transition-all ${
+                    index === currentIndex
+                      ? "bg-gray-800"
+                      : "bg-gray-400 hover:bg-gray-600"
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))
+            : null}
         </div>
-      )}
+      ) : null}
 
       {/* Image Counter */}
       {images.length > 1 && !overlayControls && showCounter && (

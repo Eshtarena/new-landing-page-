@@ -18,6 +18,15 @@ function formatExpirationTime(timestamp: number, locale: string): string {
   }).format(new Date(timestamp));
 }
 
+export function getDealEndTimeLabel(
+  timer: DealTimer,
+  locale: string,
+  prefix: string
+): string {
+  const expiration = Date.now() + timerToMilliseconds(timer);
+  return `${prefix} ${formatExpirationTime(expiration, locale)}`;
+}
+
 interface CountdownTimerProps {
   timer: DealTimer;
   className?: string;

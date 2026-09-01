@@ -1,5 +1,8 @@
 import React from "react";
+import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next/pages";
 import { DealType, DEAL_THEMES } from "../../types/deals";
+import { resolvePageLang } from "../../utils/resolvePageLang";
 
 interface DealBadgeProps {
   dealType: DealType;
@@ -8,28 +11,47 @@ interface DealBadgeProps {
   isActive?: boolean;
 }
 
-function VoucherIcon() {
+const BADGE_ICONS: Record<DealType, string> = {
+  voucher: "/voucher.svg",
+  cold: "/cold.svg",
+  original: "/product.svg",
+};
+
+function BadgeIcon({ dealType, size }: { dealType: DealType; size: "sm" | "md" | "lg" }) {
+  const sizeClass =
+    size === "lg" ? "w-4 h-4" : size === "md" ? "w-3.5 h-3.5" : "w-3 h-3";
+
   return (
-    <svg className="w-3 h-3 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M22 10v6a2 2 0 01-2 2H4a2 2 0 01-2-2v-6a2 2 0 012-2h16a2 2 0 012 2zm-2-6H4a2 2 0 00-2 2v2h20V6a2 2 0 00-2-2zM7 15a1 1 0 100-2 1 1 0 000 2zm10 0a1 1 0 100-2 1 1 0 000 2z" />
-    </svg>
+    <img
+      src={BADGE_ICONS[dealType]}
+      alt=""
+      aria-hidden="true"
+      className={`${sizeClass} shrink-0`}
+    />
   );
 }
 
-function ShoppingBagIcon() {
-  return (
-    <svg className="w-3 h-3 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58s1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z" />
-    </svg>
-  );
-}
-
-function ColdIcon() {
-  return (
-    <svg className="w-3 h-3 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M12 2l1.09 3.26L16 4l-1.09 3.26L18 8.5l-3.26 1.09L16 13l-3.26-1.09L12 15l-1.09-3.26L8 13l1.09-3.26L6 8.5l3.26-1.09L8 4l2.91 1.26L12 2zm0 5.5a4.5 4.5 0 100 9 4.5 4.5 0 000-9z" />
-    </svg>
-  );
+function getBadgeLabel(
+  t: (key: string, options?: { defaultValue?: string }) => string,
+  type: DealType,
+  isRTL: boolean
+): string {
+  switch (type) {
+    case "voucher":
+      return t("deals.voucherDeal.badge", {
+        defaultValue: isRTL ? "شراء جماعي | عرض كوبونات" : "Group buying | vouchers deal",
+      });
+    case "cold":
+      return t("deals.coldDeal.badge", {
+        defaultValue: isRTL ? "شراء مجمع | مزايدة" : "Group purchasing | Bidding",
+      });
+    case "original":
+      return t("deals.productDeal.badge", {
+        defaultValue: isRTL ? "شراء جماعي | عرض منتجات" : "Group buying | products deal",
+      });
+    default:
+      return isRTL ? "عرض" : "Deal";
+  }
 }
 
 export default function DealBadge({
@@ -38,6 +60,9 @@ export default function DealBadge({
   size = "md",
   isActive = true,
 }: DealBadgeProps) {
+  const { t } = useTranslation("common");
+  const router = useRouter();
+  const isRTL = resolvePageLang(router) === "ar";
   const theme = DEAL_THEMES[dealType];
 
   const sizeClasses = {
@@ -46,25 +71,10 @@ export default function DealBadge({
     lg: "px-4 py-1.5 text-sm gap-2 font-semibold",
   };
 
-  const getBadgeText = (type: DealType): string => {
-    switch (type) {
-      case "voucher":
-        return "Voucher";
-      case "cold":
-        return "Cold deals";
-      case "original":
-        return "Original deals";
-      default:
-        return "Deal";
-    }
-  };
-
-  const Icon = dealType === "voucher" ? VoucherIcon : dealType === "original" ? ShoppingBagIcon : ColdIcon;
-
   return (
     <div
       className={`
-        inline-flex items-center rounded-full
+        inline-flex items-center rounded-full max-w-full
         ${sizeClasses[size]}
         ${isActive ? "" : "opacity-50"}
         ${className}
@@ -74,8 +84,8 @@ export default function DealBadge({
         color: theme.text,
       }}
     >
-      <Icon />
-      {getBadgeText(dealType)}
+      <BadgeIcon dealType={dealType} size={size} />
+      {getBadgeLabel(t, dealType, isRTL)}
     </div>
   );
 }
@@ -84,20 +94,10 @@ export function SimpleDealBadge({
   dealType,
   className = "",
 }: Omit<DealBadgeProps, "isActive">) {
+  const { t } = useTranslation("common");
+  const router = useRouter();
+  const isRTL = resolvePageLang(router) === "ar";
   const theme = DEAL_THEMES[dealType];
-
-  const getBadgeText = (type: DealType): string => {
-    switch (type) {
-      case "voucher":
-        return "Voucher";
-      case "cold":
-        return "Cold";
-      case "original":
-        return "Original";
-      default:
-        return "Deal";
-    }
-  };
 
   return (
     <span
@@ -107,7 +107,7 @@ export function SimpleDealBadge({
         color: theme.text,
       }}
     >
-      {getBadgeText(dealType)}
+      {getBadgeLabel(t, dealType, isRTL)}
     </span>
   );
 }

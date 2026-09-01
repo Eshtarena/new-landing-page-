@@ -15,7 +15,7 @@ export default function ShopAdviceSection() {
       aria-label={t("advice.pageTitle")}
     >
       {isLoading ? (
-        <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-6">
+        <div className="grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
           {Array.from({ length: 2 }).map((_, index) => (
             <div key={index} className="w-full h-52 rounded-3xl bg-gray-100 animate-pulse lg:h-48" />
           ))}
@@ -25,7 +25,7 @@ export default function ShopAdviceSection() {
           <p className="text-gray-600">{t("advice.noArticles")}</p>
         </div>
       ) : (
-        <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-6">
+        <div className="grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
           {articles.map((article) => (
             <div key={article.id} className="w-full min-w-0">
               <AdviceCard
@@ -34,7 +34,6 @@ export default function ShopAdviceSection() {
                 categoryLabel={t(`advice.categories.${article.category}`)}
                 readTimeLabel={t("advice.readTime", { minutes: article.readTimeMinutes })}
                 cardTitle={t("advice.cardTitle")}
-                className="lg:h-full"
               />
             </div>
           ))}

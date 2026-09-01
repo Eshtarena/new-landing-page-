@@ -9,9 +9,8 @@ const normalizeRouteParam = (value: string | string[] | undefined): string | und
 };
 
 const resolveRouteContext = (router: NextRouter) => {
-  const langFromQuery = normalizeRouteParam(router.query.lang);
   const countryCodeFromQuery = normalizeRouteParam(router.query.countryCode);
-  const lang = langFromQuery || router.locale || 'en';
+  const lang = router.locale || normalizeRouteParam(router.query.lang) || 'en';
   return {
     lang,
     countryCode: countryCodeFromQuery,
@@ -55,7 +54,6 @@ export const navigateToDealDetails = (router: NextRouter, deal: Deal) => {
         // the type must travel with the link so the detail page knows which one to call.
         type: deal.dealType,
         ...(countryCode ? { countryCode } : {}),
-        ...(lang ? { lang } : {}),
       },
     },
     undefined,

@@ -7,6 +7,7 @@ import DealTabsSection from "./DealTabsSection";
 import DealGallery from "./DealGallery";
 import DealBadge from "./DealBadge";
 import CountdownTimer from "./CountdownTimer";
+import DealAdviceSection from "./DealAdviceSection";
 import DownloadAppModal from "./DownloadAppModal";
 import ComingSoonModal from "../ComingSoonModal";
 import { COLORS } from "../../utils/colors";
@@ -23,6 +24,7 @@ import {
 } from "../../services/dealDetailsApi";
 import { SocialService } from "../../services";
 import { DEAL_DETAILS_LABELS } from "../../utils/dealDetailsLabels";
+import { resolvePageLang, resolvePageLangFromSearch } from "../../utils/resolvePageLang";
 
 interface DealDetailsViewProps {
   /** The deal id from the URL (voucherid or dealid) */
@@ -57,14 +59,19 @@ function resolveLangFromQuery(queryLang: string | string[] | undefined): Lang {
   return q === "ar" ? "ar" : "en";
 }
 
-/** Get lang from current URL (client-safe). Use so ?lang=ar is respected even before router is ready. */
-function getLangFromUrl(routerQueryLang: string | string[] | undefined): Lang {
+/**
+ * Resolve lang for v1 shared-link routes: Next.js locale first, then ?lang=.
+ */
+function getEffectiveLang(router: ReturnType<typeof useRouter>): Lang {
+  const fromRouter = resolvePageLang(router);
+  if (fromRouter === "ar") return "ar";
+
   if (typeof window !== "undefined") {
-    const params = new URLSearchParams(window.location.search);
-    const urlLang = params.get("lang");
-    if (urlLang === "ar") return "ar";
+    const fromSearch = resolvePageLangFromSearch(window.location.search);
+    if (fromSearch === "ar") return "ar";
   }
-  return resolveLangFromQuery(routerQueryLang);
+
+  return resolveLangFromQuery(router.query.lang);
 }
 
 export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) {
@@ -73,9 +80,10 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
   const [deal, setDeal] = useState<Deal | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [countryCode, setCountryCode] = useState<string>("saudi");
-  // Initialize lang from URL on client so Arabic shows immediately when ?lang=ar
   const [lang, setLang] = useState<Lang>(() =>
-    typeof window !== "undefined" ? getLangFromUrl(undefined) : "en"
+    typeof window !== "undefined"
+      ? resolvePageLangFromSearch(window.location.search)
+      : "en"
   );
   const [storeLinks, setStoreLinks] = useState<{ apple: string; google: string }>({
     apple: "https://apps.apple.com/app/eshtarena",
@@ -95,11 +103,10 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
       .catch(() => {});
   }, []);
 
-  // Sync lang from URL so UI and content show Arabic when ?lang=ar (client: read from window so it works before router is ready)
   useEffect(() => {
-    const nextLang = getLangFromUrl(router.query.lang);
+    const nextLang = getEffectiveLang(router);
     setLang(nextLang);
-  }, [router.isReady, router.query.lang]);
+  }, [router.isReady, router.locale, router.query.lang]);
 
   useEffect(() => {
     if (typeof i18n?.changeLanguage === "function") {
@@ -123,7 +130,7 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
     }
 
     // Use URL lang so content (payment terms, description, etc.) is in correct language (?lang=ar)
-    const effectiveLang = getLangFromUrl(router.query.lang);
+    const effectiveLang = getEffectiveLang(router);
 
     let cancelled = false;
 
@@ -179,7 +186,7 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
     }
 
     setIsLoading(false);
-  }, [id, dealType, lang, router.isReady, router.query.lang]);
+  }, [id, dealType, lang, router.isReady, router.locale, router.query.lang]);
 
   const isRtl = lang === "ar";
   const labels = DEAL_DETAILS_LABELS[lang];
@@ -320,6 +327,19 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
           </div>
 
           <DealTabsSection deal={deal} variant="mobile" />
+
+          {deal.advice ? (
+            <div className="px-4 pb-6">
+              <div className="grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
+                <DealAdviceSection
+                  advice={deal.advice}
+                  isArabic={isRtl}
+                  cardTitle={t("advice.cardTitle")}
+                  readTimeLabel={t("advice.readTime", { minutes: deal.advice.readTimeMinutes ?? 1 })}
+                />
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
 
@@ -329,6 +349,17 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
           <DealInfoSection deal={deal} storeLinks={storeLinks} />
           <DealTabsSection deal={deal} />
         </div>
+
+        {deal.advice ? (
+          <div className="mt-8 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
+            <DealAdviceSection
+              advice={deal.advice}
+              isArabic={isRtl}
+              cardTitle={t("advice.cardTitle")}
+              readTimeLabel={t("advice.readTime", { minutes: deal.advice.readTimeMinutes ?? 1 })}
+            />
+          </div>
+        ) : null}
       </div>
 
       <div className="md:hidden fixed bottom-0 inset-x-0 z-[60] px-4 pb-4 pt-2">

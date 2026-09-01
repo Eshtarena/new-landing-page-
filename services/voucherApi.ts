@@ -65,6 +65,18 @@ export function mapVoucherApiToDeal(
     description: isEn ? t.desc_en : t.desc_ar,
   }));
 
+  const aboutText = v.about
+    ? ((isEn ? v.about.content_en : v.about.content_ar) || v.about.content_en || v.about.content_ar)
+    : undefined;
+  const termsText = Array.isArray(v.terms)
+    ? v.terms
+        .map((term) => (typeof term === "string" ? term.trim() : ""))
+        .filter(Boolean)
+        .join("\n\n")
+    : typeof v.terms === "string"
+      ? v.terms.trim()
+      : "";
+
   const statusLower = (v.status || "").trim().toLowerCase();
   const statusLabel = statusLower === "ended" || statusLower === "end" ? "Ended" as const : "On going" as const;
   const isActive = statusLabel === "On going";
@@ -73,7 +85,7 @@ export function mapVoucherApiToDeal(
   return {
     id: v._id,
     title: isEn ? v.title_en : v.title_ar,
-    description: v.about ? (isEn ? v.about.content_en : v.about.content_ar) : undefined,
+    description: aboutText || undefined,
     images: v.pic
       ? [{ src: `${VOUCHER_IMAGE_BASE}/${v.pic}`, alt: isEn ? v.title_en : v.title_ar }]
       : [],
@@ -93,5 +105,15 @@ export function mapVoucherApiToDeal(
     supplier: v.supplier ? (isEn ? v.supplier.name_en : v.supplier.name_ar) : undefined,
     supplierLogo: v.supplier?.pic ? `${SUPPLIER_IMAGE_BASE}/${v.supplier.pic}` : undefined,
     paymentTerms: paymentTerms.length ? paymentTerms : undefined,
+    detailContent:
+      aboutText || termsText || paymentTerms.length
+        ? {
+            about: aboutText || undefined,
+            terms: termsText || undefined,
+            customerPaymentTerms: paymentTerms.length
+              ? paymentTerms.map((term) => ({ title: term.title, content: term.description }))
+              : undefined,
+          }
+        : undefined,
   };
 }

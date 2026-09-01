@@ -51,10 +51,10 @@ export default function AboutSection() {
         <div className="flex justify-center py-4 sm:py-6">
           <div className="relative w-full max-w-[620px] mx-auto">
             <Image
-              src="/alldeals.svg"
+              src="/new-all.png"
               alt="Group purchasing deals across the app"
-              width={1600}
-              height={1054}
+              width={1431}
+              height={1233}
               className="w-full h-auto"
               priority
             />

@@ -82,6 +82,10 @@ export interface BaseDeal {
   productFactory?: string;
   /** Product country of origin from API `product.country_en/ar`. */
   productMadeIn?: string;
+  /** Size variants from API `size` (string or list). */
+  productSize?: string;
+  /** Color variants from API `color` (string or list). */
+  productColor?: string;
   detailContent?: DealDetailContent;
   /** Linked purchasing expert advice when returned by the deal details API. */
   advice?: AdviceArticle;

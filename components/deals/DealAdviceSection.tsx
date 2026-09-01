@@ -7,6 +7,7 @@ interface DealAdviceSectionProps {
   cardTitle: string;
   readTimeLabel: string;
   className?: string;
+  compact?: boolean;
 }
 
 export default function DealAdviceSection({
@@ -15,6 +16,7 @@ export default function DealAdviceSection({
   cardTitle,
   readTimeLabel,
   className = "",
+  compact = false,
 }: DealAdviceSectionProps) {
   const categoryLabel = isArabic ? advice.categoryName_ar : advice.categoryName_en;
 
@@ -27,6 +29,7 @@ export default function DealAdviceSection({
       cardTitle={cardTitle}
       className={className}
       preferFullContent
+      compact={compact}
     />
   );
 }

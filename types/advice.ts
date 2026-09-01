@@ -4,6 +4,12 @@ export type AdviceCategory =
   | "shopping"
   | "vouchers";
 
+export interface AdviceCategoryDisplay {
+  name_en?: string;
+  name_ar?: string;
+  imageUrl?: string;
+}
+
 export interface AdviceArticle {
   id: string;
   slug: string;
@@ -26,6 +32,7 @@ export interface AdviceArticle {
   categoryName_en?: string;
   categoryName_ar?: string;
   categoryImageUrl?: string;
+  categories?: AdviceCategoryDisplay[];
   likesCount?: number;
   sharesCount?: number;
 }

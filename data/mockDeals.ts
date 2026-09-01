@@ -9,6 +9,9 @@ const fashionDeals: Deal[] = [
     id: 'fashion-001',
     title: 'Designer Sneakers Collection',
     description: 'Premium quality sneakers from top brands with ultimate comfort',
+    productName: 'Sneakers',
+    supplier: 'Nike Store',
+    supplierLogo: '/logo best.png',
     images: [
       {
         src: '/dummy_images/snekers.png',
@@ -44,8 +47,11 @@ const fashionDeals: Deal[] = [
 
   {
     id: 'fashion-002',
-    title: 'Summer Fashion Collection',
-    description: 'Trendy summer outfits for men and women',
+    title: 'Iphone Product',
+    description: 'Latest iPhone with premium features',
+    productName: 'iphone',
+    supplier: 'Cashfair',
+    supplierLogo: '/logo best.png',
     images: [
       {
         src: '/dummy_images/man_fashon.png',
@@ -63,12 +69,12 @@ const fashionDeals: Deal[] = [
       text: 'Riyadh & Jeddah'
     },
     quantity: {
-      sold: 89,
-      available: 156
+      sold: 5,
+      available: 83
     },
-    dealPrice: 320,
-    saveAmount: 80,
-    marketPrice: 400,
+    dealPrice: 450,
+    saveAmount: 50,
+    marketPrice: 500,
     currency: 'SAR',
     isActive: true,
     category: 'Fashion'
@@ -152,6 +158,8 @@ const homeKitchenDeals: Deal[] = [
     id: 'home-001',
     title: 'Kitchen Appliances Voucher',
     description: 'Voucher valid for all kitchen appliances and cookware',
+    supplier: 'HomeMart',
+    supplierLogo: '/logo best.png',
     images: [
       {
         src: '/dummy_images/home_kitchen.png',

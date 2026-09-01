@@ -27,6 +27,15 @@ const SaudiRiyalIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
+const ColdDealArrow = ({ className = "" }: { className?: string }) => (
+  <img
+    src="/cold-arrow.svg"
+    alt=""
+    aria-hidden="true"
+    className={className}
+  />
+);
+
 interface PriceItemProps {
   label: string;
   value: string;
@@ -34,6 +43,7 @@ interface PriceItemProps {
   isSave?: boolean;
   labelColor?: string;
   valueSize?: string;
+  showPriceDropArrow?: boolean;
 }
 
 const PriceItem = ({
@@ -43,6 +53,7 @@ const PriceItem = ({
   isSave = false,
   labelColor = "#9CA3AF",
   valueSize = "text-sm",
+  showPriceDropArrow = false,
 }: PriceItemProps) => {
   const color = isSave ? accentColor : "#340040";
 
@@ -50,11 +61,14 @@ const PriceItem = ({
     <div className="flex flex-col items-center justify-center flex-1 py-2.5 px-1 min-w-0">
       <span
         className="text-[10px] mb-1 text-center font-normal leading-tight"
-        style={{ color: isSave ? accentColor : labelColor }}
+        style={{ color: labelColor }}
       >
         {label}
       </span>
       <div className="flex items-center gap-0.5" style={{ color }}>
+        {showPriceDropArrow ? (
+          <ColdDealArrow className="h-4.75 w-1.75 shrink-0" />
+        ) : null}
         <span className={`${valueSize} font-bold tabular-nums leading-none`}>
           {value}
         </span>
@@ -89,21 +103,26 @@ export default function PricingDisplay({
   const referenceLabel =
     "voucherValue" in deal ? labels.voucherValue : labels.marketPrice;
 
+  const isColdDeal = deal.dealType === "cold";
+
   const items = [
     {
       label: referenceLabel,
       value: formatAmount(referencePrice),
       isSave: false,
+      showPriceDropArrow: false,
     },
     {
       label: labels.dealPrice,
       value: formatAmount(deal.dealPrice),
       isSave: false,
+      showPriceDropArrow: isColdDeal,
     },
     {
       label: labels.save,
       value: formatAmount(deal.saveAmount),
       isSave: true,
+      showPriceDropArrow: false,
     },
   ];
 
@@ -118,6 +137,7 @@ export default function PricingDisplay({
             value={item.value}
             accentColor={theme.primary}
             isSave={item.isSave}
+            showPriceDropArrow={item.showPriceDropArrow}
           />
           {index < items.length - 1 && (
             <div className="w-px bg-gray-200 self-stretch my-2" />

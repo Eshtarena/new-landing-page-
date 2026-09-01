@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { DealImage } from "../../types/deals";
 import ImageCarousel from "./ImageCarousel";
+import { resolvePageLang } from "../../utils/resolvePageLang";
 
 interface DealGalleryProps {
   images: DealImage[];
@@ -20,8 +21,7 @@ export default function DealGallery({
   const [isFullscreen, setIsFullscreen] = React.useState(false);
   const hasMultiple = images.length > 1;
   const isHero = variant === "hero";
-  const queryLang = Array.isArray(router.query.lang) ? router.query.lang[0] : router.query.lang;
-  const isRTL = queryLang === "ar";
+  const isRTL = resolvePageLang(router) === "ar";
   const backIconPath = isRTL ? "M9 5l7 7-7 7" : "M15 19l-7-7 7-7";
 
   if (images.length === 0) {

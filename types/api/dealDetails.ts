@@ -43,10 +43,13 @@ export interface DealDetailsApiDeal {
     description_ar?: string;
     factory_en?: string;
     factory_ar?: string;
-    country_en?: string;
-    country_ar?: string;
-    pic?: string[];
+  country_en?: string;
+  country_ar?: string;
+  pic?: string[];
+    vat?: number;
   };
+  color?: unknown;
+  size?: unknown;
   [key: string]: unknown;
 }
 

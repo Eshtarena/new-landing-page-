@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from "react";
+import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next/pages";
 import AppStoreBadges from "../AppStoreBadges";
+import { resolvePageLang } from "../../utils/resolvePageLang";
 
 interface DownloadAppModalProps {
   isOpen: boolean;
@@ -9,7 +11,8 @@ interface DownloadAppModalProps {
 
 export default function DownloadAppModal({ isOpen, onClose }: DownloadAppModalProps) {
   const { t, i18n } = useTranslation("common");
-  const isRTL = i18n.language === "ar";
+  const router = useRouter();
+  const isRTL = resolvePageLang(router, i18n.language) === "ar";
   const dialogRef = useRef<HTMLDivElement>(null);
   const tx = (key: string, en: string, ar: string) =>
     t(key, { defaultValue: isRTL ? ar : en });
@@ -66,7 +69,7 @@ export default function DownloadAppModal({ isOpen, onClose }: DownloadAppModalPr
 
         <div className="text-center">
           <h2 id="download-app-title" className="text-2xl font-bold tracking-tight text-primary-500">
-            {tx("dealDetails.downloadApp.title", "Get the Sharena App", "حمّل تطبيق اشترينا")}
+            {tx("dealDetails.downloadApp.title", "Get the Sharena App", "حمّل تطبيق شرينا")}
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-gray-600">
             {tx(

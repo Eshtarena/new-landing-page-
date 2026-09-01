@@ -2,7 +2,7 @@
 export const COLORS = {
   // Deal Colors
   originalDeal: '#F2055C',
-  voucherDeal: '#05F26C',
+  voucherDeal: '#21BF59',
   
   // Background Colors
   mainBackground: '#F0F0F5',

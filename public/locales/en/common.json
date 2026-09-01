@@ -65,13 +65,13 @@
       "point2": "You can buy any quantity you want and get the group offer price automatically at the time of purchase",
       "point3": "Sharena guarantees you the best price for the product in the market throughout the offer",
       "point4": "You can view the supplier profile page, view the return policies and after-sales services",
-      "badge": "Product deal"
+      "badge": "Group buying | products deal"
     },
     "coldDeal": {
       "title": "What is Cold deal?",
       "description": "These deals are for specific products that require more time to allow suppliers to compete in an open tender throughout the offer period to offer us the best price.",
       "refundPolicy": "Buy the quantity you want at the current offer price before the end of the deal period from the mentioned supplier and in case there is a better offer from another supplier, Sharena will automatically refund the price difference to your bank card used in the purchase.",
-      "badge": "Cold deal"
+      "badge": "Group purchasing | Bidding"
     },
     "vouchers": {
       "howToUse": {
@@ -87,7 +87,7 @@
       "description": "They are pre-prepared group purchase offers from Sharena with a specific price, quantity and supplier on a discounted purchase voucher without terms or conditions from various suppliers.",
       "point1": "Buy a purchase voucher from the supplier you choose in the group offer at a discounted price and enjoy spending the full voucher value at the supplier without terms or conditions.",
       "point2": "Save before you buy from the brands you love and pay from your voucher wallet on Sharena at the supplier's branches or website or mobile app.",
-      "badge": "Voucher deal"
+      "badge": "Group buying | vouchers deal"
     },
     "sold": "Sold",
     "available": "Available",
@@ -161,9 +161,9 @@
       "viewProfile": "View Profile"
     },
     "dealType": {
-      "original": "Product deal",
-      "cold": "Cold deal",
-      "voucher": "Voucher deal"
+      "original": "Group buying | products deal",
+      "cold": "Group purchasing | Bidding",
+      "voucher": "Group buying | vouchers deal"
     },
     "status": {
       "active": "Active",
@@ -231,11 +231,21 @@
     "noTerms": "No terms and conditions are available for this deal yet.",
     "accordions": {
       "specialSpecs": "Special specifications",
-      "originalDeal": "What is Original deal?",
+      "terms": "Terms & conditions",
+      "originalDeal": "What is product deal?",
+      "coldDeal": "What is Cold deal?",
+      "voucherDeal": "What is Voucher deal?",
       "expertAdvice": "Purchasing expert advice",
       "noSpecialSpecs": "No special specifications available for this deal.",
       "originalDealFallback": "Original deals are group-buy offers on authentic products. Join with other buyers to unlock the deal price and save together.",
       "expertAdviceFallback": "Review the deal details, compare market price with deal price, and join before quantities run out to secure your savings."
+    },
+    "product": {
+      "factoryName": "Factory name",
+      "madeIn": "Made in",
+      "size": "Size",
+      "color": "Color",
+      "notSpecified": "Not specified"
     },
     "delivery": {
       "title": "Sharena delivery terms",
@@ -438,6 +448,8 @@
     "pageDescription": "Expert tips on group buying, vouchers, and smart shopping to help you save more on Sharena",
     "cardTitle": "Purchasing expert advice",
     "readTime": "{{minutes}} min read",
+    "showMore": "Show more",
+    "close": "Close",
     "emptyState": "No articles found in this category. Check back soon for new tips.",
     "noArticles": "No advice available yet. Check back soon for new tips.",
     "categories": {

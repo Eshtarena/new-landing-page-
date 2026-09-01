@@ -1,6 +1,6 @@
-# Eshtarena Landing Page
+# Sharena Landing Page
 
-A modern, responsive landing page for Eshtarena built with Next.js and Tailwind CSS.
+A modern, responsive landing page for Sharena built with Next.js and Tailwind CSS.
 
 ## Prerequisites
 
