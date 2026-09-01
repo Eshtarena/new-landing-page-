@@ -42,7 +42,7 @@ export interface VoucherApiResponse {
     dealPrice: number;
     save: number;
     expireDate: string;
-    terms: unknown[];
+    terms: unknown[] | string;
     cities: unknown[];
     about: VoucherApiAbout;
     isTracked: boolean;
