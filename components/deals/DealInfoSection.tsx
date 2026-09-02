@@ -11,6 +11,7 @@ import { useJoinDeal } from "../../hooks/useJoinDeal";
 import DownloadAppModal from "./DownloadAppModal";
 import ComingSoonModal from "../ComingSoonModal";
 import { resolvePageLang } from "../../utils/resolvePageLang";
+import { APP_STORE_URLS } from "../../utils/appStore";
 
 interface DealInfoSectionProps {
   deal: Deal;
@@ -38,10 +39,7 @@ export default function DealInfoSection({
   const theme = DEAL_THEMES[deal.dealType];
   const totalQuantity = deal.quantity.sold + deal.quantity.available;
 
-  const defaultStoreLinks = {
-    apple: "https://apps.apple.com/app/eshtarena",
-    google: "https://play.google.com/store/apps/details?id=eshtarena.app",
-  };
+  const defaultStoreLinks = APP_STORE_URLS;
   const links = storeLinks || defaultStoreLinks;
 
   return (

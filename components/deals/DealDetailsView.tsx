@@ -25,6 +25,7 @@ import {
 import { SocialService } from "../../services";
 import { DEAL_DETAILS_LABELS } from "../../utils/dealDetailsLabels";
 import { resolvePageLang, resolvePageLangFromSearch } from "../../utils/resolvePageLang";
+import { APP_STORE_URLS } from "../../utils/appStore";
 
 interface DealDetailsViewProps {
   /** The deal id from the URL (voucherid or dealid) */
@@ -85,19 +86,14 @@ export default function DealDetailsView({ id, dealType }: DealDetailsViewProps) 
       ? resolvePageLangFromSearch(window.location.search)
       : "en"
   );
-  const [storeLinks, setStoreLinks] = useState<{ apple: string; google: string }>({
-    apple: "https://apps.apple.com/app/eshtarena",
-    google: "https://play.google.com/store/apps/details?id=eshtarena.app",
-  });
+  const [storeLinks, setStoreLinks] = useState<{ apple: string; google: string }>(APP_STORE_URLS);
 
   useEffect(() => {
-    const defaultApple = "https://apps.apple.com/app/eshtarena";
-    const defaultGoogle = "https://play.google.com/store/apps/details?id=eshtarena.app";
     SocialService.getLinks()
       .then((data) => {
         setStoreLinks({
-          apple: data.apple || defaultApple,
-          google: data.google || defaultGoogle,
+          apple: data.apple || APP_STORE_URLS.apple,
+          google: data.google || APP_STORE_URLS.google,
         });
       })
       .catch(() => {});

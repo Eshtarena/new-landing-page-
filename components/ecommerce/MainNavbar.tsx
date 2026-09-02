@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import Logo from "../Logo";
 import LanguageSwitcher from "../landingpage/LanguageSwitcher";
@@ -34,47 +35,16 @@ function SearchIcon({ className = "w-4 h-4" }: { className?: string }) {
   );
 }
 
-function ScanIcon({ className = "w-5 h-5" }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2" />
-    </svg>
-  );
-}
-
-function FilterIcon({ className = "w-5 h-5" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M4 8h11"
-        stroke="currentColor"
-        strokeWidth={2}
-        strokeLinecap="round"
-      />
-      <circle cx="18" cy="8" r="2" fill="currentColor" />
-      <path
-        d="M4 16h7"
-        stroke="currentColor"
-        strokeWidth={2}
-        strokeLinecap="round"
-      />
-      <circle cx="14" cy="16" r="2" fill="currentColor" />
-    </svg>
-  );
-}
-
 function MobileSearchField({
   searchQuery,
   onSearchChange,
   placeholder,
   ariaLabel,
-  scanAriaLabel,
 }: {
   searchQuery: string;
   onSearchChange: (query: string) => void;
   placeholder: string;
   ariaLabel: string;
-  scanAriaLabel: string;
 }) {
   return (
     <div className="relative flex-1 min-w-0">
@@ -87,15 +57,8 @@ function MobileSearchField({
         onChange={(e) => onSearchChange(e.target.value)}
         placeholder={placeholder}
         aria-label={ariaLabel}
-        className="w-full min-h-12 ps-10 pe-11 py-3 text-sm text-[#333333] placeholder:text-[#8e8e93] bg-white border-0 rounded-full focus:outline-none focus:ring-2 focus:ring-white/60 transition-all duration-200 ease-spring shadow-sm"
+        className="w-full min-h-12 ps-10 pe-4 py-3 text-sm text-[#333333] placeholder:text-[#8e8e93] bg-white border-0 rounded-full focus:outline-none focus:ring-2 focus:ring-white/60 transition-all duration-200 ease-spring shadow-sm"
       />
-      <button
-        type="button"
-        className="absolute inset-y-0 inset-e-0 flex items-center pe-3.5 text-[#666666] hover:text-[#333333] transition-colors"
-        aria-label={scanAriaLabel}
-      >
-        <ScanIcon />
-      </button>
     </div>
   );
 }
@@ -143,7 +106,6 @@ export default function MainNavbar({
   const searchPlaceholder = t("store.searchPlaceholder");
   const mobileSearchPlaceholder = t("store.mobileSearchPlaceholder");
   const searchAriaLabel = t("store.searchAriaLabel");
-  const scanAriaLabel = t("store.scanAriaLabel");
 
   const mobileFilterButton = onMobileFilterOpen ? (
     <button
@@ -151,7 +113,7 @@ export default function MainNavbar({
       className="md:hidden flex items-center justify-center w-11 h-11 shrink-0 bg-white rounded-2xl border-0 shadow-sm hover:bg-gray-50 transition-colors duration-200 ease-spring"
       aria-label="Open filters"
     >
-      <FilterIcon className="w-5 h-5 text-[#666666]" />
+      <Image src="/new-filters.svg" alt="" width={23} height={23} aria-hidden="true" />
     </button>
   ) : null;
 
@@ -172,7 +134,6 @@ export default function MainNavbar({
               onSearchChange={handleSearchChange}
               placeholder={mobileSearchPlaceholder}
               ariaLabel={searchAriaLabel}
-              scanAriaLabel={scanAriaLabel}
             />
             {mobileFilterButton}
           </div>

@@ -32,8 +32,8 @@ export default function ShopGridHeader({ title, backLabel, onBack }: ShopGridHea
       className="sticky top-0 z-50 relative rounded-b-[28px] md:hidden"
       style={SHOP_HEADER_STYLE}
     >
-      <div className="relative px-4 pt-8 pb-7">
-        <div className="flex items-center gap-3 min-h-14">
+      <div className="relative px-4 py-3">
+        <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={handleBack}

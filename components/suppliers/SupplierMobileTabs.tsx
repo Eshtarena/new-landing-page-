@@ -35,21 +35,23 @@ export default function SupplierMobileTabs({
             role="tab"
             aria-selected={isActive}
             onClick={() => onTabChange(tab.id)}
-            className="flex shrink-0 flex-col items-center px-4 pt-3 pb-2 min-h-11"
+            className="flex shrink-0 flex-col items-center px-4 pt-2"
           >
-            <span
-              className={`text-sm whitespace-nowrap transition-colors ${
-                isActive ? "font-medium text-white" : "font-normal text-white/60"
-              }`}
-            >
-              {tab.label}
+            <span className="inline-flex flex-col items-center">
+              <span
+                className={`text-sm whitespace-nowrap transition-colors ${
+                  isActive ? "font-medium text-white" : "font-normal text-white/60"
+                }`}
+              >
+                {tab.label}
+              </span>
+              <span
+                className={`mt-2 h-[3px] w-full shrink-0 rounded-full transition-all duration-200 ${
+                  isActive ? "bg-white opacity-100" : "bg-transparent opacity-0"
+                }`}
+                aria-hidden="true"
+              />
             </span>
-            <span
-              className={`mt-2 h-[3px] rounded-full bg-white transition-all duration-200 ${
-                isActive ? "w-5 opacity-100" : "w-0 opacity-0"
-              }`}
-              aria-hidden="true"
-            />
           </button>
         );
       })}

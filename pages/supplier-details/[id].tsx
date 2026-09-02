@@ -143,8 +143,8 @@ export default function SupplierDetailsPage() {
           className="sticky top-0 z-50 relative rounded-b-[28px]"
           style={SHOP_HEADER_STYLE}
         >
-          <div className="relative px-4 pt-6 pb-2">
-            <div className="flex items-center gap-3 min-h-11">
+          <div className="relative px-4 pt-3 pb-0">
+            <div className="flex items-center gap-3">
               <button
                 type="button"
                 onClick={() => router.back()}
