@@ -232,7 +232,7 @@ export default function DealCard({
       <div className="hidden p-3 pb-0 md:block">
         <ImageCarousel
           {...carouselProps}
-          aspectRatio="video"
+          aspectRatio="dealMobile"
           showDots
           showCounter
           className="rounded-xl"
